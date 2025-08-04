@@ -1,5 +1,7 @@
+/* src/index.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "tailwindcss";
+/* Сюда можно добавлять свои глобальные стили, если они понадобятся */
