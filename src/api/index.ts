@@ -46,3 +46,8 @@ export const createEvent = async (eventData: CreateEventData): Promise<Event> =>
 export const deleteEvent = async (id: number): Promise<void> => {
   await apiClient.delete(`/admin/events/${id}`);
 };
+
+export const updateEvent = async (id: number, eventData: CreateEventData): Promise<Event> => {
+  const response = await apiClient.put(`/admin/events/${id}`, eventData);
+  return response.data;
+};

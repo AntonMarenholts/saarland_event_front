@@ -4,6 +4,7 @@ import AdminDashboardPage from "../pages/AdminDashboard";
 import EventDetailPage from "../pages/EventDetail";
 import NotFoundPage from "../pages/NotFound";
 import MainLayout from "../layout"; // <-- Импортируем наш Layout
+import AdminEditEventPage from "../pages/AdminEditEvent";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/admin",
         element: <AdminDashboardPage />,
+      },
+       {
+        path: "/admin/edit/:id",
+        element: <AdminEditEventPage />,
       },
     ],
   },
