@@ -1,15 +1,20 @@
 import axios from "axios";
 
-// Создаем экземпляр axios с базовым URL нашего бэкенда
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api",
 });
 
 // Функция для получения всех событий
-export const fetchEvents = async () => {
-  // Отправляем GET-запрос на /events (полный путь будет http://localhost:8080/api/events)
-  const response = await apiClient.get("/events");
+export const fetchEvents = async (params: URLSearchParams) => {
+  // Отправляем GET-запрос на /events с параметрами
+  const response = await apiClient.get("/events", { params });
   return response.data;
 };
 
-// В будущем мы добавим сюда и другие функции: fetchEventById, createEvent и т.д.
+// --- НОВЫЙ КОД ---
+// Функция для получения всех категорий
+export const fetchCategories = async () => {
+  const response = await apiClient.get("/categories");
+  return response.data;
+};
+// -----------------
