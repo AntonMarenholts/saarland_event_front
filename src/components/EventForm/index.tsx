@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Category,  Event } from "../../types";
+import type { Category, Event } from "../../types";
 import { fetchCategories, type CreateEventData } from "../../api";
 
 interface Props {

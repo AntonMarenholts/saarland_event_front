@@ -3,31 +3,27 @@ import HomePage from "../pages/Home";
 import AdminDashboardPage from "../pages/AdminDashboard";
 import EventDetailPage from "../pages/EventDetail";
 import NotFoundPage from "../pages/NotFound";
-import MainLayout from "../layout"; // <-- Импортируем наш Layout
+import MainLayout from "../layout";
 import AdminEditEventPage from "../pages/AdminEditEvent";
+import LoginPage from "../pages/Login"; // <-- Импорт страницы входа
+import ProtectedRoute from "./ProtectedRoute"; // <-- Импорт защищенного маршрута
 
 const router = createBrowserRouter([
   {
-    // Теперь MainLayout - это корневой элемент
     element: <MainLayout />,
     errorElement: <NotFoundPage />,
-    // А все страницы становятся его дочерними элементами
     children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/events/:id", element: <EventDetailPage /> },
+      { path: "/login", element: <LoginPage /> }, // <-- Маршрут для страницы входа
+
+      // --- ЗАЩИЩЕННЫЕ МАРШРУТЫ ---
       {
-        path: "/",
-        element: <HomePage />,
-      },
-      {
-        path: "/events/:id",
-        element: <EventDetailPage />,
-      },
-      {
-        path: "/admin",
-        element: <AdminDashboardPage />,
-      },
-       {
-        path: "/admin/edit/:id",
-        element: <AdminEditEventPage />,
+        element: <ProtectedRoute />, // <-- Обертка
+        children: [
+          { path: "/admin", element: <AdminDashboardPage /> },
+          { path: "/admin/edit/:id", element: <AdminEditEventPage /> },
+        ],
       },
     ],
   },
