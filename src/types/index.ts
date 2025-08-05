@@ -1,23 +1,47 @@
-// Описывает один перевод
+// src/types/index.ts
+
 export interface Translation {
   locale: string;
   name: string;
   description: string;
 }
 
-// Описывает категорию
 export interface Category {
   id: number;
   name: string;
   description: string;
 }
 
-// Описывает полное событие, как оно приходит от бэкенда
+export interface City {
+  id: number;
+  name: string;
+}
+
 export interface Event {
   id: number;
-  eventDate: string; // Даты приходят от Java как строки
-  location: string;
+  eventDate: string;
   imageUrl: string;
   category: Category;
+  city: City; // <-- Правильная структура
   translations: Translation[];
+}
+
+// Тип для формы создания/обновления
+export interface CreateEventData {
+  eventDate: string;
+  imageUrl: string;
+  categoryId: number;
+  cityId: number; // <-- Правильная структура
+  translations: Translation[];
+}
+
+// Тип для формы создания категории
+export interface CategoryData {
+  name: string;
+  description?: string;
+}
+
+// Тип для формы создания города
+export interface CityData {
+  name: string;
 }

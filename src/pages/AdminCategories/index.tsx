@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchCategories, createCategory, deleteCategory, type CategoryData } from "../../api";
-import type { Category } from "../../types";
+import { fetchCategories, createCategory, deleteCategory } from "../../api";
+import type { Category, CategoryData } from "../../types";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);

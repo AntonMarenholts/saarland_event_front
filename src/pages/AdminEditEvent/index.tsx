@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchEventById, updateEvent, type CreateEventData } from "../../api";
-import type { Event } from "../../types";
+import { fetchEventById, updateEvent } from "../../api";
+import type { CreateEventData, Event } from "../../types";
 import EventForm from "../../components/EventForm";
 
 export default function AdminEditEventPage() {
