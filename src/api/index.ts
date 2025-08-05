@@ -7,7 +7,9 @@ const apiClient = axios.create({
 
 // --- Функции для публичной части ---
 
-export const fetchEvents = async (params: URLSearchParams): Promise<Event[]> => {
+export const fetchEvents = async (
+  params: URLSearchParams
+): Promise<Event[]> => {
   const response = await apiClient.get("/events", { params });
   return response.data;
 };
@@ -37,7 +39,9 @@ export interface CreateEventData {
   }[];
 }
 
-export const createEvent = async (eventData: CreateEventData): Promise<Event> => {
+export const createEvent = async (
+  eventData: CreateEventData
+): Promise<Event> => {
   // Отправляем POST-запрос на админский эндпоинт
   const response = await apiClient.post("/admin/events", eventData);
   return response.data;
@@ -47,7 +51,10 @@ export const deleteEvent = async (id: number): Promise<void> => {
   await apiClient.delete(`/admin/events/${id}`);
 };
 
-export const updateEvent = async (id: number, eventData: CreateEventData): Promise<Event> => {
+export const updateEvent = async (
+  id: number,
+  eventData: CreateEventData
+): Promise<Event> => {
   const response = await apiClient.put(`/admin/events/${id}`, eventData);
   return response.data;
 };
@@ -64,6 +71,21 @@ export const createCategory = async (categoryData: CategoryData) => {
 
 export const deleteCategory = async (id: number) => {
   await apiClient.delete(`/admin/categories/${id}`);
+};
+
+export const translateText = async (
+  text: string,
+  targetLang: "en" | "ru"
+): Promise<string> => {
+  // targetLang может быть 'en-US' для DeepL, но для простоты используем 'en'
+  const deepLTargetLang = targetLang === "en" ? "en-US" : "ru";
+
+  const response = await apiClient.post("/translate", {
+    text: text,
+    targetLang: deepLTargetLang,
+  });
+
+  return response.data.translatedText;
 };
 
 // Функцию update мы пока не будем использовать, но добавим на будущее

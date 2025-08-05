@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Category, Event } from "../../types";
+import { translateText } from "../../api";
 import { fetchCategories, type CreateEventData } from "../../api";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSubmit: (eventData: CreateEventData) => void;
@@ -9,23 +11,97 @@ interface Props {
 }
 
 const saarlandCities = [
-  "Saarbrücken", "Neunkirchen", "Homburg", "Völklingen", "St. Ingbert",
-  "Saarlouis", "Merzig", "St. Wendel", "Püttlingen",
+  "Saarbrücken",
+  "Neunkirchen",
+  "Homburg",
+  "Völklingen",
+  "St. Ingbert",
+  "Saarlouis",
+  "Merzig",
+  "St. Wendel",
+  "Püttlingen",
 ];
 
 export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
-  
-  const [location, setLocation] = useState(initialData?.location || "Saarbrücken");
-  const [eventDate, setEventDate] = useState(initialData ? new Date(initialData.eventDate).toISOString().slice(0, 16) : "");
+
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  // --- Основные поля ---
+  const [location, setLocation] = useState(
+    initialData?.location || "Saarbrücken"
+  );
+  const [eventDate, setEventDate] = useState(
+    initialData
+      ? new Date(initialData.eventDate).toISOString().slice(0, 16)
+      : ""
+  );
   const [imageUrl, setImageUrl] = useState(initialData?.imageUrl || "");
-  const [categoryId, setCategoryId] = useState<number | undefined>(initialData?.category.id);
-  const [nameDe, setNameDe] = useState(initialData?.translations.find(t => t.locale === 'de')?.name || "");
-  const [descriptionDe, setDescDe] = useState(initialData?.translations.find(t => t.locale === 'de')?.description || "");
+  const [categoryId, setCategoryId] = useState<number | undefined>(
+    initialData?.category.id
+  );
+
+  // --- НОВЫЙ КОД: State для всех переводов ---
+  const [nameDe, setNameDe] = useState(
+    initialData?.translations.find((tr) => tr.locale === "de")?.name || ""
+  );
+  const [descriptionDe, setDescDe] = useState(
+    initialData?.translations.find((tr) => tr.locale === "de")?.description ||
+      ""
+  );
+
+  const [nameEn, setNameEn] = useState(
+    initialData?.translations.find((tr) => tr.locale === "en")?.name || ""
+  );
+  const [descriptionEn, setDescEn] = useState(
+    initialData?.translations.find((tr) => tr.locale === "en")?.description ||
+      ""
+  );
+
+  const [nameRu, setNameRu] = useState(
+    initialData?.translations.find((tr) => tr.locale === "ru")?.name || ""
+  );
+  const [descriptionRu, setDescRu] = useState(
+    initialData?.translations.find((tr) => tr.locale === "ru")?.description ||
+      ""
+  );
+  // ---------------------------------------------
 
   useEffect(() => {
     fetchCategories().then(setCategories);
   }, []);
+  const handleTranslate = async () => {
+    if (!nameDe || !descriptionDe) {
+      alert("Пожалуйста, сначала заполните название и описание на немецком.");
+      return;
+    }
+    setIsTranslating(true);
+    try {
+      // Переводим название и описание на английский и русский параллельно
+      const [
+        translatedNameEn,
+        translatedDescEn,
+        translatedNameRu,
+        translatedDescRu,
+      ] = await Promise.all([
+        translateText(nameDe, "en"),
+        translateText(descriptionDe, "en"),
+        translateText(nameDe, "ru"),
+        translateText(descriptionDe, "ru"),
+      ]);
+      // Обновляем состояния
+      setNameEn(translatedNameEn);
+      setDescEn(translatedDescEn);
+      setNameRu(translatedNameRu);
+      setDescRu(translatedDescRu);
+    } catch (error) {
+      alert("Произошла ошибка при переводе.");
+      console.error(error);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,83 +110,173 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
       return;
     }
 
+    // --- НОВЫЙ КОД: Собираем все переводы в один массив ---
+    const translations = [];
+    if (nameDe)
+      translations.push({
+        locale: "de",
+        name: nameDe,
+        description: descriptionDe,
+      });
+    if (nameEn)
+      translations.push({
+        locale: "en",
+        name: nameEn,
+        description: descriptionEn,
+      });
+    if (nameRu)
+      translations.push({
+        locale: "ru",
+        name: nameRu,
+        description: descriptionRu,
+      });
+    // ----------------------------------------------------
+
     const eventData: CreateEventData = {
       eventDate: new Date(eventDate).toISOString(),
       location,
       imageUrl,
       categoryId,
-      translations: [
-        {
-          locale: "de",
-          name: nameDe,
-          description: descriptionDe,
-        },
-      ],
+      translations, // <-- Передаем массив со всеми переводами
     };
     onSubmit(eventData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mb-8 p-6 bg-gray-800 rounded-lg">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 mb-8 p-6 bg-gray-800 rounded-lg"
+    >
       <h2 className="text-xl font-semibold text-white">
-        {initialData ? 'Редактировать событие' : 'Добавить новое событие'}
+        {initialData ? t("edit") : t("addNewEvent")}
       </h2>
-      
+
+      {/* --- Общие поля --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* --- ИСПРАВЛЕНИЯ НИЖЕ --- */}
-        <input 
-          type="text" 
-          placeholder="Название (DE)"
-          value={nameDe}
-          onChange={(e) => setNameDe(e.target.value)} // <-- ДОБАВЛЕНО
-          required 
-          className="p-2 rounded bg-gray-700 text-white" 
-        />
-        <input 
-          type="datetime-local" 
+        <input
+          type="datetime-local"
           value={eventDate}
-          onChange={(e) => setEventDate(e.target.value)} // <-- ДОБАВЛЕНО
-          required 
-          className="p-2 rounded bg-gray-700 text-white" 
+          onChange={(e) => setEventDate(e.target.value)}
+          required
+          className="p-2 rounded bg-gray-700 text-white"
         />
-        <select 
+        <select
           value={location}
-          onChange={(e) => setLocation(e.target.value)} // <-- ДОБАВЛЕНО
+          onChange={(e) => setLocation(e.target.value)}
           className="p-2 rounded bg-gray-700 text-white"
         >
-          {saarlandCities.map(city => <option key={city} value={city}>{city}</option>)}
+          {saarlandCities.map((city) => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
         </select>
-        <select 
+        <select
           value={categoryId || ""}
-          onChange={(e) => setCategoryId(Number(e.target.value))} // <-- ДОБАВЛЕНО
-          required 
+          onChange={(e) => setCategoryId(Number(e.target.value))}
+          required
           className="p-2 rounded bg-gray-700 text-white"
         >
-          <option value="" disabled>Выберите категорию</option>
-          {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+          <option value="" disabled>
+            {t("selectCategory")}
+          </option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
         </select>
+        <input
+          type="text"
+          placeholder={t("formImageUrl")}
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+          className="w-full p-2 rounded bg-gray-700 text-white md:col-span-1"
+        />
       </div>
-      <textarea 
-        placeholder="Описание (DE)" 
-        value={descriptionDe}
-        onChange={(e) => setDescDe(e.target.value)} // <-- ДОБАВЛЕНО
-        required 
-        className="w-full p-2 rounded bg-gray-700 text-white"
-      />
-      <input 
-        type="text" 
-        placeholder="URL изображения" 
-        value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)} // <-- ДОБАВЛЕНО
-        className="w-full p-2 rounded bg-gray-700 text-white" 
-      />
-      
-      <button 
-        type="submit" 
-        disabled={isLoading}
+
+      {/* --- НОВЫЙ КОД: Поля для переводов --- */}
+      <div className="space-y-4">
+        {/* Немецкий */}
+        <div className="border border-gray-700 p-4 rounded-md">
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-white font-semibold">
+              Deutsch (DE)
+            </label>
+            {/* --- НОВЫЙ КОД: Кнопка "Перевести" --- */}
+            <button
+              type="button"
+              onClick={handleTranslate}
+              disabled={isTranslating}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 text-sm rounded-md disabled:bg-gray-500"
+            >
+              {isTranslating ? "Übersetzt..." : "Alles übersetzen"}
+            </button>
+            {/* ---------------------------------- */}
+          </div>
+          <input
+            type="text"
+            placeholder={t("formTitleDE")}
+            value={nameDe}
+            onChange={(e) => setNameDe(e.target.value)}
+            required
+            className="w-full p-2 rounded bg-gray-700 text-white mb-2"
+          />
+          <textarea
+            placeholder={t("formDescriptionDE")}
+            value={descriptionDe}
+            onChange={(e) => setDescDe(e.target.value)}
+            required
+            className="w-full p-2 rounded bg-gray-700 text-white"
+          />
+        </div>
+        {/* Английский */}
+        <div className="border border-gray-700 p-4 rounded-md">
+          <label className="block text-white font-semibold mb-2">
+            English (EN)
+          </label>
+          <input
+            type="text"
+            placeholder="Name (EN)"
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+            className="w-full p-2 rounded bg-gray-700 text-white mb-2"
+          />
+          <textarea
+            placeholder="Description (EN)"
+            value={descriptionEn}
+            onChange={(e) => setDescEn(e.target.value)}
+            className="w-full p-2 rounded bg-gray-700 text-white"
+          />
+        </div>
+        {/* Русский */}
+        <div className="border border-gray-700 p-4 rounded-md">
+          <label className="block text-white font-semibold mb-2">
+            Русский (RU)
+          </label>
+          <input
+            type="text"
+            placeholder="Название (RU)"
+            value={nameRu}
+            onChange={(e) => setNameRu(e.target.value)}
+            className="w-full p-2 rounded bg-gray-700 text-white mb-2"
+          />
+          <textarea
+            placeholder="Описание (RU)"
+            value={descriptionRu}
+            onChange={(e) => setDescRu(e.target.value)}
+            className="w-full p-2 rounded bg-gray-700 text-white"
+          />
+        </div>
+      </div>
+
+      {/* Кнопка "Сохранить" */}
+      <button
+        type="submit"
+        disabled={isLoading || isTranslating} // Блокируем и во время перевода
         className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded transition disabled:bg-gray-500"
       >
-        {isLoading ? 'Сохранение...' : (initialData ? 'Сохранить изменения' : 'Добавить событие')}
+        {/* ... */}
       </button>
     </form>
   );
