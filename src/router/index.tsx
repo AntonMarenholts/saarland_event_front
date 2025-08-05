@@ -7,6 +7,7 @@ import MainLayout from "../layout";
 import AdminEditEventPage from "../pages/AdminEditEvent";
 import LoginPage from "../pages/Login"; // <-- Импорт страницы входа
 import ProtectedRoute from "./ProtectedRoute"; // <-- Импорт защищенного маршрута
+import AdminCategoriesPage from "../pages/AdminCategories";
 
 const router = createBrowserRouter([
   {
@@ -19,10 +20,11 @@ const router = createBrowserRouter([
 
       // --- ЗАЩИЩЕННЫЕ МАРШРУТЫ ---
       {
-        element: <ProtectedRoute />, // <-- Обертка
+        element: <ProtectedRoute />,
         children: [
           { path: "/admin", element: <AdminDashboardPage /> },
           { path: "/admin/edit/:id", element: <AdminEditEventPage /> },
+          { path: "/admin/categories", element: <AdminCategoriesPage /> }, // <-- НОВЫЙ МАРШРУТ
         ],
       },
     ],

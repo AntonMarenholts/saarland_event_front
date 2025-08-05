@@ -51,3 +51,23 @@ export const updateEvent = async (id: number, eventData: CreateEventData): Promi
   const response = await apiClient.put(`/admin/events/${id}`, eventData);
   return response.data;
 };
+
+export interface CategoryData {
+  name: string;
+  description?: string;
+}
+
+export const createCategory = async (categoryData: CategoryData) => {
+  const response = await apiClient.post("/admin/categories", categoryData);
+  return response.data;
+};
+
+export const deleteCategory = async (id: number) => {
+  await apiClient.delete(`/admin/categories/${id}`);
+};
+
+// Функцию update мы пока не будем использовать, но добавим на будущее
+// export const updateCategory = async (id: number, categoryData: CategoryData) => {
+//   const response = await apiClient.put(`/admin/categories/${id}`, categoryData);
+//   return response.data;
+// };

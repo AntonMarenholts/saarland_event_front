@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchEvents, deleteEvent, createEvent, type CreateEventData } from "../../api";
+import {
+  fetchEvents,
+  deleteEvent,
+  createEvent,
+  type CreateEventData,
+} from "../../api";
 import type { Event } from "../../types";
 import EventForm from "../../components/EventForm";
 
@@ -69,8 +74,17 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="w-full text-white">
-      <h1 className="text-3xl font-bold mb-6">Панель Администратора</h1>
-      
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Панель Администратора</h1>
+        {/* --- НОВАЯ ССЫЛКА --- */}
+        <Link
+          to="/admin/categories"
+          className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
+        >
+          Управлять категориями &rarr;
+        </Link>
+      </div>
+
       {/* Форма для добавления нового события */}
       <EventForm onSubmit={handleCreateEvent} isLoading={isSubmitting} />
 
@@ -81,23 +95,43 @@ export default function AdminDashboardPage() {
           <table className="min-w-full divide-y divide-gray-700">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Название (DE)</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Город</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Дата</th>
-                <th className="relative px-6 py-3"><span className="sr-only">Действия</span></th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Название (DE)
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Город
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  Дата
+                </th>
+                <th className="relative px-6 py-3">
+                  <span className="sr-only">Действия</span>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
               {events.map((event) => (
                 <tr key={event.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">{event.translations.find(t => t.locale === 'de')?.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{event.location}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{new Date(event.eventDate).toLocaleDateString('de-DE')}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {event.translations.find((t) => t.locale === "de")?.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {event.location}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {new Date(event.eventDate).toLocaleDateString("de-DE")}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <Link to={`/admin/edit/${event.id}`} className="text-indigo-400 hover:text-indigo-300 mr-4">
+                    <Link
+                      to={`/admin/edit/${event.id}`}
+                      className="text-indigo-400 hover:text-indigo-300 mr-4"
+                    >
                       Редактировать
                     </Link>
-                    <button onClick={() => handleDelete(event.id)} className="text-red-500 hover:text-red-400">
+                    <button
+                      onClick={() => handleDelete(event.id)}
+                      className="text-red-500 hover:text-red-400"
+                    >
                       Удалить
                     </button>
                   </td>
