@@ -47,5 +47,9 @@
   "upcomingEvents": "Nächste Veranstaltungen",
   "noEventsFound": "Für Ihre Anfrage wurden keine Veranstaltungen gefunden.",
   "loadingEvents": "Veranstaltungen werden geladen...",
-  "errorLoadEvents": "Veranstaltungen konnten nicht geladen werden. Stellen Sie sicher, dass der Backend-Server läuft."
+  "errorLoadEvents": "Veranstaltungen konnten nicht geladen werden. Stellen Sie sicher, dass der Backend-Server läuft.",
+  "profile_title": "Willkommen, {{name}}",
+  "profile_subtitle": "Hier sind Ihre gespeicherten Lieblingsveranstaltungen.",
+  "profile_no_favorites": "Sie haben noch keine Favoriten gespeichert.",
+  "auth_required": "Bitte melden Sie sich an, um diese Seite anzuzeigen."
 }

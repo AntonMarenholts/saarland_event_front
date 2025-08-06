@@ -74,3 +74,7 @@ export interface CurrentUser {
   roles: string[];
   token: string;
 }
+export interface ProfileData {
+  user: CurrentUser;
+  favoriteEvents: Event[];
+}

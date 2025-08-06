@@ -25,7 +25,8 @@
   "formDate": "Дата",
   "backToAdmin": "Назад к панели",
   "backToList": "Назад к списку",
-  "logout": "Выйти","alertFillGerman": "Пожалуйста, сначала заполните название и описание на немецком.",
+  "logout": "Выйти",
+  "alertFillGerman": "Пожалуйста, сначала заполните название и описание на немецком.",
   "alertTranslateError": "Произошла ошибка при переводе.",
   "alertSelectCityAndCategory": "Пожалуйста, выберите город и категорию.",
   "translating": "Переводится...",
@@ -33,7 +34,8 @@
   "formTitleEN": "Title (EN)",
   "formDescriptionEN": "Description (EN)",
   "formTitleRU": "Название (RU)",
-  "formDescriptionRU": "Описание (RU)","selectCity_placeholder": "Выберите город",
+  "formDescriptionRU": "Описание (RU)",
+  "selectCity_placeholder": "Выберите город",
   "selectCategory_placeholder": "Выберите категорию",
   "selectYear_placeholder": "Выберите год",
   "selectMonth_placeholder": "Выберите месяц",
@@ -45,5 +47,9 @@
   "upcomingEvents": "Ближайшие события",
   "noEventsFound": "По вашему запросу событий не найдено.",
   "loadingEvents": "Загрузка событий...",
-  "errorLoadEvents": "Не удалось загрузить события. Убедитесь, что бэкенд-сервер запущен."
+  "errorLoadEvents": "Не удалось загрузить события. Убедитесь, что бэкенд-сервер запущен.",
+  "profile_title": "Добро пожаловать, {{name}}",
+  "profile_subtitle": "Здесь находятся ваши избранные события.",
+  "profile_no_favorites": "У вас пока нет избранных событий.",
+  "auth_required": "Пожалуйста, войдите в систему, чтобы просмотреть эту страницу."
 }

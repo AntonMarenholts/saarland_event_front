@@ -10,6 +10,7 @@ import RegisterPage from "../pages/Register"; // <-- Импорт
 import ProtectedRoute from "./ProtectedRoute";
 import AdminCategoriesPage from "../pages/AdminCategories";
 import AdminCitiesPage from "../pages/AdminCities";
+import ProfilePage from "../pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/profile", element: <ProfilePage /> },
       { path: "/events/:id", element: <EventDetailPage /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> }, // <-- НОВЫЙ МАРШРУТ
