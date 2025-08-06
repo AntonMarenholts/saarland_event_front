@@ -7,7 +7,29 @@ const apiClient = axios.create({
   baseURL: "http://localhost:8080/api",
 });
 
-// --- ПУБЛИЧНЫЕ ЗАПРОСЫ ---
+// ▼▼▼ НОВЫЙ КОД ▼▼▼
+// Interceptor для добавления JWT токена в заголовки
+apiClient.interceptors.request.use(
+  (config) => {
+    // Пытаемся получить данные пользователя из localStorage
+    const userString = localStorage.getItem("user");
+    if (userString) {
+      const user = JSON.parse(userString);
+      if (user && user.token) {
+        // Если токен есть, добавляем его в заголовок Authorization
+        config.headers['Authorization'] = 'Bearer ' + user.token;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+// ▲▲▲ НОВЫЙ КОД ▲▲▲
+
+
+// --- ПУБЛИЧНЫЕ ЗАПРОСЫ (остаются без изменений) ---
 export const fetchEvents = async (params: URLSearchParams): Promise<Event[]> => {
   const response = await apiClient.get("/events", { params });
   return response.data;
@@ -35,7 +57,7 @@ export const translateText = async (text: string, targetLang: 'en' | 'ru'): Prom
 };
 
 
-// --- АДМИНСКИЕ ЗАПРОСЫ ---
+// --- АДМИНСКИЕ ЗАПРОСЫ (теперь защищены токеном) ---
 export const createEvent = async (eventData: CreateEventData): Promise<Event> => {
   const response = await apiClient.post("/admin/events", eventData);
   return response.data;

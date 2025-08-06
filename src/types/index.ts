@@ -45,3 +45,32 @@ export interface CategoryData {
 export interface CityData {
   name: string;
 }
+
+export interface LoginData {
+  username?: string;
+  password?: string;
+}
+
+export interface RegisterData extends LoginData {
+  email?: string;
+}
+
+// --- Типы для аутентификации ---
+
+export interface LoginData {
+  username?: string;
+  password?: string;
+}
+
+export interface RegisterData extends LoginData {
+  email?: string;
+}
+
+// ▼▼▼ ДОБАВЬТЕ ЭТОТ ИНТЕРФЕЙС ▼▼▼
+export interface CurrentUser {
+  id: number;
+  username: string;
+  email: string;
+  roles: string[];
+  token: string;
+}

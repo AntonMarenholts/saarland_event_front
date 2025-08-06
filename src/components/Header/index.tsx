@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { NavLink, useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchCategories } from "../../api";
-import type { Category } from "../../types";
-import { useAuth } from "../../hooks/useAuth";
+import type { Category, CurrentUser } from "../../types"; // <-- 1. Импортируем CurrentUser
+import AuthService from "../../services/auth.service";
 
 const saarlandCities = [
   "Saarbrücken", "Neunkirchen", "Homburg", "Völklingen", "St. Ingbert",
@@ -23,9 +23,31 @@ export default function Header() {
   const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { isAdmin, logout } = useAuth();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  // 2. Указываем тип для состояния: CurrentUser или undefined
+  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(undefined);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user);
+      setIsAdmin(user.roles.includes("ROLE_ADMIN"));
+    } else {
+      setCurrentUser(undefined);
+      setIsAdmin(false);
+    }
+  }, [location]);
+
+  const logOut = () => {
+    AuthService.logout();
+    setCurrentUser(undefined);
+    setIsAdmin(false);
+    navigate("/");
+  };
+  
   const isAdminPage = location.pathname.startsWith('/admin');
 
   useEffect(() => {
@@ -57,6 +79,7 @@ export default function Header() {
         
         {!isAdminPage ? (
           <div className="flex gap-2 flex-wrap">
+            {/* Блок фильтров остается без изменений */}
             <select 
               onChange={(e) => handleFilterChange('city', e.target.value)} 
               value={searchParams.get('city') || 'all'}
@@ -65,8 +88,7 @@ export default function Header() {
               <option value="all">{t('selectCity_placeholder')}</option>
               {saarlandCities.map((city) => <option key={city} value={city}>{city}</option>)}
             </select>
-
-            <select 
+             <select 
               onChange={(e) => handleFilterChange('category', e.target.value)}
               value={searchParams.get('category') || 'all'}
               className="bg-gray-700 text-white p-2 rounded-md appearance-none"
@@ -103,24 +125,32 @@ export default function Header() {
             value={i18n.language}
             className="bg-gray-700 text-white p-2 rounded-md appearance-none text-sm"
           >
-            {/* Добавляем неактивную опцию-заголовок */}
-            <option value="" disabled>{t('selectLanguage')}</option>
-            <option value="de">Deutsch</option>
-            <option value="en">English</option>
-            <option value="ru">Русский</option>
+            <option value="de">DE</option>
+            <option value="en">EN</option>
+            <option value="ru">RU</option>
           </select>
 
-          <NavLink to="/" className="hover:text-cyan-400">
-            {t('home')}
-          </NavLink>
-          
-          {isAdmin && (
-            <button 
-              onClick={logout} 
-              className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm"
-            >
-              {t('logout')}
-            </button>
+          {currentUser ? (
+            <>
+              {isAdmin && (
+                <NavLink to="/admin" className="text-sm font-medium hover:text-cyan-400">
+                  {t('adminPanelTitle')}
+                </NavLink>
+              )}
+               <span className="text-sm">{currentUser.username}</span>
+              <button onClick={logOut} className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm">
+                {t('logout')}
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" className="text-sm font-medium hover:text-cyan-400">
+                {t('loginButton')}
+              </NavLink>
+              <NavLink to="/register" className="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded-md text-sm">
+                {t('signupButton')} 
+              </NavLink>
+            </>
           )}
         </div>
       </nav>
