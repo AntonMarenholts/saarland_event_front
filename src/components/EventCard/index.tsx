@@ -1,6 +1,5 @@
-// src/components/EventCard/index.tsx
-
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import type { Event } from "../../types";
 
 interface Props {
@@ -8,8 +7,11 @@ interface Props {
 }
 
 export default function EventCard({ event }: Props) {
-  // Ищем немецкий перевод, так как он у нас основной
-  const translation = event.translations.find((t) => t.locale === "de");
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+
+  const translation = event.translations.find((t) => t.locale === currentLang) || 
+                      event.translations.find((t) => t.locale === "de");
 
   return (
     <Link
@@ -18,7 +20,7 @@ export default function EventCard({ event }: Props) {
     >
       <img
         className="w-full h-48 object-cover"
-        src={event.imageUrl || "https://via.placeholder.com/400x200"} // Заглушка, если нет картинки
+        src={event.imageUrl || "https://via.placeholder.com/400x200"}
         alt={translation?.name || "Event Image"}
       />
       <div className="p-4">
@@ -27,7 +29,7 @@ export default function EventCard({ event }: Props) {
         </h3>
         <p className="text-gray-400 mb-2">{event.city.name}</p>
         <p className="text-gray-300 text-sm">
-          {new Date(event.eventDate).toLocaleDateString("de-DE", {
+          {new Date(event.eventDate).toLocaleDateString(currentLang, {
             weekday: "long",
             year: "numeric",
             month: "long",

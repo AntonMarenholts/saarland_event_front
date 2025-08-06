@@ -4,6 +4,7 @@ import './index.css';
 import App from './App.tsx';
 // ИСПРАВЛЕНИЕ: Импортируем AuthProvider из нового места
 import { AuthProvider } from './providers/AuthProvider.tsx'; 
+import './lib/i18n';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
