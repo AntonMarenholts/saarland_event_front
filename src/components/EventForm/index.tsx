@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { Category, City, CreateEventData, Event } from "../../types";
-import { fetchCategories, fetchCities, translateText } from "../../api";
 import { useTranslation } from "react-i18next";
+import { fetchCategories, fetchCities, translateText } from "../../api";
+import type { Category, City, CreateEventData, Event } from "../../types";
 
 interface Props {
   onSubmit: (eventData: CreateEventData) => void;
@@ -13,17 +13,11 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [cities, setCities] = useState<City[]>([]);
-
   const [isTranslating, setIsTranslating] = useState(false);
 
-  const [cityId, setCityId] = useState<number | undefined>(
-    initialData?.city.id
-  );
-  const [eventDate, setEventDate] = useState(
-    initialData
-      ? new Date(initialData.eventDate).toISOString().slice(0, 16)
-      : ""
-  );
+  const [specifyTime, setSpecifyTime] = useState(true);
+  const [eventDate, setEventDate] = useState("");
+  const [cityId, setCityId] = useState<number | undefined>(initialData?.city.id);
   const [imageUrl, setImageUrl] = useState(initialData?.imageUrl || "");
   const [categoryId, setCategoryId] = useState<number | undefined>(
     initialData?.category.id
@@ -33,32 +27,41 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
     initialData?.translations.find((tr) => tr.locale === "de")?.name || ""
   );
   const [descriptionDe, setDescDe] = useState(
-    initialData?.translations.find((tr) => tr.locale === "de")?.description ||
-      ""
+    initialData?.translations.find((tr) => tr.locale === "de")?.description || ""
   );
   const [nameEn, setNameEn] = useState(
     initialData?.translations.find((tr) => tr.locale === "en")?.name || ""
   );
   const [descriptionEn, setDescEn] = useState(
-    initialData?.translations.find((tr) => tr.locale === "en")?.description ||
-      ""
+    initialData?.translations.find((tr) => tr.locale === "en")?.description || ""
   );
   const [nameRu, setNameRu] = useState(
     initialData?.translations.find((tr) => tr.locale === "ru")?.name || ""
   );
   const [descriptionRu, setDescRu] = useState(
-    initialData?.translations.find((tr) => tr.locale === "ru")?.description ||
-      ""
+    initialData?.translations.find((tr) => tr.locale === "ru")?.description || ""
   );
 
   useEffect(() => {
     fetchCategories().then(setCategories);
     fetchCities().then(setCities);
-  }, []);
+
+    if (initialData) {
+      const initialDate = new Date(initialData.eventDate);
+      const timeIsSpecified =
+        initialDate.getUTCHours() !== 0 || initialDate.getUTCMinutes() !== 0;
+      setSpecifyTime(timeIsSpecified);
+
+      if (timeIsSpecified) {
+        setEventDate(initialData.eventDate.slice(0, 16));
+      } else {
+        setEventDate(initialData.eventDate.slice(0, 10));
+      }
+    }
+  }, [initialData]);
 
   const handleTranslate = async () => {
     if (!nameDe || !descriptionDe) {
-      // ИСПРАВЛЕНИЕ 1: Используем t() для alert
       alert(t("alertFillGerman"));
       return;
     }
@@ -80,7 +83,6 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
       setNameRu(translatedNameRu);
       setDescRu(translatedDescRu);
     } catch (error) {
-       // ИСПРАВЛЕНИЕ 2: Используем t() для alert
       alert(t("alertTranslateError"));
       console.error(error);
     } finally {
@@ -91,9 +93,15 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!categoryId || !cityId) {
-       // ИСПРАВЛЕНИЕ 3: Используем t() для alert
       alert(t("alertSelectCityAndCategory"));
       return;
+    }
+
+    let finalEventDate = "";
+    if (specifyTime) {
+      finalEventDate = new Date(eventDate).toISOString();
+    } else {
+      finalEventDate = new Date(eventDate + "T00:00:00Z").toISOString();
     }
 
     const translations = [];
@@ -117,7 +125,7 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
       });
 
     const eventData: CreateEventData = {
-      eventDate: new Date(eventDate).toISOString(),
+      eventDate: finalEventDate,
       imageUrl,
       categoryId,
       cityId,
@@ -135,20 +143,37 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         {initialData ? t("edit") : t("addNewEvent")}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          type="datetime-local"
-          value={eventDate}
-          onChange={(e) => setEventDate(e.target.value)}
-          required
-          className="p-2 rounded bg-gray-700 text-white"
-        />
+        <div>
+          <input
+            type={specifyTime ? "datetime-local" : "date"}
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
+            required
+            className="p-2 rounded bg-gray-700 text-white w-full"
+          />
+        </div>
+        <div className="flex items-center">
+          <input
+            id="specifyTime"
+            type="checkbox"
+            checked={specifyTime}
+            onChange={(e) => setSpecifyTime(e.target.checked)}
+            className="h-4 w-4 rounded border-gray-600 text-cyan-600 focus:ring-cyan-500 bg-gray-700"
+          />
+          <label
+            htmlFor="specifyTime"
+            className="ml-2 block text-sm text-gray-300"
+          >
+            {t("form_specify_time")}
+          </label>
+        </div>
+
         <select
           value={cityId || ""}
           onChange={(e) => setCityId(Number(e.target.value))}
           required
           className="p-2 rounded bg-gray-700 text-white"
         >
-          {/* ИСПРАВЛЕНИЕ 4: Используем t() для опции по умолчанию */}
           <option value="" disabled>
             {t("selectCity")}
           </option>
@@ -178,7 +203,7 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
           placeholder={t("formImageUrl")}
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
-          className="w-full p-2 rounded bg-gray-700 text-white md:col-span-1"
+          className="w-full p-2 rounded bg-gray-700 text-white md:col-span-2"
         />
       </div>
       <div className="space-y-4">
@@ -191,7 +216,6 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
               disabled={isTranslating}
               className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 text-sm rounded-md disabled:bg-gray-500"
             >
-              {/* ИСПРАВЛЕНИЕ 5: Используем t() для кнопки */}
               {isTranslating ? t("translating") : t("translateAll")}
             </button>
           </div>
@@ -212,17 +236,17 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
           />
         </div>
         <div className="border border-gray-700 p-4 rounded-md">
-          <label className="block text-white font-semibold mb-2">English (EN)</label>
+          <label className="block text-white font-semibold mb-2">
+            English (EN)
+          </label>
           <input
             type="text"
-            // ИСПРАВЛЕНИЕ 6: Используем t() для плейсхолдера
             placeholder={t("formTitleEN")}
             value={nameEn}
             onChange={(e) => setNameEn(e.target.value)}
             className="w-full p-2 rounded bg-gray-700 text-white mb-2"
           />
           <textarea
-            // ИСПРАВЛЕНИЕ 7: Используем t() для плейсхолдера
             placeholder={t("formDescriptionEN")}
             value={descriptionEn}
             onChange={(e) => setDescEn(e.target.value)}
@@ -230,17 +254,17 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
           />
         </div>
         <div className="border border-gray-700 p-4 rounded-md">
-          <label className="block text-white font-semibold mb-2">Русский (RU)</label>
+          <label className="block text-white font-semibold mb-2">
+            Русский (RU)
+          </label>
           <input
             type="text"
-            // ИСПРАВЛЕНИЕ 8: Используем t() для плейсхолдера
             placeholder={t("formTitleRU")}
             value={nameRu}
             onChange={(e) => setNameRu(e.target.value)}
             className="w-full p-2 rounded bg-gray-700 text-white mb-2"
           />
           <textarea
-            // ИСПРАВЛЕНИЕ 9: Используем t() для плейсхолдера
             placeholder={t("formDescriptionRU")}
             value={descriptionRu}
             onChange={(e) => setDescRu(e.target.value)}

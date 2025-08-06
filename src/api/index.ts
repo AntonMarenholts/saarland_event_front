@@ -144,12 +144,8 @@ export const fetchAllEventsForAdmin = async (): Promise<Event[]> => {
 };
 
 // Обновляет статус события (Одобрить/Отклонить)
-export const updateEventStatus = async (
-  id: number,
-  status: "APPROVED" | "REJECTED"
-): Promise<Event> => {
-  const response = await apiClient.patch(`/admin/events/${id}/status`, status, {
-    headers: { "Content-Type": "text/plain" },
-  });
+export const updateEventStatus = async (id: number, status: 'APPROVED' | 'REJECTED'): Promise<Event> => {
+  // ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ: Отправляем объект вместо текста и убираем заголовки ▼▼▼
+  const response = await apiClient.patch(`/admin/events/${id}/status`, { status });
   return response.data;
 };

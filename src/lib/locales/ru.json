@@ -68,5 +68,6 @@
   "categoryDesc_placeholder": "Описание (необязательно)",
   "addNewCity": "Добавить новый город",
   "allCities": "Все города",
-  "cityName_placeholder": "Название города"
+  "cityName_placeholder": "Название города",
+  "form_specify_time": "Указать точное время"
 }

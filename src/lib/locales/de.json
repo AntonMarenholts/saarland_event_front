@@ -68,5 +68,6 @@
   "categoryDesc_placeholder": "Beschreibung (optional)",
   "addNewCity": "Neue Stadt hinzufügen",
   "allCities": "Alle Städte",
-  "cityName_placeholder": "Name der Stadt"
+  "cityName_placeholder": "Name der Stadt",
+  "form_specify_time": "Genaue Zeit angeben"
 }

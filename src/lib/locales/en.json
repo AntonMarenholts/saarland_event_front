@@ -68,5 +68,6 @@
   "categoryDesc_placeholder": "Description (optional)",
   "addNewCity": "Add New City",
   "allCities": "All Cities",
-  "cityName_placeholder": "City Name"
+  "cityName_placeholder": "City Name",
+  "form_specify_time": "Specify exact time"
 }

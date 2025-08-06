@@ -1,5 +1,3 @@
-// src/components/EventCard/index.tsx
-
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Event } from "../../types";
@@ -19,7 +17,6 @@ export default function EventCard({ event }: Props) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    // Проверяем, является ли событие избранным при загрузке
     if (currentUser) {
       fetchFavorites(currentUser.id).then(favorites => {
         if (favorites.some(fav => fav.id === event.id)) {
@@ -29,22 +26,41 @@ export default function EventCard({ event }: Props) {
     }
   }, [currentUser, event.id]);
 
-
   const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Предотвращаем переход по ссылке
-    e.stopPropagation(); // Останавливаем всплытие события
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!currentUser) {
       alert("Please log in to save favorites.");
       return;
     }
 
-    if (isFavorite) {
-      removeFavorite(currentUser.id, event.id).then(() => setIsFavorite(false));
-    } else {
-      addFavorite(currentUser.id, event.id).then(() => setIsFavorite(true));
-    }
+    const action = isFavorite 
+      ? removeFavorite(currentUser.id, event.id) 
+      : addFavorite(currentUser.id, event.id);
+      
+    action.then(() => setIsFavorite(!isFavorite));
   };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const timeIsSpecified = date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
+
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: 'UTC'
+    };
+
+    if (timeIsSpecified) {
+      options.hour = "2-digit";
+      options.minute = "2-digit";
+    }
+
+    return date.toLocaleDateString(currentLang, options);
+  }
 
   const translation =
     event.translations.find((t) => t.locale === currentLang) ||
@@ -55,7 +71,7 @@ export default function EventCard({ event }: Props) {
       to={`/events/${event.id}`}
       className="relative block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 hover:scale-105 transition-transform duration-300"
     >
-      {/* КНОПКА "ИЗБРАННОЕ" */}
+      {/* ▼▼▼ ВОТ ЭТА КНОПКА БЫЛА ПРОПУЩЕНА ▼▼▼ */}
       {currentUser && (
         <button
           onClick={handleFavoriteClick}
@@ -89,14 +105,7 @@ export default function EventCard({ event }: Props) {
         </h3>
         <p className="text-gray-400 mb-2">{event.city.name}</p>
         <p className="text-gray-300 text-sm">
-          {new Date(event.eventDate).toLocaleDateString(currentLang, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {formatDate(event.eventDate)}
         </p>
       </div>
     </Link>
