@@ -103,9 +103,11 @@ export default function Header() {
             value={i18n.language}
             className="bg-gray-700 text-white p-2 rounded-md appearance-none text-sm"
           >
-            <option value="de">DE</option>
-            <option value="en">EN</option>
-            <option value="ru">RU</option>
+            {/* Добавляем неактивную опцию-заголовок */}
+            <option value="" disabled>{t('selectLanguage')}</option>
+            <option value="de">Deutsch</option>
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
           </select>
 
           <NavLink to="/" className="hover:text-cyan-400">

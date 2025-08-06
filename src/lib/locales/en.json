@@ -41,5 +41,10 @@
   "loginTitle": "Administrator Login",
   "loginSubtitle": "This page is for administrators only.",
   "loginButton": "Login (Simulation)",
-  "footerRights": "All rights reserved."
+  "footerRights": "All rights reserved.",
+  "selectLanguage": "Select language",
+  "upcomingEvents": "Upcoming Events",
+  "noEventsFound": "No events found for your request.",
+  "loadingEvents": "Loading events...",
+  "errorLoadEvents": "Failed to load events. Make sure the backend server is running."
 }
