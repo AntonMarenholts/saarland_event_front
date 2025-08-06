@@ -51,5 +51,22 @@
   "profile_title": "Welcome, {{name}}",
   "profile_subtitle": "Here are your saved favorite events.",
   "profile_no_favorites": "You have not saved any favorites yet.",
-  "auth_required": "Please log in to view this page."
+  "auth_required": "Please log in to view this page.",
+  "submit_event_button": "Submit Event",
+  "submit_page_title": "Submit a New Event",
+  "submit_page_subtitle": "Fill out the form below to submit your event for moderation.",
+  "submit_success_alert": "Thank you! Your event has been submitted for review.",
+  "status_label": "Status",
+  "status_pending": "Pending",
+  "status_approved": "Approved",
+  "status_rejected": "Rejected",
+  "action_approve": "Approve",
+  "action_reject": "Reject",
+  "addNewCategory": "Add New Category",
+  "allCategories": "All Categories",
+  "categoryName_placeholder": "Category Name",
+  "categoryDesc_placeholder": "Description (optional)",
+  "addNewCity": "Add New City",
+  "allCities": "All Cities",
+  "cityName_placeholder": "City Name"
 }

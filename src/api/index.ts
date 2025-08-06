@@ -126,3 +126,30 @@ export const removeFavorite = async (
 ): Promise<void> => {
   await apiClient.delete(`/favorites/${userId}/${eventId}`);
 };
+
+export const submitEvent = async (
+  eventData: CreateEventData
+): Promise<Event> => {
+  // Используем новый эндпоинт, доступный для обычных пользователей
+  const response = await apiClient.post("/user/events", eventData);
+  return response.data;
+};
+
+// --- ADMIN MODERATION API ---
+
+// Получает ВСЕ события, включая те, что на модерации
+export const fetchAllEventsForAdmin = async (): Promise<Event[]> => {
+  const response = await apiClient.get("/admin/events");
+  return response.data;
+};
+
+// Обновляет статус события (Одобрить/Отклонить)
+export const updateEventStatus = async (
+  id: number,
+  status: "APPROVED" | "REJECTED"
+): Promise<Event> => {
+  const response = await apiClient.patch(`/admin/events/${id}/status`, status, {
+    headers: { "Content-Type": "text/plain" },
+  });
+  return response.data;
+};

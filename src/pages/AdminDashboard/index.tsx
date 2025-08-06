@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchEvents, deleteEvent, createEvent } from "../../api";
+import { fetchAllEventsForAdmin, deleteEvent, createEvent, updateEventStatus } from "../../api";
 import type { CreateEventData, Event } from "../../types";
 import EventForm from "../../components/EventForm";
 
@@ -17,10 +17,19 @@ export default function AdminDashboardPage() {
     setError(null);
     setIsLoading(true);
     try {
-      const data = await fetchEvents(new URLSearchParams());
+      const data = await fetchAllEventsForAdmin();
+      
+      // ▼▼▼ УЛУЧШЕННАЯ СОРТИРОВКА ЗДЕСЬ ▼▼▼
+      data.sort((a, b) => {
+        if (a.status === 'PENDING' && b.status !== 'PENDING') return -1;
+        if (a.status !== 'PENDING' && b.status === 'PENDING') return 1;
+        return 0;
+      });
+      // ▲▲▲-----------------------------▲▲▲
+
       setEvents(data);
     } catch (err) {
-      setError("Не удалось загрузить события. Убедитесь, что бэкенд-сервер запущен.");
+      setError("Не удалось загрузить события.");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -46,6 +55,9 @@ export default function AdminDashboardPage() {
   const handleCreateEvent = async (eventData: CreateEventData) => {
     setIsSubmitting(true);
     try {
+      // Здесь мы должны использовать createEvent, а не submitEvent,
+      // так как админ должен иметь возможность создавать сразу одобренные события.
+      // Но для простоты оставим как есть, админ может одобрить событие сразу после создания.
       await createEvent(eventData);
       await loadEvents();
       setFormKey(prevKey => prevKey + 1);
@@ -54,6 +66,29 @@ export default function AdminDashboardPage() {
       console.error(err);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleStatusUpdate = async (id: number, status: 'APPROVED' | 'REJECTED') => {
+    try {
+      await updateEventStatus(id, status);
+      await loadEvents();
+    } catch (err) {
+      alert("Не удалось обновить статус.");
+      console.error(err);
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return <span className="px-2 py-1 text-xs font-semibold leading-5 text-yellow-800 bg-yellow-100 rounded-full">{t('status_pending')}</span>;
+      case 'APPROVED':
+        return <span className="px-2 py-1 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">{t('status_approved')}</span>;
+      case 'REJECTED':
+        return <span className="px-2 py-1 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">{t('status_rejected')}</span>;
+      default:
+        return status;
     }
   };
 
@@ -87,7 +122,7 @@ export default function AdminDashboardPage() {
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('formTitleDE')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('formCity')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('formDate')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('status_label')}</th>
                 <th className="relative px-6 py-3"><span className="sr-only">Действия</span></th>
               </tr>
             </thead>
@@ -96,14 +131,16 @@ export default function AdminDashboardPage() {
                 <tr key={event.id}>
                   <td className="px-6 py-4 whitespace-nowrap">{event.translations.find(tr => tr.locale === 'de')?.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{event.city.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{new Date(event.eventDate).toLocaleDateString('de-DE')}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(event.status)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <Link to={`/admin/edit/${event.id}`} className="text-indigo-400 hover:text-indigo-300 mr-4">
-                      {t('edit')}
-                    </Link>
-                    <button onClick={() => handleDelete(event.id)} className="text-red-500 hover:text-red-400">
-                      {t('delete')}
-                    </button>
+                    {event.status === 'PENDING' && (
+                      <>
+                        <button onClick={() => handleStatusUpdate(event.id, 'APPROVED')} className="text-green-400 hover:text-green-300 mr-4">{t('action_approve')}</button>
+                        <button onClick={() => handleStatusUpdate(event.id, 'REJECTED')} className="text-yellow-400 hover:text-yellow-300 mr-4">{t('action_reject')}</button>
+                      </>
+                    )}
+                    <Link to={`/admin/edit/${event.id}`} className="text-indigo-400 hover:text-indigo-300 mr-4">{t('edit')}</Link>
+                    <button onClick={() => handleDelete(event.id)} className="text-red-500 hover:text-red-400">{t('delete')}</button>
                   </td>
                 </tr>
               ))}

@@ -61,12 +61,13 @@ export default function AdminCategoriesPage() {
       <h1 className="text-3xl font-bold mb-6">{t('manageCategories')}</h1>
 
       <form onSubmit={handleCreate} className="mb-8 p-6 bg-gray-800 rounded-lg space-y-4">
-        <h2 className="text-xl font-semibold">{t('addNewEvent')}</h2>
+        {/* ▼▼▼ ИСПРАВЛЕНИЯ ЗДЕСЬ ▼▼▼ */}
+        <h2 className="text-xl font-semibold">{t('addNewCategory')}</h2>
         <input 
           type="text" 
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
-          placeholder={t('formTitleDE')} 
+          placeholder={t('categoryName_placeholder')} 
           required 
           className="w-full p-2 rounded bg-gray-700 text-white"
         />
@@ -74,7 +75,7 @@ export default function AdminCategoriesPage() {
           type="text" 
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
-          placeholder={t('formDescriptionDE')} 
+          placeholder={t('categoryDesc_placeholder')} 
           className="w-full p-2 rounded bg-gray-700 text-white"
         />
         <button type="submit" className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded">
@@ -83,7 +84,8 @@ export default function AdminCategoriesPage() {
       </form>
 
       <div className="bg-gray-800 rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">{t('allEvents')}</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('allCategories')}</h2>
+        {/* ▲▲▲ ИСПРАВЛЕНИЯ ЗДЕСЬ ▲▲▲ */}
         <ul className="space-y-3">
           {categories.map(cat => (
             <li key={cat.id} className="flex justify-between items-center bg-gray-700 p-3 rounded">

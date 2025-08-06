@@ -51,5 +51,22 @@
   "profile_title": "Willkommen, {{name}}",
   "profile_subtitle": "Hier sind Ihre gespeicherten Lieblingsveranstaltungen.",
   "profile_no_favorites": "Sie haben noch keine Favoriten gespeichert.",
-  "auth_required": "Bitte melden Sie sich an, um diese Seite anzuzeigen."
+  "auth_required": "Bitte melden Sie sich an, um diese Seite anzuzeigen.",
+  "submit_event_button": "Veranstaltung einreichen",
+  "submit_page_title": "Neue Veranstaltung einreichen",
+  "submit_page_subtitle": "Füllen Sie das Formular aus, um Ihre Veranstaltung zur Moderation einzureichen.",
+  "submit_success_alert": "Vielen Dank! Ihre Veranstaltung wurde zur Überprüfung eingereicht.",
+  "status_label": "Status",
+  "status_pending": "Ausstehend",
+  "status_approved": "Genehmigt",
+  "status_rejected": "Abgelehnt",
+  "action_approve": "Genehmigen",
+  "action_reject": "Ablehnen",
+  "addNewCategory": "Neue Kategorie hinzufügen",
+  "allCategories": "Alle Kategorien",
+  "categoryName_placeholder": "Name der Kategorie",
+  "categoryDesc_placeholder": "Beschreibung (optional)",
+  "addNewCity": "Neue Stadt hinzufügen",
+  "allCities": "Alle Städte",
+  "cityName_placeholder": "Name der Stadt"
 }

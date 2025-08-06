@@ -51,5 +51,22 @@
   "profile_title": "Добро пожаловать, {{name}}",
   "profile_subtitle": "Здесь находятся ваши избранные события.",
   "profile_no_favorites": "У вас пока нет избранных событий.",
-  "auth_required": "Пожалуйста, войдите в систему, чтобы просмотреть эту страницу."
+  "auth_required": "Пожалуйста, войдите в систему, чтобы просмотреть эту страницу.",
+  "submit_event_button": "Предложить событие",
+  "submit_page_title": "Предложить новое событие",
+  "submit_page_subtitle": "Заполните форму ниже, чтобы отправить ваше событие на модерацию.",
+  "submit_success_alert": "Спасибо! Ваше событие отправлено на рассмотрение.",
+  "status_label": "Статус",
+  "status_pending": "На рассмотрении",
+  "status_approved": "Одобрено",
+  "status_rejected": "Отклонено",
+  "action_approve": "Одобрить",
+  "action_reject": "Отклонить",
+  "addNewCategory": "Добавить новую категорию",
+  "allCategories": "Все категории",
+  "categoryName_placeholder": "Название категории",
+  "categoryDesc_placeholder": "Описание (необязательно)",
+  "addNewCity": "Добавить новый город",
+  "allCities": "Все города",
+  "cityName_placeholder": "Название города"
 }

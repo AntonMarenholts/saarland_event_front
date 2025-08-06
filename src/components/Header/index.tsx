@@ -115,21 +115,18 @@ export default function Header() {
       );
     }
 
-    // Если пользователь вошел в систему
     return (
       <>
-        {/* ▼▼▼ УЛУЧШЕННАЯ ЛОГИКА ОТОБРАЖЕНИЯ ▼▼▼ */}
-        {isAdmin && !isAdminPage && (
-          // Показываем ссылку на админку, только если админ НЕ в админке
+        {/* ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ: Добавляем проверку !isAdminPage ▼▼▼ */}
+        {!isAdminPage && (
           <NavLink
-            to="/admin"
-            className="text-sm font-medium hover:text-cyan-400"
+            to="/submit-event"
+            className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-sm"
           >
-            {t("adminPanelTitle")}
+            {t("submit_event_button")}
           </NavLink>
         )}
 
-        {/* Имя пользователя всегда видно */}
         <NavLink
           to={isAdmin ? "/admin" : "/profile"}
           className="text-sm font-medium hover:text-cyan-400"
