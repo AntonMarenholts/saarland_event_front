@@ -65,16 +65,14 @@ export default function AdminDashboardPage() {
     <div className="w-full text-white">
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">{t('adminPanelTitle')}</h1>
-        {/* --- ИСПРАВЛЕНИЕ ЗДЕСЬ: Добавляем обе ссылки --- */}
         <div className="flex gap-2">
             <Link to="/admin/categories" className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm">
-                Управлять категориями
+                {t('manageCategories')}
             </Link>
             <Link to="/admin/cities" className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm">
-                Управлять городами &rarr;
+                {t('manageCities')} &rarr;
             </Link>
         </div>
-        {/* ------------------------------------------- */}
       </div>
       
       <EventForm key={formKey} onSubmit={handleCreateEvent} isLoading={isSubmitting} />

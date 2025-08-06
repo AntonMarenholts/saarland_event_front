@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom"; // <-- Импортируем хук
+import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // <-- 1. Импортируем хук
 import { fetchEvents } from "../../api";
 import type { Event } from "../../types";
 import EventCard from "../../components/EventCard";
 
 export default function HomePage() {
+  const { t } = useTranslation(); // <-- 2. Получаем функцию для перевода
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchParams] = useSearchParams(); // <-- Получаем доступ к параметрам URL
+  const [searchParams] = useSearchParams();
 
-  // useEffect теперь будет срабатывать каждый раз, когда меняется searchParams
   useEffect(() => {
     const getEvents = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        // Передаем параметры фильтрации в нашу API-функцию
         const data = await fetchEvents(searchParams); 
         setEvents(data);
       } catch (err) {
-        setError("Не удалось загрузить события. Убедитесь, что бэкенд-сервер запущен.");
+        // 3. Переводим сообщение об ошибке
+        setError(t('errorLoadEvents'));
         console.error(err);
       } finally {
         setIsLoading(false);
@@ -28,13 +29,13 @@ export default function HomePage() {
     };
 
     getEvents();
-  }, [searchParams]); // <-- Добавляем searchParams в массив зависимостей
+  }, [searchParams, t]); // <-- Добавляем t в зависимости
 
   if (isLoading) {
-    return <div className="text-white text-2xl text-center">Загрузка событий...</div>;
+    // 4. Переводим сообщение о загрузке
+    return <div className="text-white text-2xl text-center">{t('loadingEvents')}</div>;
   }
   
-  // ... остальная часть компонента без изменений
   if (error) {
     return <div className="text-red-500 text-2xl text-center">{error}</div>;
   }
@@ -42,7 +43,8 @@ export default function HomePage() {
   return (
     <div>
       <h1 className="text-4xl font-bold text-white text-center mb-8">
-        Ближайшие события
+        {/* 5. Переводим заголовок */}
+        {t('upcomingEvents')}
       </h1>
       {events.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -51,7 +53,8 @@ export default function HomePage() {
           ))}
         </div>
       ) : (
-        <p className="text-gray-400 text-center text-xl mt-10">По вашему запросу событий не найдено.</p>
+        // 6. Переводим сообщение об отсутствии событий
+        <p className="text-gray-400 text-center text-xl mt-10">{t('noEventsFound')}</p>
       )}
     </div>
   );
