@@ -34,7 +34,8 @@
   "formTitleEN": "Title (EN)",
   "formDescriptionEN": "Description (EN)",
   "formTitleRU": "Название (RU)",
-  "formDescriptionRU": "Описание (RU)","selectCity_placeholder": "Select City",
+  "formDescriptionRU": "Описание (RU)",
+  "selectCity_placeholder": "Select City",
   "selectCategory_placeholder": "Select Category",
   "selectYear_placeholder": "Select Year",
   "selectMonth_placeholder": "Select Month",
@@ -46,5 +47,9 @@
   "upcomingEvents": "Upcoming Events",
   "noEventsFound": "No events found for your request.",
   "loadingEvents": "Loading events...",
-  "errorLoadEvents": "Failed to load events. Make sure the backend server is running."
+  "errorLoadEvents": "Failed to load events. Make sure the backend server is running.",
+  "profile_title": "Welcome, {{name}}",
+  "profile_subtitle": "Here are your saved favorite events.",
+  "profile_no_favorites": "You have not saved any favorites yet.",
+  "auth_required": "Please log in to view this page."
 }

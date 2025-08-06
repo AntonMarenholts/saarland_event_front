@@ -1,10 +1,12 @@
-import { useAuth } from "../hooks/useAuth";
+import AuthService from "../services/auth.service";
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function ProtectedRoute() {
-  const { isAdmin } = useAuth();
+  const user = AuthService.getCurrentUser();
 
-  // Если пользователь - админ, показываем содержимое (через Outlet)
-  // Если нет - перенаправляем на страницу входа
-  return isAdmin ? <Outlet /> : <Navigate to="/login" replace />;
+  // Проверяем, есть ли пользователь и является ли он админом
+  const isAdmin = user && user.roles.includes("ROLE_ADMIN");
+
+  // Если админ - показываем содержимое. Если нет - перенаправляем на главную.
+  return isAdmin ? <Outlet /> : <Navigate to="/" replace />;
 }

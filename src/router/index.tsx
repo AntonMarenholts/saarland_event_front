@@ -1,5 +1,3 @@
-// src/router/index.tsx
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "../pages/Home";
 import AdminDashboardPage from "../pages/AdminDashboard";
@@ -8,9 +6,11 @@ import NotFoundPage from "../pages/NotFound";
 import MainLayout from "../layout";
 import AdminEditEventPage from "../pages/AdminEditEvent";
 import LoginPage from "../pages/Login";
+import RegisterPage from "../pages/Register"; // <-- Импорт
 import ProtectedRoute from "./ProtectedRoute";
 import AdminCategoriesPage from "../pages/AdminCategories";
-import AdminCitiesPage from "../pages/AdminCities"; // <-- Импорт
+import AdminCitiesPage from "../pages/AdminCities";
+import ProfilePage from "../pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -18,15 +18,17 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/profile", element: <ProfilePage /> },
       { path: "/events/:id", element: <EventDetailPage /> },
       { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> }, // <-- НОВЫЙ МАРШРУТ
       {
         element: <ProtectedRoute />,
         children: [
           { path: "/admin", element: <AdminDashboardPage /> },
           { path: "/admin/edit/:id", element: <AdminEditEventPage /> },
           { path: "/admin/categories", element: <AdminCategoriesPage /> },
-          { path: "/admin/cities", element: <AdminCitiesPage /> }, // <-- НОВЫЙ МАРШРУТ
+          { path: "/admin/cities", element: <AdminCitiesPage /> },
         ],
       },
     ],
