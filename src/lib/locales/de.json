@@ -87,5 +87,10 @@
   "reminder_set_alert": "Erinnerung eingestellt für",
   "reminder_error_alert": "Erinnerung konnte nicht eingestellt werden",
   "not_found_message": "Hoppla! Sieht so aus, als hätten Sie sich verlaufen.",
-  "not_found_button": "Zurück zur Startseite"
+  "not_found_button": "Zurück zur Startseite",
+  "stats_total_events": "Veranstaltungen",
+  "stats_pending": "Ausstehend",
+  "stats_approved": "Genehmigt",
+  "stats_users": "Benutzer",
+  "stats_categories": "Kategorien"
 }

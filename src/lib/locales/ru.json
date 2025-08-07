@@ -87,5 +87,10 @@
   "reminder_set_alert": "Напоминание установлено на",
   "reminder_error_alert": "Не удалось установить напоминание",
   "not_found_message": "Упс! Кажется, вы забрели не туда.",
-  "not_found_button": "Вернуться на главную"
+  "not_found_button": "Вернуться на главную",
+  "stats_total_events": "Всего событий",
+  "stats_pending": "На модерации",
+  "stats_approved": "Одобрено",
+  "stats_users": "Пользователи",
+  "stats_categories": "Категории"
 }

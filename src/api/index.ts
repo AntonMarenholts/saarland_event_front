@@ -9,6 +9,7 @@ import type {
   CategoryData,
   CityData,
 } from "../types";
+import type { /*...,*/ AdminStats } from "../types";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api",
@@ -174,5 +175,9 @@ export const setReminder = async (
   remindAt: string
 ): Promise<ReminderResponse> => {
   const response = await apiClient.post('/reminders', { userId, eventId, remindAt });
+  return response.data;
+};
+export const fetchAdminStats = async (): Promise<AdminStats> => {
+  const response = await apiClient.get("/admin/events/stats");
   return response.data;
 };

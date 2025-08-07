@@ -87,5 +87,10 @@
   "reminder_set_alert": "Reminder set for",
   "reminder_error_alert": "Failed to set reminder",
   "not_found_message": "Oops! It looks like you're lost.",
-  "not_found_button": "Go back home"
+  "not_found_button": "Go back home",
+  "stats_total_events": "Total Events",
+  "stats_pending": "Pending",
+  "stats_approved": "Approved",
+  "stats_users": "Users",
+  "stats_categories": "Categories"
 }
