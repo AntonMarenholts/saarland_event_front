@@ -12,6 +12,7 @@ import AdminCategoriesPage from "../pages/AdminCategories";
 import AdminCitiesPage from "../pages/AdminCities";
 import ProfilePage from "../pages/Profile";
 import SubmitEventPage from "../pages/SubmitEvent";
+import CategoryPage from "../pages/CategoryPage";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "/submit-event", element: <SubmitEventPage /> },
+      { path: "/category/:categoryName", element: <CategoryPage /> },
       {
         element: <ProtectedRoute />,
         children: [

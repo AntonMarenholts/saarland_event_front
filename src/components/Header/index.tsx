@@ -1,54 +1,26 @@
 import { useEffect, useState } from "react";
-import {
-  NavLink,
-  useSearchParams,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { NavLink, useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchCategories } from "../../api";
-import type { Category, CurrentUser } from "../../types";
+import { fetchCategories, fetchCities } from "../../api";
+import type { Category, City, CurrentUser } from "../../types";
 import AuthService from "../../services/auth.service";
 
-const saarlandCities = [
-  "Saarbrücken",
-  "Neunkirchen",
-  "Homburg",
-  "Völklingen",
-  "St. Ingbert",
-  "Saarlouis",
-  "Merzig",
-  "St. Wendel",
-  "Püttlingen",
-];
-
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 5 }, (_, i) => currentYear + i);
+const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() + i);
 const months = [
-  { value: 1, name: "Januar" },
-  { value: 2, name: "Februar" },
-  { value: 3, name: "März" },
-  { value: 4, name: "April" },
-  { value: 5, name: "Mai" },
-  { value: 6, name: "Juni" },
-  { value: 7, name: "Juli" },
-  { value: 8, name: "August" },
-  { value: 9, name: "September" },
-  { value: 10, name: "Oktober" },
-  { value: 11, name: "November" },
-  { value: 12, name: "Dezember" },
+  { value: 1, name: "Januar" }, { value: 2, name: "Februar" }, { value: 3, name: "März" },
+  { value: 4, name: "April" }, { value: 5, name: "Mai" }, { value: 6, name: "Juni" },
+  { value: 7, name: "Juli" }, { value: 8, name: "August" }, { value: 9, name: "September" },
+  { value: 10, name: "Oktober" }, { value: 11, name: "November" }, { value: 12, name: "Dezember" },
 ];
 
 export default function Header() {
   const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-
-  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
-    undefined
-  );
+  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(undefined);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -70,14 +42,12 @@ export default function Header() {
   };
 
   const isAdminPage = location.pathname.startsWith("/admin");
-  const isAuthPage =
-    location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
 
   useEffect(() => {
     if (!isAdminPage && !isAuthPage) {
-      fetchCategories()
-        .then(setCategories)
-        .catch((err) => console.error("Failed to load categories", err));
+      fetchCategories().then(setCategories).catch((err) => console.error("Failed to load categories", err));
+      fetchCities().then(setCities).catch((err) => console.error("Failed to load cities", err));
     }
   }, [isAdminPage, isAuthPage]);
 
@@ -99,47 +69,26 @@ export default function Header() {
     if (!currentUser) {
       return (
         <>
-          <NavLink
-            to="/login"
-            className="text-sm font-medium hover:text-cyan-400"
-          >
-            {t("loginButton")}
-          </NavLink>
-          <NavLink
-            to="/register"
-            className="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded-md text-sm"
-          >
-            {t("signupButton")}
-          </NavLink>
+          <NavLink to="/login" className="text-sm font-medium hover:text-cyan-400">{t("loginButton")}</NavLink>
+          <NavLink to="/register" className="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded-md text-sm">{t("signupButton")}</NavLink>
         </>
       );
     }
-
     return (
       <>
-        {/* ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ: Добавляем проверку !isAdminPage ▼▼▼ */}
         {!isAdminPage && (
-          <NavLink
-            to="/submit-event"
-            className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-sm"
-          >
-            {t("submit_event_button")}
-          </NavLink>
+          <NavLink to="/submit-event" className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-sm">{t("submit_event_button")}</NavLink>
         )}
 
-        <NavLink
-          to={isAdmin ? "/admin" : "/profile"}
-          className="text-sm font-medium hover:text-cyan-400"
-        >
-          {currentUser.username}
+        {/* ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ: Добавляем кнопку "Избранное" ▼▼▼ */}
+        <NavLink to="/profile" className="text-sm font-medium hover:text-cyan-400">
+          {isAdmin ? `⭐ ${t('admin')}` : `⭐ ${t('favorites_button')}`}
         </NavLink>
+        
+        {/* Имя пользователя теперь ведет в админку, если это админ */}
+        <span className="text-sm font-medium text-gray-400">{currentUser.username}</span>
 
-        <button
-          onClick={logOut}
-          className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm"
-        >
-          {t("logout")}
-        </button>
+        <button onClick={logOut} className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm">{t("logout")}</button>
       </>
     );
   };
@@ -147,10 +96,7 @@ export default function Header() {
   return (
     <header className="bg-gray-800 text-white p-4 sticky top-0 z-50">
       <nav className="container mx-auto flex justify-between items-center gap-4 flex-wrap">
-        <NavLink to="/" className="text-xl font-bold hover:text-cyan-400">
-          {t("appName")}
-        </NavLink>
-
+        <NavLink to="/" className="text-xl font-bold hover:text-cyan-400">{t("appName")}</NavLink>
         {!isAdminPage && !isAuthPage ? (
           <div className="flex gap-2 flex-wrap">
             <select
@@ -159,11 +105,7 @@ export default function Header() {
               className="bg-gray-700 text-white p-2 rounded-md appearance-none"
             >
               <option value="all">{t("selectCity_placeholder")}</option>
-              {saarlandCities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
+              {cities.map((city) => (<option key={city.id} value={city.name}>{city.name}</option>))}
             </select>
             <select
               onChange={(e) => handleFilterChange("category", e.target.value)}
@@ -171,11 +113,7 @@ export default function Header() {
               className="bg-gray-700 text-white p-2 rounded-md appearance-none"
             >
               <option value="all">{t("selectCategory_placeholder")}</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id.toString()}>
-                  {cat.name}
-                </option>
-              ))}
+              {categories.map((cat) => (<option key={cat.id} value={cat.id.toString()}>{cat.name}</option>))}
             </select>
             <select
               onChange={(e) => handleFilterChange("year", e.target.value)}
@@ -183,11 +121,7 @@ export default function Header() {
               className="bg-gray-700 text-white p-2 rounded-md appearance-none"
             >
               <option value="all">{t("selectYear_placeholder")}</option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
+              {years.map((year) => (<option key={year} value={year}>{year}</option>))}
             </select>
             <select
               onChange={(e) => handleFilterChange("month", e.target.value)}
@@ -195,17 +129,12 @@ export default function Header() {
               className="bg-gray-700 text-white p-2 rounded-md appearance-none"
             >
               <option value="all">{t("selectMonth_placeholder")}</option>
-              {months.map((month) => (
-                <option key={month.value} value={month.value.toString()}>
-                  {month.name}
-                </option>
-              ))}
+              {months.map((month) => (<option key={month.value} value={month.value.toString()}>{month.name}</option>))}
             </select>
           </div>
         ) : (
           <div className="flex-grow"></div>
         )}
-
         <div className="flex items-center gap-4">
           <select
             onChange={(e) => changeLanguage(e.target.value)}
@@ -216,7 +145,6 @@ export default function Header() {
             <option value="en">EN</option>
             <option value="ru">RU</option>
           </select>
-
           {!isAuthPage && renderUserSection()}
         </div>
       </nav>

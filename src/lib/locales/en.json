@@ -92,5 +92,7 @@
   "stats_pending": "Pending",
   "stats_approved": "Approved",
   "stats_users": "Users",
-  "stats_categories": "Categories"
+  "stats_categories": "Categories",
+  "favorites_button": "Favorites",
+  "admin": "Admin"
 }

@@ -1,6 +1,5 @@
-// src/pages/Profile/index.tsx
-
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // <-- 1. Импортируем useNavigate
 import AuthService from "../../services/auth.service";
 import { fetchFavorites } from "../../api";
 import type { Event } from "../../types";
@@ -9,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
+  const navigate = useNavigate(); // <-- 2. Инициализируем хук для навигации
   const currentUser = AuthService.getCurrentUser();
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +34,11 @@ export default function ProfilePage() {
 
   return (
     <div className="text-white">
+      {/* ▼▼▼ 3. ДОБАВЛЯЕМ КНОПКУ "НАЗАД" ▼▼▼ */}
+      <button onClick={() => navigate(-1)} className="mb-6 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg">
+        &larr; {t('backToList')}
+      </button>
+
       <h1 className="text-3xl font-bold mb-4">
         {t("profile_title", { name: currentUser.username })}
       </h1>

@@ -92,5 +92,7 @@
   "stats_pending": "Ausstehend",
   "stats_approved": "Genehmigt",
   "stats_users": "Benutzer",
-  "stats_categories": "Kategorien"
+  "stats_categories": "Kategorien",
+  "favorites_button": "Favoriten",
+  "admin": "Admin"
 }

@@ -8,23 +8,19 @@ import type {
   CreateEventData,
   CategoryData,
   CityData,
+  AdminStats, // Убедимся, что все типы импортированы
 } from "../types";
-import type { /*...,*/ AdminStats } from "../types";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api",
 });
 
-// ▼▼▼ НОВЫЙ КОД ▼▼▼
-// Interceptor для добавления JWT токена в заголовки
 apiClient.interceptors.request.use(
   (config) => {
-    // Пытаемся получить данные пользователя из localStorage
     const userString = localStorage.getItem("user");
     if (userString) {
       const user = JSON.parse(userString);
       if (user && user.token) {
-        // Если токен есть, добавляем его в заголовок Authorization
         config.headers["Authorization"] = "Bearer " + user.token;
       }
     }
@@ -34,15 +30,18 @@ apiClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-// ▲▲▲ НОВЫЙ КОД ▲▲▲
 
-// --- ПУБЛИЧНЫЕ ЗАПРОСЫ (остаются без изменений) ---
+// --- ПУБЛИЧНЫЕ ЗАПРОСЫ ---
+
+// ▼▼▼ ИЗМЕНЯЕМ ЭТУ ФУНКЦИЮ ▼▼▼
 export const fetchEvents = async (
   params: URLSearchParams
 ): Promise<Event[]> => {
-  const response = await apiClient.get("/events", { params });
+  // Мы больше не передаем весь объект params, а только его строковое представление
+  const response = await apiClient.get(`/events?${params.toString()}`);
   return response.data;
 };
+// ▲▲▲ КОНЕЦ ИЗМЕНЕНИЙ ▲▲▲
 
 export const fetchCategories = async (): Promise<Category[]> => {
   const response = await apiClient.get("/categories");
@@ -71,24 +70,74 @@ export const translateText = async (
   return response.data.translatedText;
 };
 
-// --- АДМИНСКИЕ ЗАПРОСЫ (теперь защищены токеном) ---
-export const createEvent = async (
-  eventData: CreateEventData
-): Promise<Event> => {
+// --- ЗАПРОСЫ ПОЛЬЗОВАТЕЛЯ ---
+
+export const fetchFavorites = async (userId: number): Promise<Event[]> => {
+    const response = await apiClient.get(`/favorites/${userId}`);
+    return response.data;
+};
+
+export const addFavorite = async (userId: number, eventId: number): Promise<void> => {
+    await apiClient.post(`/favorites/${userId}/${eventId}`);
+};
+
+export const removeFavorite = async (userId: number, eventId: number): Promise<void> => {
+    await apiClient.delete(`/favorites/${userId}/${eventId}`);
+};
+
+export const submitEvent = async (eventData: CreateEventData): Promise<Event> => {
+    const response = await apiClient.post("/user/events", eventData);
+    return response.data;
+};
+
+export const uploadImage = async (file: File): Promise<{ imageUrl: string }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await apiClient.post("/upload/image", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+};
+
+interface ReminderResponse {
+    message: string;
+}
+
+export const setReminder = async (userId: number, eventId: number, remindAt: string): Promise<ReminderResponse> => {
+    const response = await apiClient.post('/reminders', { userId, eventId, remindAt });
+    return response.data;
+};
+
+
+// --- АДМИНСКИЕ ЗАПРОСЫ ---
+
+export const fetchAllEventsForAdmin = async (): Promise<Event[]> => {
+  const response = await apiClient.get("/admin/events");
+  return response.data;
+};
+
+export const fetchAdminStats = async (): Promise<AdminStats> => {
+  const response = await apiClient.get("/admin/events/stats");
+  return response.data;
+};
+
+export const createEvent = async (eventData: CreateEventData): Promise<Event> => {
   const response = await apiClient.post("/admin/events", eventData);
   return response.data;
 };
 
-export const updateEvent = async (
-  id: number,
-  eventData: CreateEventData
-): Promise<Event> => {
+export const updateEvent = async (id: number, eventData: CreateEventData): Promise<Event> => {
   const response = await apiClient.put(`/admin/events/${id}`, eventData);
   return response.data;
 };
 
 export const deleteEvent = async (id: number): Promise<void> => {
   await apiClient.delete(`/admin/events/${id}`);
+};
+
+export const updateEventStatus = async (id: number, status: 'APPROVED' | 'REJECTED'): Promise<Event> => {
+  const response = await apiClient.patch(`/admin/events/${id}/status`, { status });
+  return response.data;
 };
 
 export const createCategory = async (categoryData: CategoryData) => {
@@ -107,77 +156,4 @@ export const createCity = async (cityData: CityData) => {
 
 export const deleteCity = async (id: number) => {
   await apiClient.delete(`/admin/cities/${id}`);
-};
-
-export const fetchFavorites = async (userId: number): Promise<Event[]> => {
-  const response = await apiClient.get(`/favorites/${userId}`);
-  return response.data;
-};
-
-export const addFavorite = async (
-  userId: number,
-  eventId: number
-): Promise<void> => {
-  await apiClient.post(`/favorites/${userId}/${eventId}`);
-};
-
-export const removeFavorite = async (
-  userId: number,
-  eventId: number
-): Promise<void> => {
-  await apiClient.delete(`/favorites/${userId}/${eventId}`);
-};
-
-export const submitEvent = async (
-  eventData: CreateEventData
-): Promise<Event> => {
-  // Используем новый эндпоинт, доступный для обычных пользователей
-  const response = await apiClient.post("/user/events", eventData);
-  return response.data;
-};
-
-// --- ADMIN MODERATION API ---
-
-// Получает ВСЕ события, включая те, что на модерации
-export const fetchAllEventsForAdmin = async (): Promise<Event[]> => {
-  const response = await apiClient.get("/admin/events");
-  return response.data;
-};
-
-// Обновляет статус события (Одобрить/Отклонить)
-export const updateEventStatus = async (id: number, status: 'APPROVED' | 'REJECTED'): Promise<Event> => {
-  // ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ: Отправляем объект вместо текста и убираем заголовки ▼▼▼
-  const response = await apiClient.patch(`/admin/events/${id}/status`, { status });
-  return response.data;
-};
-export const uploadImage = async (file: File): Promise<{ imageUrl: string }> => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const response = await apiClient.post("/upload/image", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data;
-};
-
-// ... все существующие функции
-
-interface ReminderResponse {
-  message: string;
-}
-
-// 2. Указываем этот тип в функции вместо "any"
-export const setReminder = async (
-  userId: number, 
-  eventId: number, 
-  remindAt: string
-): Promise<ReminderResponse> => {
-  const response = await apiClient.post('/reminders', { userId, eventId, remindAt });
-  return response.data;
-};
-export const fetchAdminStats = async (): Promise<AdminStats> => {
-  const response = await apiClient.get("/admin/events/stats");
-  return response.data;
 };
