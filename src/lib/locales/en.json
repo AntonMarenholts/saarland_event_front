@@ -69,5 +69,21 @@
   "addNewCity": "Add New City",
   "allCities": "All Cities",
   "cityName_placeholder": "City Name",
-  "form_specify_time": "Specify exact time"
+  "form_specify_time": "Specify exact time",
+  "city_label": "City",
+  "category_label": "Category",
+  "date_label": "Date",
+  "remind_button": "Remind me about the event",
+  "description_label": "Description",
+  "event_not_found": "Event not found",
+  "reminder_modal_title": "Set a reminder",
+  "reminder_modal_question": "How long before the event should we remind you?",
+  "reminder_option_1h": "1 hour before",
+  "reminder_option_3h": "3 hours before",
+  "reminder_option_1d": "1 day before",
+  "reminder_option_3d": "3 days before",
+  "cancel_button": "Cancel",
+  "set_button": "Set",
+  "reminder_set_alert": "Reminder set for",
+  "reminder_error_alert": "Failed to set reminder"
 }

@@ -69,5 +69,21 @@
   "addNewCity": "Добавить новый город",
   "allCities": "Все города",
   "cityName_placeholder": "Название города",
-  "form_specify_time": "Указать точное время"
+  "form_specify_time": "Указать точное время",
+  "city_label": "Город",
+  "category_label": "Категория",
+  "date_label": "Дата",
+  "remind_button": "Напомнить о событии",
+  "description_label": "Описание",
+  "event_not_found": "Событие не найдено",
+  "reminder_modal_title": "Установить напоминание",
+  "reminder_modal_question": "За сколько времени до начала события вам напомнить?",
+  "reminder_option_1h": "За 1 час",
+  "reminder_option_3h": "За 3 часа",
+  "reminder_option_1d": "За 1 день",
+  "reminder_option_3d": "За 3 дня",
+  "cancel_button": "Отмена",
+  "set_button": "Установить",
+  "reminder_set_alert": "Напоминание установлено на",
+  "reminder_error_alert": "Не удалось установить напоминание"
 }

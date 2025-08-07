@@ -69,5 +69,20 @@
   "addNewCity": "Neue Stadt hinzufügen",
   "allCities": "Alle Städte",
   "cityName_placeholder": "Name der Stadt",
-  "form_specify_time": "Genaue Zeit angeben"
+  "form_specify_time": "Genaue Zeit angeben","city_label": "Stadt",
+  "category_label": "Kategorie",
+  "date_label": "Datum",
+  "remind_button": "An die Veranstaltung erinnern",
+  "description_label": "Beschreibung",
+  "event_not_found": "Veranstaltung nicht gefunden",
+  "reminder_modal_title": "Erinnerung einstellen",
+  "reminder_modal_question": "Wie lange vor der Veranstaltung sollen wir Sie erinnern?",
+  "reminder_option_1h": "1 Stunde vorher",
+  "reminder_option_3h": "3 Stunden vorher",
+  "reminder_option_1d": "1 Tag vorher",
+  "reminder_option_3d": "3 Tage vorher",
+  "cancel_button": "Abbrechen",
+  "set_button": "Einstellen",
+  "reminder_set_alert": "Erinnerung eingestellt für",
+  "reminder_error_alert": "Erinnerung konnte nicht eingestellt werden"
 }
