@@ -160,3 +160,19 @@ export const uploadImage = async (file: File): Promise<{ imageUrl: string }> => 
   });
   return response.data;
 };
+
+// ... все существующие функции
+
+interface ReminderResponse {
+  message: string;
+}
+
+// 2. Указываем этот тип в функции вместо "any"
+export const setReminder = async (
+  userId: number, 
+  eventId: number, 
+  remindAt: string
+): Promise<ReminderResponse> => {
+  const response = await apiClient.post('/reminders', { userId, eventId, remindAt });
+  return response.data;
+};
