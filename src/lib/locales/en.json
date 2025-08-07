@@ -85,5 +85,7 @@
   "cancel_button": "Cancel",
   "set_button": "Set",
   "reminder_set_alert": "Reminder set for",
-  "reminder_error_alert": "Failed to set reminder"
+  "reminder_error_alert": "Failed to set reminder",
+  "not_found_message": "Oops! It looks like you're lost.",
+  "not_found_button": "Go back home"
 }

@@ -85,5 +85,7 @@
   "cancel_button": "Отмена",
   "set_button": "Установить",
   "reminder_set_alert": "Напоминание установлено на",
-  "reminder_error_alert": "Не удалось установить напоминание"
+  "reminder_error_alert": "Не удалось установить напоминание",
+  "not_found_message": "Упс! Кажется, вы забрели не туда.",
+  "not_found_button": "Вернуться на главную"
 }

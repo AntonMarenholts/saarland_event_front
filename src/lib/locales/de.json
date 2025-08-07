@@ -69,7 +69,8 @@
   "addNewCity": "Neue Stadt hinzufügen",
   "allCities": "Alle Städte",
   "cityName_placeholder": "Name der Stadt",
-  "form_specify_time": "Genaue Zeit angeben","city_label": "Stadt",
+  "form_specify_time": "Genaue Zeit angeben",
+  "city_label": "Stadt",
   "category_label": "Kategorie",
   "date_label": "Datum",
   "remind_button": "An die Veranstaltung erinnern",
@@ -84,5 +85,7 @@
   "cancel_button": "Abbrechen",
   "set_button": "Einstellen",
   "reminder_set_alert": "Erinnerung eingestellt für",
-  "reminder_error_alert": "Erinnerung konnte nicht eingestellt werden"
+  "reminder_error_alert": "Erinnerung konnte nicht eingestellt werden",
+  "not_found_message": "Hoppla! Sieht so aus, als hätten Sie sich verlaufen.",
+  "not_found_button": "Zurück zur Startseite"
 }
