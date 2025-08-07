@@ -149,3 +149,14 @@ export const updateEventStatus = async (id: number, status: 'APPROVED' | 'REJECT
   const response = await apiClient.patch(`/admin/events/${id}/status`, { status });
   return response.data;
 };
+export const uploadImage = async (file: File): Promise<{ imageUrl: string }> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await apiClient.post("/upload/image", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
