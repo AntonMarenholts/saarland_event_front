@@ -86,3 +86,10 @@ export interface AdminStats {
   totalUsers: number;
   totalCategories: number;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+}

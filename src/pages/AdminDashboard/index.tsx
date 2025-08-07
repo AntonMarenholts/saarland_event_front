@@ -160,6 +160,12 @@ export default function AdminDashboardPage() {
           >
             {t("manageCities")}
           </Link>
+          <Link
+            to="/admin/users"
+            className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
+          >
+            {t("manage_users")}
+          </Link>
         </div>
       </div>
 

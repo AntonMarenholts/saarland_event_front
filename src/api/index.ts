@@ -8,8 +8,10 @@ import type {
   CreateEventData,
   CategoryData,
   CityData,
-  AdminStats, // Убедимся, что все типы импортированы
+  AdminStats, 
+  User,
 } from "../types";
+
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api",
@@ -156,4 +158,12 @@ export const createCity = async (cityData: CityData) => {
 
 export const deleteCity = async (id: number) => {
   await apiClient.delete(`/admin/cities/${id}`);
+};
+export const fetchAllUsers = async (): Promise<User[]> => {
+  const response = await apiClient.get("/admin/users");
+  return response.data;
+};
+
+export const deleteUser = async (id: number): Promise<void> => {
+  await apiClient.delete(`/admin/users/${id}`);
 };

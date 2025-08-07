@@ -94,5 +94,7 @@
   "stats_users": "Пользователи",
   "stats_categories": "Категории",
   "favorites_button": "Избранное",
-  "admin": "Админ"
+  "admin": "Админ",
+  "manage_users": "Управлять пользователями",
+  "all_users": "Все пользователи"
 }

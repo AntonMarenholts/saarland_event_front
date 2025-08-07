@@ -94,5 +94,7 @@
   "stats_users": "Benutzer",
   "stats_categories": "Kategorien",
   "favorites_button": "Favoriten",
-  "admin": "Admin"
+  "admin": "Admin",
+  "manage_users": "Benutzer verwalten",
+  "all_users": "Alle Benutzer"
 }

@@ -13,6 +13,7 @@ import AdminCitiesPage from "../pages/AdminCities";
 import ProfilePage from "../pages/Profile";
 import SubmitEventPage from "../pages/SubmitEvent";
 import CategoryPage from "../pages/CategoryPage";
+import AdminUsersPage from "../pages/AdminUsers";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
           { path: "/admin/edit/:id", element: <AdminEditEventPage /> },
           { path: "/admin/categories", element: <AdminCategoriesPage /> },
           { path: "/admin/cities", element: <AdminCitiesPage /> },
+          { path: "/admin/users", element: <AdminUsersPage /> },
         ],
       },
     ],
