@@ -24,6 +24,7 @@ export interface Event {
   category: Category;
   city: City; // <-- Правильная структура
   translations: Translation[];
+  status: string;
 }
 
 // Тип для формы создания/обновления

@@ -1,6 +1,3 @@
-
-
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -12,8 +9,6 @@ export default function AdminCitiesPage() {
   const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newName, setNewName] = useState("");
-
-  
 
   const loadCities = async () => {
     try {
@@ -27,13 +22,9 @@ export default function AdminCitiesPage() {
     }
   };
 
-
   useEffect(() => {
     loadCities();
   }, []);
-
-
-
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +32,7 @@ export default function AdminCitiesPage() {
       await createCity({ name: newName });
       setNewName("");
       await loadCities();
-      // eslint-disable-next-line
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       alert(t('errorCreate'));
     }
@@ -52,7 +43,7 @@ export default function AdminCitiesPage() {
       try {
         await deleteCity(id);
         await loadCities();
-        // eslint-disable-next-line
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         alert(t('errorDelete'));
       }
@@ -61,9 +52,6 @@ export default function AdminCitiesPage() {
   
   if (isLoading) return <div className="text-white">{t('loading')}</div>;
 
-  
-
-
   return (
     <div className="w-full text-white">
       <Link to="/admin" className="text-cyan-400 hover:underline mb-6 block">&larr; {t('backToAdmin')}</Link>
@@ -71,12 +59,13 @@ export default function AdminCitiesPage() {
 
       <form onSubmit={handleCreate} className="mb-8 p-6 bg-gray-800 rounded-lg flex gap-4 items-end">
         <div>
-          <label className="block text-sm font-medium mb-1">{t('add')}</label>
+          {/* ▼▼▼ ИСПРАВЛЕНИЯ ЗДЕСЬ ▼▼▼ */}
+          <label className="block text-sm font-medium mb-1">{t('addNewCity')}</label>
           <input 
             type="text" 
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder={t('formCity')} 
+            placeholder={t('cityName_placeholder')} 
             required 
             className="p-2 rounded bg-gray-700 text-white"
           />
@@ -87,7 +76,8 @@ export default function AdminCitiesPage() {
       </form>
       
       <div className="bg-gray-800 rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">{t('allEvents')}</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('allCities')}</h2>
+        {/* ▲▲▲ ИСПРАВЛЕНИЯ ЗДЕСЬ ▲▲▲ */}
         <ul className="space-y-3">
           {cities.map(city => (
             <li key={city.id} className="flex justify-between items-center bg-gray-700 p-3 rounded">
@@ -97,9 +87,6 @@ export default function AdminCitiesPage() {
           ))}
         </ul>
       </div>
-      
-
-      
     </div>
   );
 }

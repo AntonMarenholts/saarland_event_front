@@ -11,6 +11,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminCategoriesPage from "../pages/AdminCategories";
 import AdminCitiesPage from "../pages/AdminCities";
 import ProfilePage from "../pages/Profile";
+import SubmitEventPage from "../pages/SubmitEvent";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
       { path: "/profile", element: <ProfilePage /> },
       { path: "/events/:id", element: <EventDetailPage /> },
       { path: "/login", element: <LoginPage /> },
-      { path: "/register", element: <RegisterPage /> }, // <-- НОВЫЙ МАРШРУТ
+      { path: "/register", element: <RegisterPage /> },
+      { path: "/submit-event", element: <SubmitEventPage /> },
       {
         element: <ProtectedRoute />,
         children: [
