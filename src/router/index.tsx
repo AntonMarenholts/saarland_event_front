@@ -14,6 +14,8 @@ import ProfilePage from "../pages/Profile";
 import SubmitEventPage from "../pages/SubmitEvent";
 import CategoryPage from "../pages/CategoryPage";
 import AdminUsersPage from "../pages/AdminUsers";
+import AuthCallbackPage from "../pages/AuthCallback";
+import SyncUserPage from "../pages/SyncUser";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,8 @@ const router = createBrowserRouter([
       { path: "/register", element: <RegisterPage /> },
       { path: "/submit-event", element: <SubmitEventPage /> },
       { path: "/category/:categoryName", element: <CategoryPage /> },
+      { path: "/auth/callback", element: <AuthCallbackPage /> },
+      { path: "/sync-user", element: <SyncUserPage /> },
       {
         element: <ProtectedRoute />,
         children: [

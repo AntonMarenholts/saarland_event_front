@@ -96,5 +96,12 @@
   "favorites_button": "Favoriten",
   "admin": "Admin",
   "manage_users": "Benutzer verwalten",
-  "all_users": "Alle Benutzer"
+  "all_users": "Alle Benutzer",
+  "login_with_google": "Mit Google anmelden",
+  "or_separator": "ODER",
+  "username_label": "Benutzername",
+  "password_label": "Passwort",
+  "create_account_link": "Konto erstellen",
+  "error_required_username": "Bitte geben Sie Ihren Benutzernamen ein.",
+  "error_required_password": "Bitte geben Sie Ihr Passwort ein."
 }

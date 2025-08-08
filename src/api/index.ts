@@ -8,10 +8,11 @@ import type {
   CreateEventData,
   CategoryData,
   CityData,
-  AdminStats, 
+  AdminStats,
   User,
+  CurrentUser,
 } from "../types";
-
+// AuthService здесь больше НЕ импортируется
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080/api",
@@ -33,17 +34,15 @@ apiClient.interceptors.request.use(
   }
 );
 
-// --- ПУБЛИЧНЫЕ ЗАПРОСЫ ---
+// --- Все остальные функции (fetchEvents, fetchCategories и т.д.) остаются без изменений ---
+// (Полный код всех функций для надежности приведен ниже)
 
-// ▼▼▼ ИЗМЕНЯЕМ ЭТУ ФУНКЦИЮ ▼▼▼
 export const fetchEvents = async (
   params: URLSearchParams
 ): Promise<Event[]> => {
-  // Мы больше не передаем весь объект params, а только его строковое представление
   const response = await apiClient.get(`/events?${params.toString()}`);
   return response.data;
 };
-// ▲▲▲ КОНЕЦ ИЗМЕНЕНИЙ ▲▲▲
 
 export const fetchCategories = async (): Promise<Category[]> => {
   const response = await apiClient.get("/categories");
@@ -71,8 +70,6 @@ export const translateText = async (
   });
   return response.data.translatedText;
 };
-
-// --- ЗАПРОСЫ ПОЛЬЗОВАТЕЛЯ ---
 
 export const fetchFavorites = async (userId: number): Promise<Event[]> => {
     const response = await apiClient.get(`/favorites/${userId}`);
@@ -109,9 +106,6 @@ export const setReminder = async (userId: number, eventId: number, remindAt: str
     const response = await apiClient.post('/reminders', { userId, eventId, remindAt });
     return response.data;
 };
-
-
-// --- АДМИНСКИЕ ЗАПРОСЫ ---
 
 export const fetchAllEventsForAdmin = async (): Promise<Event[]> => {
   const response = await apiClient.get("/admin/events");
@@ -159,6 +153,7 @@ export const createCity = async (cityData: CityData) => {
 export const deleteCity = async (id: number) => {
   await apiClient.delete(`/admin/cities/${id}`);
 };
+
 export const fetchAllUsers = async (): Promise<User[]> => {
   const response = await apiClient.get("/admin/users");
   return response.data;
@@ -166,4 +161,14 @@ export const fetchAllUsers = async (): Promise<User[]> => {
 
 export const deleteUser = async (id: number): Promise<void> => {
   await apiClient.delete(`/admin/users/${id}`);
+};
+
+// ▼▼▼ ИЗМЕНЕННАЯ ФУНКЦИЯ ▼▼▼
+export const fetchUserProfile = async (): Promise<CurrentUser> => {
+  const response = await apiClient.get('/auth/profile');
+  // Мы больше не импортируем AuthService, а напрямую берем токен из localStorage
+  const userString = localStorage.getItem("user");
+  const token = userString ? JSON.parse(userString).token : null;
+  // Возвращаем данные с бэкенда, добавляя к ним токен
+  return { ...response.data, token: token };
 };

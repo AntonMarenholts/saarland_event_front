@@ -96,5 +96,12 @@
   "favorites_button": "Избранное",
   "admin": "Админ",
   "manage_users": "Управлять пользователями",
-  "all_users": "Все пользователи"
+  "all_users": "Все пользователи",
+  "login_with_google": "Войти через Google",
+  "or_separator": "ИЛИ",
+  "username_label": "Имя пользователя",
+  "password_label": "Пароль",
+  "create_account_link": "Создать аккаунт",
+  "error_required_username": "Пожалуйста, введите имя пользователя.",
+  "error_required_password": "Пожалуйста, введите пароль."
 }
