@@ -103,5 +103,11 @@
   "password_label": "Password",
   "create_account_link": "Create an Account",
   "error_required_username": "Please enter your username.",
-  "error_required_password": "Please enter your password."
+  "error_required_password": "Please enter your password.",
+  "latitude_label": "Latitude",
+  "longitude_label": "Longitude",
+  "get_coordinates_hint": "To get coordinates, find the city on <1>Google Maps</1>, right-click on it, and the coordinates will be at the top of the context menu.",
+  "city_name_placeholder": "For example, Saarbrücken",
+  "latitude_placeholder": "For example, 49.2343",
+  "longitude_placeholder": "For example, 6.9965"
 }

@@ -103,5 +103,11 @@
   "password_label": "Passwort",
   "create_account_link": "Konto erstellen",
   "error_required_username": "Bitte geben Sie Ihren Benutzernamen ein.",
-  "error_required_password": "Bitte geben Sie Ihr Passwort ein."
+  "error_required_password": "Bitte geben Sie Ihr Passwort ein.",
+  "latitude_label": "Breitengrad (Latitude)",
+  "longitude_label": "Längengrad (Longitude)",
+  "get_coordinates_hint": "Um Koordinaten zu erhalten, suchen Sie die Stadt auf <1>Google Maps</1>, klicken Sie mit der rechten Maustaste darauf, und die Koordinaten werden oben im Kontextmenü angezeigt.",
+  "city_name_placeholder": "z.B., Saarbrücken",
+  "latitude_placeholder": "z.B., 49.2343",
+  "longitude_placeholder": "z.B., 6.9965"
 }

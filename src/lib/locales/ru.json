@@ -103,5 +103,11 @@
   "password_label": "Пароль",
   "create_account_link": "Создать аккаунт",
   "error_required_username": "Пожалуйста, введите имя пользователя.",
-  "error_required_password": "Пожалуйста, введите пароль."
+  "error_required_password": "Пожалуйста, введите пароль.",
+  "latitude_label": "Широта (Latitude)",
+  "longitude_label": "Долгота (Longitude)",
+  "get_coordinates_hint": "Чтобы получить координаты, найдите город на <1>Google Maps</1>, нажмите на него правой кнопкой мыши, и координаты будут вверху выпадающего меню.",
+  "city_name_placeholder": "Например, Saarbrücken",
+  "latitude_placeholder": "Например, 49.2343",
+  "longitude_placeholder": "Например, 6.9965"
 }

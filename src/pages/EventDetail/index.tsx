@@ -1,9 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // <-- 1. ИМПОРТИРУЕМ ХУК
+import { useTranslation } from "react-i18next";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { fetchEventById, setReminder } from "../../api";
 import type { Event } from "../../types";
 import AuthService from "../../services/auth.service";
+
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+// ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ: let заменен на const ▼▼▼
+const DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconAnchor: [12, 41] 
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
 
 export default function EventDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,9 +37,9 @@ export default function EventDetailPage() {
     if (!id) return;
     fetchEventById(id)
       .then(setEvent)
-      .catch(() => setError(t("errorLoadEvents"))) // Используем t() для перевода ошибки
+      .catch(() => setError(t("errorLoadEvents")))
       .finally(() => setIsLoading(false));
-  }, [id, t]); // Добавляем t в зависимости useEffect
+  }, [id, t]);
 
   const handleSetReminder = async () => {
     if (!currentUser || !event) return;
@@ -67,7 +83,7 @@ export default function EventDetailPage() {
         &larr; {t("backToList")}
       </button>
 
-      <article className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+      <article className="bg-gray-800 rounded-lg overflow-hidden shadow-lg mb-8">
         <img
           src={event.imageUrl || "https://via.placeholder.com/800x400"}
           alt={translation?.name}
@@ -79,23 +95,14 @@ export default function EventDetailPage() {
           </h1>
 
           <div className="flex flex-col md:flex-row flex-wrap gap-x-8 gap-y-2 text-gray-400 mb-6 border-b border-gray-700 pb-4">
-            <p>
-              <strong>{t("city_label")}:</strong> {event.city.name}
-            </p>
+            <p><strong>{t("city_label")}:</strong> {event.city.name}</p>
             <p>
               <strong>{t("category_label")}:</strong>
-              {/* ▼▼▼ ДЕЛАЕМ КАТЕГОРИЮ ССЫЛКОЙ ▼▼▼ */}
-              <Link
-                to={`/category/${event.category.name}`}
-                className="text-cyan-400 hover:underline ml-1"
-              >
+              <Link to={`/category/${event.category.name}`} className="text-cyan-400 hover:underline ml-1">
                 {event.category.name}
               </Link>
             </p>
-            <p>
-              <strong>{t("date_label")}:</strong>{" "}
-              {new Date(event.eventDate).toLocaleString(i18n.language)}
-            </p>
+            <p><strong>{t("date_label")}:</strong> {new Date(event.eventDate).toLocaleString(i18n.language)}</p>
           </div>
 
           {currentUser && (
@@ -114,6 +121,25 @@ export default function EventDetailPage() {
         </div>
       </article>
 
+      {event.city.latitude && event.city.longitude && (
+        <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg p-4 md:p-8">
+            <h2 className="text-2xl font-semibold mb-4">Местоположение на карте</h2>
+            <MapContainer 
+                center={[event.city.latitude, event.city.longitude]} 
+                zoom={14} 
+                scrollWheelZoom={false}
+                className="h-96 w-full rounded-md"
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[event.city.latitude, event.city.longitude]}>
+                    <Popup>{translation?.name} <br /> {event.city.name}</Popup>
+                </Marker>
+            </MapContainer>
+        </div>
+      )}
       {showReminderModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-gray-800 p-8 rounded-lg shadow-xl text-white">
