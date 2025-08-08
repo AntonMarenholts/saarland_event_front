@@ -79,3 +79,17 @@ export interface ProfileData {
   user: CurrentUser;
   favoriteEvents: Event[];
 }
+export interface AdminStats {
+  totalEvents: number;
+  pendingEvents: number;
+  approvedEvents: number;
+  totalUsers: number;
+  totalCategories: number;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+}

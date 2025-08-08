@@ -12,6 +12,10 @@ import AdminCategoriesPage from "../pages/AdminCategories";
 import AdminCitiesPage from "../pages/AdminCities";
 import ProfilePage from "../pages/Profile";
 import SubmitEventPage from "../pages/SubmitEvent";
+import CategoryPage from "../pages/CategoryPage";
+import AdminUsersPage from "../pages/AdminUsers";
+import AuthCallbackPage from "../pages/AuthCallback";
+import SyncUserPage from "../pages/SyncUser";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +28,9 @@ const router = createBrowserRouter([
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "/submit-event", element: <SubmitEventPage /> },
+      { path: "/category/:categoryName", element: <CategoryPage /> },
+      { path: "/auth/callback", element: <AuthCallbackPage /> },
+      { path: "/sync-user", element: <SyncUserPage /> },
       {
         element: <ProtectedRoute />,
         children: [
@@ -31,6 +38,7 @@ const router = createBrowserRouter([
           { path: "/admin/edit/:id", element: <AdminEditEventPage /> },
           { path: "/admin/categories", element: <AdminCategoriesPage /> },
           { path: "/admin/cities", element: <AdminCitiesPage /> },
+          { path: "/admin/users", element: <AdminUsersPage /> },
         ],
       },
     ],
