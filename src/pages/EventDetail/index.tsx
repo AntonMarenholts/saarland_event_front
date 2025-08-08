@@ -8,7 +8,7 @@ import AuthService from "../../services/auth.service";
 export default function EventDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(); // <-- 2. ПОДКЛЮЧАЕМСЯ К СИСТЕМЕ ПЕРЕВОДОВ
+  const { t, i18n } = useTranslation();
   const currentUser = AuthService.getCurrentUser();
 
   const [event, setEvent] = useState<Event | null>(null);
@@ -54,8 +54,6 @@ export default function EventDetailPage() {
       </div>
     );
 
-  // <-- 3. ДИНАМИЧЕСКИ ВЫБИРАЕМ ПЕРЕВОД СОБЫТИЯ -->
-  // Ищем перевод для текущего языка, если его нет — показываем немецкий (основной)
   const translation =
     event.translations.find((tr) => tr.locale === i18n.language) ||
     event.translations.find((tr) => tr.locale === "de");
@@ -73,12 +71,14 @@ export default function EventDetailPage() {
         <img
           src={event.imageUrl || "https://via.placeholder.com/800x400"}
           alt={translation?.name}
-          className="w-full h-96 object-cover"
+          className="w-full h-64 md:h-96 object-cover"
         />
-        <div className="p-8">
-          <h1 className="text-4xl font-bold mb-4">{translation?.name}</h1>
+        <div className="p-4 md:p-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            {translation?.name}
+          </h1>
 
-          <div className="flex flex-wrap gap-x-8 gap-y-2 text-gray-400 mb-6 border-b border-gray-700 pb-4">
+          <div className="flex flex-col md:flex-row flex-wrap gap-x-8 gap-y-2 text-gray-400 mb-6 border-b border-gray-700 pb-4">
             <p>
               <strong>{t("city_label")}:</strong> {event.city.name}
             </p>

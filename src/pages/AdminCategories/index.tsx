@@ -61,7 +61,6 @@ export default function AdminCategoriesPage() {
       <h1 className="text-3xl font-bold mb-6">{t('manageCategories')}</h1>
 
       <form onSubmit={handleCreate} className="mb-8 p-6 bg-gray-800 rounded-lg space-y-4">
-        {/* ▼▼▼ ИСПРАВЛЕНИЯ ЗДЕСЬ ▼▼▼ */}
         <h2 className="text-xl font-semibold">{t('addNewCategory')}</h2>
         <input 
           type="text" 
@@ -83,17 +82,16 @@ export default function AdminCategoriesPage() {
         </button>
       </form>
 
-      <div className="bg-gray-800 rounded-lg p-6">
+      <div className="bg-gray-800 rounded-lg p-4 md:p-6">
         <h2 className="text-xl font-semibold mb-4">{t('allCategories')}</h2>
-        {/* ▲▲▲ ИСПРАВЛЕНИЯ ЗДЕСЬ ▲▲▲ */}
         <ul className="space-y-3">
           {categories.map(cat => (
-            <li key={cat.id} className="flex justify-between items-center bg-gray-700 p-3 rounded">
+            <li key={cat.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-700 p-3 rounded gap-2">
               <div>
                 <p className="font-bold">{cat.name}</p>
                 <p className="text-sm text-gray-400">{cat.description}</p>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 self-end sm:self-center">
                 <button onClick={() => handleDelete(cat.id)} className="text-red-500 hover:text-red-400 text-sm">{t('delete')}</button>
               </div>
             </li>

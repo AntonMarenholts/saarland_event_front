@@ -77,10 +77,9 @@ export default function AdminCitiesPage() {
       
       <div className="bg-gray-800 rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">{t('allCities')}</h2>
-        {/* ▲▲▲ ИСПРАВЛЕНИЯ ЗДЕСЬ ▲▲▲ */}
         <ul className="space-y-3">
           {cities.map(city => (
-            <li key={city.id} className="flex justify-between items-center bg-gray-700 p-3 rounded">
+            <li key={city.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-700 p-3 rounded gap-2">
               <p className="font-bold">{city.name}</p>
               <button onClick={() => handleDelete(city.id)} className="text-red-500 hover:text-red-400 text-sm">{t('delete')}</button>
             </li>
