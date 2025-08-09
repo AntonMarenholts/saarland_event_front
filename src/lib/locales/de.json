@@ -109,5 +109,14 @@
   "get_coordinates_hint": "Um Koordinaten zu erhalten, suchen Sie die Stadt auf <1>Google Maps</1>, klicken Sie mit der rechten Maustaste darauf, und die Koordinaten werden oben im Kontextmenü angezeigt.",
   "city_name_placeholder": "z.B., Saarbrücken",
   "latitude_placeholder": "z.B., 49.2343",
-  "longitude_placeholder": "z.B., 6.9965"
+  "longitude_placeholder": "z.B., 6.9965",
+  "reviews_title": "Bewertungen",
+  "reviews_none": "Noch keine Bewertungen.",
+  "review_form_title": "Ihre Bewertung abgeben",
+  "review_form_rating_alert": "Bitte geben Sie eine Bewertung ab.",
+  "review_form_comment_placeholder": "Ihr Kommentar...",
+  "review_form_submit_button": "Senden",
+  "review_form_submitting": "Wird gesendet...",
+  "review_error_alert": "Bewertung konnte nicht gesendet werden.",
+  "location_map_title": "Standort auf der Karte"
 }

@@ -109,5 +109,14 @@
   "get_coordinates_hint": "Чтобы получить координаты, найдите город на <1>Google Maps</1>, нажмите на него правой кнопкой мыши, и координаты будут вверху выпадающего меню.",
   "city_name_placeholder": "Например, Saarbrücken",
   "latitude_placeholder": "Например, 49.2343",
-  "longitude_placeholder": "Например, 6.9965"
+  "longitude_placeholder": "Например, 6.9965",
+  "reviews_title": "Отзывы",
+  "reviews_none": "Отзывов пока нет.",
+  "review_form_title": "Оставить свой отзыв",
+  "review_form_rating_alert": "Пожалуйста, поставьте оценку.",
+  "review_form_comment_placeholder": "Ваш комментарий...",
+  "review_form_submit_button": "Отправить",
+  "review_form_submitting": "Отправка...",
+  "review_error_alert": "Не удалось отправить отзыв.",
+  "location_map_title": "Местоположение на карте"
 }

@@ -3,21 +3,28 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { fetchEventById, setReminder } from "../../api";
-import type { Event } from "../../types";
-import AuthService from "../../services/auth.service";
-
 import L from 'leaflet';
+
+// Импортируем все необходимые функции из API
+import { fetchEventById, setReminder, fetchReviewsByEventId, createReview } from "../../api";
+// Добавляем типы для Review
+import type { Event, Review } from "../../types";
+import AuthService from "../../services/auth.service";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ: let заменен на const ▼▼▼
+// Импортируем новые компоненты
+import StarRating from "../../components/StarRating";
+import ReviewList from "../../components/ReviewList";
+import ReviewForm from "../../components/ReviewForm";
+
+
+// Исправление для иконок Leaflet в Vite/Webpack
 const DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
-    iconAnchor: [12, 41] 
+    iconAnchor: [12, 41]
 });
-
 L.Marker.prototype.options.icon = DefaultIcon;
 
 
@@ -30,17 +37,66 @@ export default function EventDetailPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Состояния для отзывов
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [avgRating, setAvgRating] = useState(0);
+  const [isReviewLoading, setIsReviewLoading] = useState(false);
+
+  // Состояния для модального окна напоминаний
   const [showReminderModal, setShowReminderModal] = useState(false);
   const [reminderTime, setReminderTime] = useState(1);
 
   useEffect(() => {
     if (!id) return;
-    fetchEventById(id)
-      .then(setEvent)
-      .catch(() => setError(t("errorLoadEvents")))
-      .finally(() => setIsLoading(false));
+    
+    const loadData = async () => {
+        try {
+            setIsLoading(true);
+            // Загружаем параллельно и событие, и отзывы
+            const [eventData, reviewsData] = await Promise.all([
+                fetchEventById(id),
+                fetchReviewsByEventId(Number(id))
+            ]);
+            
+            setEvent(eventData);
+            setReviews(reviewsData);
+
+            // Считаем средний рейтинг
+            if (reviewsData.length > 0) {
+                const totalRating = reviewsData.reduce((acc, review) => acc + review.rating, 0);
+                setAvgRating(totalRating / reviewsData.length);
+            }
+
+        } catch {
+            setError(t("errorLoadEvents"));
+        } finally {
+            setIsLoading(false);
+        }
+    }
+    loadData();
   }, [id, t]);
 
+  const handleReviewSubmit = async (rating: number, comment: string) => {
+      if (!event) return;
+      setIsReviewLoading(true);
+      try {
+          const newReview = await createReview(event.id, { rating, comment });
+          setReviews([newReview, ...reviews]);
+      } catch (err: unknown) { // 1. Меняем 'any' на 'unknown'
+          let errorMessage = "Не удалось отправить отзыв.";
+          // 2. Добавляем проверку, чтобы безопасно извлечь сообщение
+          if (typeof err === 'object' && err !== null && 'response' in err && 
+              typeof (err as { response?: { data?: { message?: string } } }).response?.data?.message === 'string') {
+              errorMessage = (err as { response: { data: { message: string } } }).response.data.message;
+          }
+          alert(`Ошибка: ${errorMessage}`);
+          console.error(err);
+      } finally {
+          setIsReviewLoading(false);
+      }
+  }
+  
   const handleSetReminder = async () => {
     if (!currentUser || !event) return;
     const eventDate = new Date(event.eventDate);
@@ -61,39 +117,34 @@ export default function EventDetailPage() {
     }
   };
 
-  if (isLoading)
-    return <div className="text-white text-center">{t("loading")}</div>;
-  if (error || !event)
-    return (
-      <div className="text-red-500 text-center">
-        {error || t("event_not_found")}
-      </div>
-    );
+  if (isLoading) return <div className="text-white text-center">{t("loading")}</div>;
+  if (error || !event) return <div className="text-red-500 text-center">{error || t("event_not_found")}</div>;
 
-  const translation =
-    event.translations.find((tr) => tr.locale === i18n.language) ||
-    event.translations.find((tr) => tr.locale === "de");
+  const translation = event.translations.find((tr) => tr.locale === i18n.language) || event.translations.find((tr) => tr.locale === "de");
+
+  // Условия для отображения формы отзыва
+  const isEventPast = new Date(event.eventDate) < new Date();
+  const hasUserReviewed = reviews.some(review => review.userId === currentUser?.id);
+  const canUserReview = isEventPast && currentUser && !hasUserReviewed;
 
   return (
     <div className="text-white w-full max-w-4xl mx-auto">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-6 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg"
-      >
+      <button onClick={() => navigate(-1)} className="mb-6 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg">
         &larr; {t("backToList")}
       </button>
 
       <article className="bg-gray-800 rounded-lg overflow-hidden shadow-lg mb-8">
-        <img
-          src={event.imageUrl || "https://via.placeholder.com/800x400"}
-          alt={translation?.name}
-          className="w-full h-64 md:h-96 object-cover"
-        />
+        <img src={event.imageUrl || "https://via.placeholder.com/800x400"} alt={translation?.name} className="w-full h-64 md:h-96 object-cover" />
         <div className="p-4 md:p-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            {translation?.name}
-          </h1>
-
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-4">
+                <h1 className="text-3xl md:text-4xl font-bold">{translation?.name}</h1>
+                {avgRating > 0 && (
+                    <div className="flex items-center gap-2 pt-1">
+                        <StarRating rating={avgRating} size="md" />
+                        <span className="text-gray-400 text-sm">({reviews.length})</span>
+                    </div>
+                )}
+            </div>
           <div className="flex flex-col md:flex-row flex-wrap gap-x-8 gap-y-2 text-gray-400 mb-6 border-b border-gray-700 pb-4">
             <p><strong>{t("city_label")}:</strong> {event.city.name}</p>
             <p>
@@ -104,16 +155,11 @@ export default function EventDetailPage() {
             </p>
             <p><strong>{t("date_label")}:</strong> {new Date(event.eventDate).toLocaleString(i18n.language)}</p>
           </div>
-
           {currentUser && (
-            <button
-              onClick={() => setShowReminderModal(true)}
-              className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg mb-6"
-            >
+            <button onClick={() => setShowReminderModal(true)} className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg mb-6">
               ⏰ {t("remind_button")}
             </button>
           )}
-
           <div className="prose prose-invert max-w-none">
             <h2 className="text-2xl font-semibold">{t("description_label")}</h2>
             <p>{translation?.description}</p>
@@ -123,13 +169,8 @@ export default function EventDetailPage() {
 
       {event.city.latitude && event.city.longitude && (
         <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg p-4 md:p-8">
-            <h2 className="text-2xl font-semibold mb-4">Местоположение на карте</h2>
-            <MapContainer 
-                center={[event.city.latitude, event.city.longitude]} 
-                zoom={14} 
-                scrollWheelZoom={false}
-                className="h-96 w-full rounded-md"
-            >
+            <h2 className="text-2xl font-semibold mb-4">{t('location_map_title')}</h2>
+            <MapContainer center={[event.city.latitude, event.city.longitude]} zoom={14} scrollWheelZoom={false} className="h-96 w-full rounded-md">
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -140,32 +181,33 @@ export default function EventDetailPage() {
             </MapContainer>
         </div>
       )}
+      
+      <div className="bg-gray-800 rounded-lg shadow-lg p-4 md:p-8 mt-8">
+          <h2 className="text-2xl font-semibold mb-4">{t('reviews_title')}</h2>
+          {canUserReview && (
+              <div className="mb-8">
+                  <ReviewForm onSubmit={handleReviewSubmit} isLoading={isReviewLoading} />
+              </div>
+          )}
+          <ReviewList reviews={reviews} />
+      </div>
+
       {showReminderModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-gray-800 p-8 rounded-lg shadow-xl text-white">
             <h2 className="text-2xl mb-4">{t("reminder_modal_title")}</h2>
             <p className="mb-4">{t("reminder_modal_question")}</p>
-            <select
-              value={reminderTime}
-              onChange={(e) => setReminderTime(Number(e.target.value))}
-              className="w-full p-2 rounded bg-gray-700 text-white mb-6"
-            >
+            <select value={reminderTime} onChange={(e) => setReminderTime(Number(e.target.value))} className="w-full p-2 rounded bg-gray-700 text-white mb-6">
               <option value={1}>{t("reminder_option_1h")}</option>
               <option value={3}>{t("reminder_option_3h")}</option>
               <option value={24}>{t("reminder_option_1d")}</option>
               <option value={72}>{t("reminder_option_3d")}</option>
             </select>
             <div className="flex justify-end gap-4">
-              <button
-                onClick={() => setShowReminderModal(false)}
-                className="px-4 py-2 rounded bg-gray-600 hover:bg-gray-500"
-              >
+              <button onClick={() => setShowReminderModal(false)} className="px-4 py-2 rounded bg-gray-600 hover:bg-gray-500">
                 {t("cancel_button")}
               </button>
-              <button
-                onClick={handleSetReminder}
-                className="px-4 py-2 rounded bg-teal-600 hover:bg-teal-700"
-              >
+              <button onClick={handleSetReminder} className="px-4 py-2 rounded bg-teal-600 hover:bg-teal-700">
                 {t("set_button")}
               </button>
             </div>

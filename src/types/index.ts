@@ -88,3 +88,19 @@ export interface User {
   email: string;
   role: string;
 }
+
+// Тип для отзыва, который мы получаем с бэкенда
+export interface Review {
+  id: number;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  username: string;
+  userId: number;
+}
+
+// Тип для данных, которые мы отправляем на бэкенд при создании отзыва
+export interface ReviewData {
+  rating: number;
+  comment: string;
+}

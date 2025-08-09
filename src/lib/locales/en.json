@@ -109,5 +109,14 @@
   "get_coordinates_hint": "To get coordinates, find the city on <1>Google Maps</1>, right-click on it, and the coordinates will be at the top of the context menu.",
   "city_name_placeholder": "For example, Saarbrücken",
   "latitude_placeholder": "For example, 49.2343",
-  "longitude_placeholder": "For example, 6.9965"
+  "longitude_placeholder": "For example, 6.9965",
+  "reviews_title": "Reviews",
+  "reviews_none": "No reviews yet.",
+  "review_form_title": "Leave your review",
+  "review_form_rating_alert": "Please set a rating.",
+  "review_form_comment_placeholder": "Your comment...",
+  "review_form_submit_button": "Submit",
+  "review_form_submitting": "Submitting...",
+  "review_error_alert": "Failed to submit review.",
+  "location_map_title": "Location on map"
 }

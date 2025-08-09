@@ -11,6 +11,8 @@ import type {
   AdminStats,
   User,
   CurrentUser,
+  Review,
+  ReviewData,
 } from "../types";
 // AuthService здесь больше НЕ импортируется
 
@@ -171,4 +173,14 @@ export const fetchUserProfile = async (): Promise<CurrentUser> => {
   const token = userString ? JSON.parse(userString).token : null;
   // Возвращаем данные с бэкенда, добавляя к ним токен
   return { ...response.data, token: token };
+};
+
+export const fetchReviewsByEventId = async (eventId: number): Promise<Review[]> => {
+  const response = await apiClient.get(`/events/${eventId}/reviews`);
+  return response.data;
+};
+
+export const createReview = async (eventId: number, reviewData: ReviewData): Promise<Review> => {
+  const response = await apiClient.post(`/events/${eventId}/reviews`, reviewData);
+  return response.data;
 };
