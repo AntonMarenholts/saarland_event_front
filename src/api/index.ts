@@ -184,3 +184,4 @@ export const createReview = async (eventId: number, reviewData: ReviewData): Pro
   const response = await apiClient.post(`/events/${eventId}/reviews`, reviewData);
   return response.data;
 };
+
