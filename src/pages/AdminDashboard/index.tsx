@@ -11,7 +11,7 @@ import {
 import type { CreateEventData, Event, AdminStats } from "../../types";
 import EventForm from "../../components/EventForm";
 
-// Новый компонент для карточки со статистикой
+// Компонент для карточки со статистикой
 function StatCard({
   title,
   value,
@@ -35,7 +35,7 @@ function StatCard({
 export default function AdminDashboardPage() {
   const { t } = useTranslation();
   const [events, setEvents] = useState<Event[]>([]);
-  const [stats, setStats] = useState<AdminStats | null>(null); // Состояние для статистики
+  const [stats, setStats] = useState<AdminStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +45,6 @@ export default function AdminDashboardPage() {
     setError(null);
     setIsLoading(true);
     try {
-      // Загружаем и события, и статистику одновременно
       const [eventsData, statsData] = await Promise.all([
         fetchAllEventsForAdmin(),
         fetchAdminStats(),
@@ -71,13 +70,11 @@ export default function AdminDashboardPage() {
     loadAllData();
   }, []);
 
-  // ... все остальные хендлеры (handleDelete, handleCreateEvent, etc.) остаются без изменений ...
-
   const handleDelete = async (id: number) => {
     if (window.confirm(t("confirmDelete"))) {
       try {
         await deleteEvent(id);
-        await loadAllData(); // Обновляем все данные
+        await loadAllData();
       } catch (err) {
         alert(t("errorDelete"));
         console.error(err);
@@ -89,7 +86,7 @@ export default function AdminDashboardPage() {
     setIsSubmitting(true);
     try {
       await createEvent(eventData);
-      await loadAllData(); // Обновляем все данные
+      await loadAllData();
       setFormKey((prevKey) => prevKey + 1);
     } catch (err) {
       alert(t("errorCreate"));
@@ -105,7 +102,7 @@ export default function AdminDashboardPage() {
   ) => {
     try {
       await updateEventStatus(id, status);
-      await loadAllData(); // Обновляем все данные
+      await loadAllData();
     } catch (err) {
       alert("Не удалось обновить статус.");
       console.error(err);
@@ -147,7 +144,7 @@ export default function AdminDashboardPage() {
     <div className="w-full text-white">
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">{t("adminPanelTitle")}</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap"> {/* Добавлен flex-wrap */}
           <Link
             to="/admin/categories"
             className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
@@ -169,7 +166,6 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* ▼▼▼ БЛОК СО СТАТИСТИКОЙ ▼▼▼ */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <StatCard
@@ -212,11 +208,10 @@ export default function AdminDashboardPage() {
         isLoading={isSubmitting}
       />
 
-      <div className="bg-gray-800 rounded-lg p-6">
+      <div className="bg-gray-800 rounded-lg p-4 md:p-6">
         <h2 className="text-xl font-semibold mb-4">{t("allEvents")}</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-700">
-            {/* ... тело таблицы остается без изменений ... */}
             <thead>
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
@@ -236,10 +231,10 @@ export default function AdminDashboardPage() {
             <tbody className="divide-y divide-gray-700">
               {events.map((event) => (
                 <tr key={event.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {event.translations.find((tr) => tr.locale === "de")?.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {event.city.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

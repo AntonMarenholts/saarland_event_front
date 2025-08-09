@@ -12,40 +12,45 @@ export interface Category {
   description: string;
 }
 
+// ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ ▼▼▼
 export interface City {
   id: number;
   name: string;
+  latitude?: number | null; // Добавляем необязательные поля
+  longitude?: number | null;
 }
+// ▲▲▲ КОНЕЦ ИЗМЕНЕНИЙ ▲▲▲
 
 export interface Event {
   id: number;
   eventDate: string;
   imageUrl: string;
   category: Category;
-  city: City; // <-- Правильная структура
+  city: City; 
   translations: Translation[];
   status: string;
 }
 
-// Тип для формы создания/обновления
 export interface CreateEventData {
   eventDate: string;
   imageUrl: string;
   categoryId: number;
-  cityId: number; // <-- Правильная структура
+  cityId: number;
   translations: Translation[];
 }
 
-// Тип для формы создания категории
 export interface CategoryData {
   name: string;
   description?: string;
 }
 
-// Тип для формы создания города
+// ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ ▼▼▼
 export interface CityData {
   name: string;
+  latitude?: number | null; // Добавляем необязательные поля
+  longitude?: number | null;
 }
+// ▲▲▲ КОНЕЦ ИЗМЕНЕНИЙ ▲▲▲
 
 export interface LoginData {
   username?: string;
@@ -56,18 +61,6 @@ export interface RegisterData extends LoginData {
   email?: string;
 }
 
-// --- Типы для аутентификации ---
-
-export interface LoginData {
-  username?: string;
-  password?: string;
-}
-
-export interface RegisterData extends LoginData {
-  email?: string;
-}
-
-// ▼▼▼ ДОБАВЬТЕ ЭТОТ ИНТЕРФЕЙС ▼▼▼
 export interface CurrentUser {
   id: number;
   username: string;
@@ -75,10 +68,12 @@ export interface CurrentUser {
   roles: string[];
   token: string;
 }
+
 export interface ProfileData {
   user: CurrentUser;
   favoriteEvents: Event[];
 }
+
 export interface AdminStats {
   totalEvents: number;
   pendingEvents: number;
@@ -92,4 +87,20 @@ export interface User {
   username: string;
   email: string;
   role: string;
+}
+
+// Тип для отзыва, который мы получаем с бэкенда
+export interface Review {
+  id: number;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  username: string;
+  userId: number;
+}
+
+// Тип для данных, которые мы отправляем на бэкенд при создании отзыва
+export interface ReviewData {
+  rating: number;
+  comment: string;
 }
