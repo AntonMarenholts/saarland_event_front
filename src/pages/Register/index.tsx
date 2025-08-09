@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
-import type { RegisterData } from "../../types"; // <-- Импортируем тип
+import type { RegisterData } from "../../types";
+import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
+ 
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -10,11 +12,13 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterData>(); // <-- Указываем тип
+  } = useForm<RegisterData>();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Указываем тип для 'data'
+  // 2. Добавляем состояние для видимости пароля
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
   const handleRegister = (data: RegisterData) => {
     setMessage("");
     setLoading(true);
@@ -23,7 +27,8 @@ export default function RegisterPage() {
       (response) => {
         setMessage(response.data.message);
         setLoading(false);
-        navigate("/login");
+        // Рекомендуется перенаправить на страницу входа после успешной регистрации
+        navigate("/login"); 
       },
       (error) => {
         const resMessage =
@@ -50,7 +55,6 @@ export default function RegisterPage() {
         onSubmit={handleSubmit(handleRegister)}
         className="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        {/* Остальная часть формы без изменений */}
         <div className="mb-4">
           <label
             className="block text-white text-sm font-bold mb-2"
@@ -60,7 +64,7 @@ export default function RegisterPage() {
           </label>
           <input
             {...register("username", { required: true })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline"
           />
           {errors.username && (
             <p className="text-red-500 text-xs italic">Username is required.</p>
@@ -76,7 +80,7 @@ export default function RegisterPage() {
           </label>
           <input
             {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline"
           />
           {errors.email && (
             <p className="text-red-500 text-xs italic">
@@ -92,11 +96,23 @@ export default function RegisterPage() {
           >
             Password
           </label>
-          <input
-            type="password"
-            {...register("password", { required: true, minLength: 6 })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          />
+          {/* 3. Оборачиваем input и button в div */}
+          <div className="relative">
+            <input
+              // 4. Тип инпута теперь динамический
+              type={passwordVisible ? "text" : "password"}
+              {...register("password", { required: true, minLength: 6 })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10" // Добавляем отступ справа
+            />
+            {/* 5. Кнопка для переключения видимости */}
+            <button
+              type="button"
+              onClick={() => setPasswordVisible(!passwordVisible)}
+              className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-white"
+            >
+              {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
+            </button>
+          </div>
           {errors.password && (
             <p className="text-red-500 text-xs italic">
               Password must be at least 6 characters.
@@ -108,13 +124,13 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-gray-500"
           >
             {loading ? "Loading..." : "Sign Up"}
           </button>
           <Link
             to="/login"
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+            className="inline-block align-baseline font-bold text-sm text-cyan-500 hover:text-cyan-400"
           >
             Already have an account?
           </Link>
@@ -122,7 +138,11 @@ export default function RegisterPage() {
         {message && (
           <div className="mt-4">
             <div
-              className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+              className={`p-4 mb-4 text-sm rounded-lg ${
+                message.includes("successfully") 
+                ? "text-green-200 bg-green-900 border border-green-500" 
+                : "text-red-200 bg-red-900 border border-red-500"
+              }`}
               role="alert"
             >
               {message}

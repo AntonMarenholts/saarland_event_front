@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import type { LoginData } from "../../types";
 import { useTranslation } from "react-i18next";
+import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
+ // 1. Импортируем иконки
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -11,10 +13,13 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors }, // Теперь 'errors' используется
+    formState: { errors },
   } = useForm<LoginData>();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  // 2. Добавляем состояние для видимости пароля
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleLogin = (data: LoginData) => {
     setMessage("");
@@ -61,7 +66,6 @@ export default function LoginPage() {
           onClick={handleGoogleLogin}
           className="w-full mb-4 bg-white text-gray-700 font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"
         >
-          {/* ... SVG иконка Google ... */}
           <svg className="w-5 h-5" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
@@ -87,7 +91,6 @@ export default function LoginPage() {
               {...register("username", { required: true })}
               className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline"
             />
-            {/* ▼▼▼ ДОБАВЛЕН БЛОК ОШИБКИ ▼▼▼ */}
             {errors.username && (
               <p className="text-red-500 text-xs italic mt-1">{t('error_required_username')}</p>
             )}
@@ -96,12 +99,23 @@ export default function LoginPage() {
             <label className="block text-white text-sm font-bold mb-2" htmlFor="password">
               {t('password_label')}
             </label>
-            <input
-              type="password"
-              {...register("password", { required: true })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline"
-            />
-            {/* ▼▼▼ ДОБАВЛЕН БЛОК ОШИБКИ ▼▼▼ */}
+            {/* 3. Оборачиваем input и button в div */}
+            <div className="relative">
+              <input
+                // 4. Тип инпута теперь динамический
+                type={passwordVisible ? "text" : "password"}
+                {...register("password", { required: true })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10" // Добавляем отступ справа для иконки
+              />
+              {/* 5. Кнопка для переключения видимости */}
+              <button
+                type="button"
+                onClick={() => setPasswordVisible(!passwordVisible)}
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-white"
+              >
+                {passwordVisible ? <EyeSlashIcon /> : <EyeIcon />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-xs italic mt-1">{t('error_required_password')}</p>
             )}
