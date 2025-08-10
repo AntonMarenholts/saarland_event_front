@@ -34,7 +34,7 @@ export default function ProfilePage() {
     } else {
       setIsLoading(false);
     }
-  }, [currentUser, t]);
+  }, [currentUser?.id, t]);
 
   if (isLoading) {
     return <div className="text-white">{t("loading")}</div>;

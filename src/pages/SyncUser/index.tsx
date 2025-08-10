@@ -11,8 +11,10 @@ export default function SyncUserPage() {
       try {
         const fullUserData = await fetchUserProfile();
         localStorage.setItem("user", JSON.stringify(fullUserData));
-        navigate("/");
-        window.location.reload();
+        // Вместо главной страницы, можно перенаправить в профиль,
+        // так как пользователь, вероятно, хотел посмотреть избранное.
+        navigate("/profile");
+        // window.location.reload(); <-- УДАЛИТЕ ИЛИ ЗАКОММЕНТИРУЙТЕ ЭТУ СТРОКУ
       } catch (error) {
         console.error("Failed to sync user data, logging out.", error);
         AuthService.logout();
@@ -23,5 +25,7 @@ export default function SyncUserPage() {
     syncUser();
   }, [navigate]);
 
-  return <div className="text-white text-center">Синхронизация пользователя...</div>;
+  return (
+    <div className="text-white text-center">Синхронизация пользователя...</div>
+  );
 }
