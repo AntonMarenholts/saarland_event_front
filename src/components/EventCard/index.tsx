@@ -95,7 +95,7 @@ export default function EventCard({ event }: Props) {
       )}
 
       <img
-        className="w-full h-48 object-contain bg-gray-700"
+        className="w-full h-48 object-cover bg-gray-700"
         src={event.imageUrl || "https://via.placeholder.com/400x200"}
         alt={translation?.name || "Event Image"}
       />
