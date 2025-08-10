@@ -1,40 +1,37 @@
-import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // <-- 1. ИМПОРТИРУЕМ ДЕКОДЕР
-import type { LoginData, RegisterData, CurrentUser } from "../types";
+// src/services/auth.service.ts
 
-const API_URL = "http://localhost:8080/api/auth/";
+import type { AxiosResponse } from "axios"; // 1. ИМПОРТИРУЕМ ТИП
+import { jwtDecode } from "jwt-decode";
+import type { LoginData, RegisterData, CurrentUser } from "../types";
+import { apiClient } from "../api"; // 2. ИСПРАВЛЯЕМ ИМПОРТ (с фигурными скобками)
 
 const register = (data: RegisterData) => {
-  return axios.post(API_URL + "signup", data);
+  return apiClient.post("/auth/signup", data);
 };
 
 const login = (data: LoginData) => {
-  return axios
-    .post(API_URL + "signin", data)
-    .then((response) => {
-      if (response.data.token) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      }
-      return response.data;
-    });
+  return (
+    apiClient
+      .post("/auth/signin", data)
+      // 3. УКАЗЫВАЕМ ТИП ДЛЯ ПАРАМЕТРА response
+      .then((response: AxiosResponse) => {
+        if (response.data.token) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+        return response.data;
+      })
+  );
 };
 
-// ▼▼▼ 2. НОВЫЙ МЕТОД ДЛЯ ВХОДА С ТОКЕНОМ ▼▼▼
 const loginWithToken = (token: string) => {
-  // Декодируем токен, чтобы получить информацию о пользователе
   const decoded: { sub: string; iat: number; exp: number } = jwtDecode(token);
-  
-  // Создаем объект пользователя, который будем хранить.
-  // ВАЖНО: Мы не знаем email и ID из простого токена, но для работы интерфейса
-  // нам достаточно имени пользователя и ролей.
   const user: CurrentUser = {
     token: token,
     username: decoded.sub,
-    roles: ['ROLE_USER'], // По умолчанию все, кто вошел через Google - USER
-    id: 0, // Мы не знаем ID, ставим заглушку
-    email: '', // Мы не знаем email, ставим заглушку
+    roles: ["ROLE_USER"],
+    id: 0,
+    email: "",
   };
-  
   localStorage.setItem("user", JSON.stringify(user));
 };
 
@@ -55,7 +52,7 @@ const AuthService = {
   login,
   logout,
   getCurrentUser,
-  loginWithToken, // <-- 3. ЭКСПОРТИРУЕМ НОВЫЙ МЕТОД
+  loginWithToken,
 };
 
 export default AuthService;
