@@ -20,6 +20,7 @@ const apiClient = axios.create({
   baseURL: "https://saarland-events-api-ahtoh-102ce42017ef.herokuapp.com/api",
 });
 
+
 apiClient.interceptors.request.use(
   (config) => {
     const userString = localStorage.getItem("user");
