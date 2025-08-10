@@ -17,7 +17,7 @@ import type {
 // AuthService здесь больше НЕ импортируется
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://saarland-events-api-ahtoh-102ce42017ef.herokuapp.com/api",
 });
 
 apiClient.interceptors.request.use(
@@ -74,39 +74,57 @@ export const translateText = async (
 };
 
 export const fetchFavorites = async (userId: number): Promise<Event[]> => {
-    const response = await apiClient.get(`/favorites/${userId}`);
-    return response.data;
+  const response = await apiClient.get(`/favorites/${userId}`);
+  return response.data;
 };
 
-export const addFavorite = async (userId: number, eventId: number): Promise<void> => {
-    await apiClient.post(`/favorites/${userId}/${eventId}`);
+export const addFavorite = async (
+  userId: number,
+  eventId: number
+): Promise<void> => {
+  await apiClient.post(`/favorites/${userId}/${eventId}`);
 };
 
-export const removeFavorite = async (userId: number, eventId: number): Promise<void> => {
-    await apiClient.delete(`/favorites/${userId}/${eventId}`);
+export const removeFavorite = async (
+  userId: number,
+  eventId: number
+): Promise<void> => {
+  await apiClient.delete(`/favorites/${userId}/${eventId}`);
 };
 
-export const submitEvent = async (eventData: CreateEventData): Promise<Event> => {
-    const response = await apiClient.post("/user/events", eventData);
-    return response.data;
+export const submitEvent = async (
+  eventData: CreateEventData
+): Promise<Event> => {
+  const response = await apiClient.post("/user/events", eventData);
+  return response.data;
 };
 
-export const uploadImage = async (file: File): Promise<{ imageUrl: string }> => {
-    const formData = new FormData();
-    formData.append("file", file);
-    const response = await apiClient.post("/upload/image", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-    });
-    return response.data;
+export const uploadImage = async (
+  file: File
+): Promise<{ imageUrl: string }> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await apiClient.post("/upload/image", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data;
 };
 
 interface ReminderResponse {
-    message: string;
+  message: string;
 }
 
-export const setReminder = async (userId: number, eventId: number, remindAt: string): Promise<ReminderResponse> => {
-    const response = await apiClient.post('/reminders', { userId, eventId, remindAt });
-    return response.data;
+export const setReminder = async (
+  userId: number,
+  eventId: number,
+  remindAt: string
+): Promise<ReminderResponse> => {
+  const response = await apiClient.post("/reminders", {
+    userId,
+    eventId,
+    remindAt,
+  });
+  return response.data;
 };
 
 export const fetchAllEventsForAdmin = async (): Promise<Event[]> => {
@@ -119,12 +137,17 @@ export const fetchAdminStats = async (): Promise<AdminStats> => {
   return response.data;
 };
 
-export const createEvent = async (eventData: CreateEventData): Promise<Event> => {
+export const createEvent = async (
+  eventData: CreateEventData
+): Promise<Event> => {
   const response = await apiClient.post("/admin/events", eventData);
   return response.data;
 };
 
-export const updateEvent = async (id: number, eventData: CreateEventData): Promise<Event> => {
+export const updateEvent = async (
+  id: number,
+  eventData: CreateEventData
+): Promise<Event> => {
   const response = await apiClient.put(`/admin/events/${id}`, eventData);
   return response.data;
 };
@@ -133,8 +156,13 @@ export const deleteEvent = async (id: number): Promise<void> => {
   await apiClient.delete(`/admin/events/${id}`);
 };
 
-export const updateEventStatus = async (id: number, status: 'APPROVED' | 'REJECTED'): Promise<Event> => {
-  const response = await apiClient.patch(`/admin/events/${id}/status`, { status });
+export const updateEventStatus = async (
+  id: number,
+  status: "APPROVED" | "REJECTED"
+): Promise<Event> => {
+  const response = await apiClient.patch(`/admin/events/${id}/status`, {
+    status,
+  });
   return response.data;
 };
 
@@ -167,7 +195,7 @@ export const deleteUser = async (id: number): Promise<void> => {
 
 // ▼▼▼ ИЗМЕНЕННАЯ ФУНКЦИЯ ▼▼▼
 export const fetchUserProfile = async (): Promise<CurrentUser> => {
-  const response = await apiClient.get('/auth/profile');
+  const response = await apiClient.get("/auth/profile");
   // Мы больше не импортируем AuthService, а напрямую берем токен из localStorage
   const userString = localStorage.getItem("user");
   const token = userString ? JSON.parse(userString).token : null;
@@ -175,13 +203,20 @@ export const fetchUserProfile = async (): Promise<CurrentUser> => {
   return { ...response.data, token: token };
 };
 
-export const fetchReviewsByEventId = async (eventId: number): Promise<Review[]> => {
+export const fetchReviewsByEventId = async (
+  eventId: number
+): Promise<Review[]> => {
   const response = await apiClient.get(`/events/${eventId}/reviews`);
   return response.data;
 };
 
-export const createReview = async (eventId: number, reviewData: ReviewData): Promise<Review> => {
-  const response = await apiClient.post(`/events/${eventId}/reviews`, reviewData);
+export const createReview = async (
+  eventId: number,
+  reviewData: ReviewData
+): Promise<Review> => {
+  const response = await apiClient.post(
+    `/events/${eventId}/reviews`,
+    reviewData
+  );
   return response.data;
 };
-
