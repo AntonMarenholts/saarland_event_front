@@ -46,7 +46,8 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL;
+    window.location.href =
+      "https://saarland-events-api-ahtoh-102ce42017ef.herokuapp.com/oauth2/authorization/google";
   };
 
   return (
