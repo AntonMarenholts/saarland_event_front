@@ -118,5 +118,7 @@
   "review_form_submit_button": "Отправить",
   "review_form_submitting": "Отправка...",
   "review_error_alert": "Не удалось отправить отзыв.",
-  "location_map_title": "Местоположение на карте"
+  "location_map_title": "Местоположение на карте",
+  "search_placeholder": "Поиск...",
+  "signup": "Регистрация"
 }

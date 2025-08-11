@@ -5,7 +5,6 @@ import AuthService from "../../services/auth.service";
 import type { LoginData } from "../../types";
 import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
-// 1. Импортируем иконки
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -18,7 +17,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // 2. Добавляем состояние для видимости пароля
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleLogin = (data: LoginData) => {
@@ -31,7 +29,7 @@ export default function LoginPage() {
         if (user && user.roles.includes("ROLE_ADMIN")) {
           navigate("/admin");
         } else {
-          navigate("/profile");
+          navigate("/");
         }
       },
       (error) => {
@@ -48,8 +46,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href =
-      "https://saarland-events-api-ahtoh-102ce42017ef.herokuapp.com/oauth2/authorization/google";
+    window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL;
   };
 
   return (

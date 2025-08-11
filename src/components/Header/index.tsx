@@ -41,7 +41,6 @@ export default function Header() {
     searchParams.get("keyword") || ""
   );
 
-  // Состояние для управления мобильным меню
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -55,7 +54,6 @@ export default function Header() {
     }
   }, [location]);
 
-  // Закрываем мобильное меню при переходе на другую страницу
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
@@ -121,7 +119,7 @@ export default function Header() {
             to="/register"
             className="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded-md text-sm"
           >
-            {t("signupButton")}
+            {t("signup")}
           </NavLink>
         </>
       );
@@ -162,8 +160,6 @@ export default function Header() {
         <NavLink to="/" className="text-xl font-bold hover:text-cyan-400">
           {t("appName")}
         </NavLink>
-
-        {/* Кнопка-бургер (видна только на мобильных) */}
         {!isAdminPage && !isAuthPage && (
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -189,20 +185,18 @@ export default function Header() {
           </div>
         )}
 
-        {/* Контейнер для меню и фильтров (адаптивный) */}
         <div
           className={
             `w-full md:flex md:items-center md:w-auto` +
             (isMenuOpen ? " block" : " hidden")
           }
         >
-          {/* Контейнер для фильтров */}
           {!isAdminPage && !isAuthPage && (
             <div className="flex flex-col md:flex-row gap-2 mt-4 md:mt-0 md:mr-4">
               <form onSubmit={handleSearch} className="w-full">
                 <input
                   type="search"
-                  placeholder="Поиск..."
+                  placeholder={t("search_placeholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bg-gray-700 text-white p-2 rounded-md w-full"
@@ -261,7 +255,6 @@ export default function Header() {
 
           <div className="hidden md:flex flex-grow"></div>
 
-          {/* Контейнер для языка и пользователя */}
           <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mt-4 md:mt-0 pt-4 md:pt-0 border-t border-gray-700 md:border-0">
             <select
               onChange={(e) => changeLanguage(e.target.value)}
