@@ -124,5 +124,6 @@
   "uploadingPhoto": "Загрузка фото...",
   "selectFileButton": "Выберите файл",
   "noFileSelected": "Файл не выбран",
-  "actions_column": "Действия"
+  "actions_column": "Действия",
+  "error_incorrect_password": "Неверный пароль или имя пользователя."
 }

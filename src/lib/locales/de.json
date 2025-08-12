@@ -124,5 +124,6 @@
   "uploadingPhoto": "Foto wird hochgeladen...",
   "selectFileButton": "Datei auswählen",
   "noFileSelected": "Keine Datei ausgewählt",
-  "actions_column": "Aktionen"
+  "actions_column": "Aktionen",
+  "error_incorrect_password": "Falsches Passwort oder Benutzername."
 }

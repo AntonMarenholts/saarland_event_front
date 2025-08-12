@@ -124,5 +124,6 @@
   "uploadingPhoto": "Uploading photo...",
   "selectFileButton": "Select file",
   "noFileSelected": "No file selected",
-  "actions_column": "Actions"
+  "actions_column": "Actions",
+  "error_incorrect_password": "Incorrect password or username."
 }
