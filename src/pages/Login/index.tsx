@@ -6,7 +6,6 @@ import type { LoginData } from "../../types";
 import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
 
-
 export default function LoginPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -18,7 +17,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleLogin = (data: LoginData) => {
@@ -48,8 +46,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href =
-      "https://saarland-events-api-ahtoh-102ce42017ef.herokuapp.com/oauth2/authorization/google";
+    window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL;
   };
 
   return (
