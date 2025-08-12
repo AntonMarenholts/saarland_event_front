@@ -121,5 +121,7 @@
   "location_map_title": "Standort auf der Karte",
   "search_placeholder": "Suche...",
   "signup": "Registrieren",
-  "uploadingPhoto": "Foto wird hochgeladen..."
+  "uploadingPhoto": "Foto wird hochgeladen...",
+  "selectFileButton": "Datei auswählen",
+  "noFileSelected": "Keine Datei ausgewählt"
 }

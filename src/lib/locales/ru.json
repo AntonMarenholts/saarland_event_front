@@ -121,5 +121,7 @@
   "location_map_title": "Местоположение на карте",
   "search_placeholder": "Поиск...",
   "signup": "Регистрация",
-  "uploadingPhoto": "Загрузка фото..."
+  "uploadingPhoto": "Загрузка фото...",
+  "selectFileButton": "Выберите файл",
+  "noFileSelected": "Файл не выбран"
 }

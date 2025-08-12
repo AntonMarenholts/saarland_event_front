@@ -18,6 +18,7 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
   // Состояния для загрузки файла
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [fileName, setFileName] = useState(""); // <-- ИЗМЕНЕНИЕ: Состояние для имени файла
 
   // Состояния для полей формы
   const [specifyTime, setSpecifyTime] = useState(true);
@@ -90,9 +91,14 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
     }
   };
 
+  // ИЗМЕНЕНИЕ: Обновляем обработчик, чтобы он сохранял имя файла
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+    if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);
+      setFileName(e.target.files[0].name);
+    } else {
+      setImageFile(null);
+      setFileName("");
     }
   };
 
@@ -105,7 +111,6 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
 
     let finalImageUrl = initialData?.imageUrl || "";
 
-    // Сначала загружаем изображение, если оно было выбрано
     if (imageFile) {
       setIsUploading(true);
       try {
@@ -113,15 +118,14 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         finalImageUrl = response.imageUrl;
       } catch (error) {
         console.error("Image upload failed:", error);
-        alert("Ошибка загрузки изображения!");
+        alert(t('uploadError')); // Используем ключ перевода
         setIsUploading(false);
-        return; // Прерываем отправку формы
+        return;
       } finally {
         setIsUploading(false);
       }
     }
 
-    // Форматируем дату в UTC ISO формат
     let finalEventDate = "";
     if (specifyTime) {
       finalEventDate = new Date(eventDate).toISOString();
@@ -129,13 +133,11 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
       finalEventDate = new Date(eventDate + "T00:00:00Z").toISOString();
     }
 
-    // Собираем все переводы
     const translations = [];
     if (nameDe) translations.push({ locale: "de", name: nameDe, description: descriptionDe });
     if (nameEn) translations.push({ locale: "en", name: nameEn, description: descriptionEn });
     if (nameRu) translations.push({ locale: "ru", name: nameRu, description: descriptionRu });
 
-    // Формируем финальный объект и отправляем его
     const eventData: CreateEventData = {
       eventDate: finalEventDate,
       imageUrl: finalImageUrl,
@@ -152,7 +154,6 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         {initialData ? t("edit") : t("addNewEvent")}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
         <div>
           <input
             type={specifyTime ? "datetime-local" : "date"}
@@ -175,7 +176,6 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
           </label>
         </div>
 
-        
         <select value={cityId || ""} onChange={(e) => setCityId(Number(e.target.value))} required className="p-2 rounded bg-gray-700 text-white">
           <option value="" disabled>{t("selectCity")}</option>
           {cities.map((city) => (<option key={city.id} value={city.id}>{city.name}</option>))}
@@ -185,14 +185,27 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
           {categories.map((cat) => (<option key={cat.id} value={cat.id}>{cat.name}</option>))}
         </select>
         
+        {/* ИЗМЕНЕНИЕ: Кастомный компонент для загрузки файла */}
         <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-300 mb-1">{t("formImageUrl")}</label>
-            <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-700"
-            />
+            <div className="flex items-center gap-4">
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    id="imageUpload"
+                    className="hidden"
+                />
+                <label
+                    htmlFor="imageUpload"
+                    className="cursor-pointer bg-cyan-600 text-white py-2 px-4 rounded-md text-sm font-semibold hover:bg-cyan-700 whitespace-nowrap"
+                >
+                    {t("selectFileButton")}
+                </label>
+                <span className="text-sm text-gray-400 truncate">
+                    {fileName || t("noFileSelected")}
+                </span>
+            </div>
             {initialData?.imageUrl && !imageFile && (
                 <img src={initialData.imageUrl} alt="Current" className="mt-4 rounded-lg max-h-40" />
             )}

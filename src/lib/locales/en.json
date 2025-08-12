@@ -121,5 +121,7 @@
   "location_map_title": "Location on map",
   "search_placeholder": "Search...",
   "signup": "Sign Up",
-  "uploadingPhoto": "Uploading photo..."
+  "uploadingPhoto": "Uploading photo...",
+  "selectFileButton": "Select file",
+  "noFileSelected": "No file selected"
 }
