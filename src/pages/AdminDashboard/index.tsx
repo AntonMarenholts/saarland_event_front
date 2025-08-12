@@ -11,7 +11,6 @@ import {
 import type { CreateEventData, Event, AdminStats } from "../../types";
 import EventForm from "../../components/EventForm";
 
-// Компонент для карточки со статистикой
 function StatCard({
   title,
   value,
@@ -59,7 +58,7 @@ export default function AdminDashboardPage() {
       setEvents(eventsData);
       setStats(statsData);
     } catch (err) {
-      setError("Не удалось загрузить данные.");
+      setError("Failed to load data.");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -104,7 +103,7 @@ export default function AdminDashboardPage() {
       await updateEventStatus(id, status);
       await loadAllData();
     } catch (err) {
-      alert("Не удалось обновить статус.");
+      alert("Failed to update status.");
       console.error(err);
     }
   };
@@ -144,7 +143,7 @@ export default function AdminDashboardPage() {
     <div className="w-full text-white">
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">{t("adminPanelTitle")}</h1>
-        <div className="flex gap-2 flex-wrap"> {/* Добавлен flex-wrap */}
+        <div className="flex gap-2 flex-wrap">
           <Link
             to="/admin/categories"
             className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
@@ -223,8 +222,8 @@ export default function AdminDashboardPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                   {t("status_label")}
                 </th>
-                <th className="relative px-6 py-3">
-                  <span className="sr-only">Действия</span>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  {t("actions_column")}
                 </th>
               </tr>
             </thead>

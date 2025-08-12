@@ -7,20 +7,16 @@ export default function AuthCallbackPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 1. Пытаемся получить токен из URL
     const token = searchParams.get("token");
 
     if (token) {
-      // 2. Если токен есть, "логиним" пользователя, сохраняя токен
       AuthService.loginWithToken(token);
 
-      // 3. Перенаправляем пользователя на его страницу профиля
       navigate("/sync-user");
     } else {
-      // Если токена нет, что-то пошло не так, возвращаем на главную
       navigate("/");
     }
   }, [searchParams, navigate]);
 
-  return <div className="text-white text-center">Обработка входа...</div>;
+  return <div className="text-white text-center">Processing login...</div>;
 }

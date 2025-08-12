@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import type { RegisterData } from "../../types";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
- 
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -16,7 +15,6 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // 2. Добавляем состояние для видимости пароля
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleRegister = (data: RegisterData) => {
@@ -27,8 +25,8 @@ export default function RegisterPage() {
       (response) => {
         setMessage(response.data.message);
         setLoading(false);
-        // Рекомендуется перенаправить на страницу входа после успешной регистрации
-        navigate("/login"); 
+
+        navigate("/login");
       },
       (error) => {
         const resMessage =
@@ -96,15 +94,14 @@ export default function RegisterPage() {
           >
             Password
           </label>
-          {/* 3. Оборачиваем input и button в div */}
+
           <div className="relative">
             <input
-              // 4. Тип инпута теперь динамический
               type={passwordVisible ? "text" : "password"}
               {...register("password", { required: true, minLength: 6 })}
               className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10" // Добавляем отступ справа
             />
-            {/* 5. Кнопка для переключения видимости */}
+
             <button
               type="button"
               onClick={() => setPasswordVisible(!passwordVisible)}
@@ -139,9 +136,9 @@ export default function RegisterPage() {
           <div className="mt-4">
             <div
               className={`p-4 mb-4 text-sm rounded-lg ${
-                message.includes("successfully") 
-                ? "text-green-200 bg-green-900 border border-green-500" 
-                : "text-red-200 bg-red-900 border border-red-500"
+                message.includes("successfully")
+                  ? "text-green-200 bg-green-900 border border-green-500"
+                  : "text-red-200 bg-red-900 border border-red-500"
               }`}
               role="alert"
             >

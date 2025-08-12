@@ -6,7 +6,7 @@ import NotFoundPage from "../pages/NotFound";
 import MainLayout from "../layout";
 import AdminEditEventPage from "../pages/AdminEditEvent";
 import LoginPage from "../pages/Login";
-import RegisterPage from "../pages/Register"; // <-- Импорт
+import RegisterPage from "../pages/Register"; 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminCategoriesPage from "../pages/AdminCategories";
 import AdminCitiesPage from "../pages/AdminCities";

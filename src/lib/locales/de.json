@@ -123,5 +123,6 @@
   "signup": "Registrieren",
   "uploadingPhoto": "Foto wird hochgeladen...",
   "selectFileButton": "Datei auswählen",
-  "noFileSelected": "Keine Datei ausgewählt"
+  "noFileSelected": "Keine Datei ausgewählt",
+  "actions_column": "Aktionen"
 }

@@ -123,5 +123,6 @@
   "signup": "Регистрация",
   "uploadingPhoto": "Загрузка фото...",
   "selectFileButton": "Выберите файл",
-  "noFileSelected": "Файл не выбран"
+  "noFileSelected": "Файл не выбран",
+  "actions_column": "Действия"
 }

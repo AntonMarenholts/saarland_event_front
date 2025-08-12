@@ -123,5 +123,6 @@
   "signup": "Sign Up",
   "uploadingPhoto": "Uploading photo...",
   "selectFileButton": "Select file",
-  "noFileSelected": "No file selected"
+  "noFileSelected": "No file selected",
+  "actions_column": "Actions"
 }

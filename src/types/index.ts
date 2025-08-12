@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 export interface Translation {
   locale: string;
   name: string;
@@ -12,21 +10,19 @@ export interface Category {
   description: string;
 }
 
-// ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ ▼▼▼
 export interface City {
   id: number;
   name: string;
-  latitude?: number | null; // Добавляем необязательные поля
+  latitude?: number | null;
   longitude?: number | null;
 }
-// ▲▲▲ КОНЕЦ ИЗМЕНЕНИЙ ▲▲▲
 
 export interface Event {
   id: number;
   eventDate: string;
   imageUrl: string;
   category: Category;
-  city: City; 
+  city: City;
   translations: Translation[];
   status: string;
 }
@@ -44,13 +40,11 @@ export interface CategoryData {
   description?: string;
 }
 
-// ▼▼▼ ИЗМЕНЕНИЕ ЗДЕСЬ ▼▼▼
 export interface CityData {
   name: string;
-  latitude?: number | null; // Добавляем необязательные поля
+  latitude?: number | null;
   longitude?: number | null;
 }
-// ▲▲▲ КОНЕЦ ИЗМЕНЕНИЙ ▲▲▲
 
 export interface LoginData {
   username?: string;
@@ -89,7 +83,6 @@ export interface User {
   role: string;
 }
 
-// Тип для отзыва, который мы получаем с бэкенда
 export interface Review {
   id: number;
   rating: number;
@@ -99,7 +92,6 @@ export interface Review {
   userId: number;
 }
 
-// Тип для данных, которые мы отправляем на бэкенд при создании отзыва
 export interface ReviewData {
   rating: number;
   comment: string;

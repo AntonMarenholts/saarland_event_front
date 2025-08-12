@@ -1,26 +1,22 @@
-// src/services/auth.service.ts
-
-import type { AxiosResponse } from "axios"; // 1. ИМПОРТИРУЕМ ТИП
+import type { AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
 import type { LoginData, RegisterData, CurrentUser } from "../types";
-import { apiClient } from "../api"; // 2. ИСПРАВЛЯЕМ ИМПОРТ (с фигурными скобками)
+import { apiClient } from "../api";
 
 const register = (data: RegisterData) => {
   return apiClient.post("/auth/signup", data);
 };
 
 const login = (data: LoginData) => {
-  return (
-    apiClient
-      .post("/auth/signin", data)
-      // 3. УКАЗЫВАЕМ ТИП ДЛЯ ПАРАМЕТРА response
-      .then((response: AxiosResponse) => {
-        if (response.data.token) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
-        return response.data;
-      })
-  );
+  return apiClient
+    .post("/auth/signin", data)
+
+    .then((response: AxiosResponse) => {
+      if (response.data.token) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+      return response.data;
+    });
 };
 
 const loginWithToken = (token: string) => {

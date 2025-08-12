@@ -13,7 +13,6 @@ export default function ProfilePage() {
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // ▼▼▼ 1. ОБЪЯВЛЯЕМ СОСТОЯНИЕ ДЛЯ ОШИБКИ ▼▼▼
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function ProfilePage() {
         })
         .catch((err) => {
           console.error(err);
-          // ▼▼▼ 2. СОХРАНЯЕМ ОШИБКУ В СОСТОЯНИЕ ▼▼▼
+
           setError(t("errorLoadEvents"));
         })
         .finally(() => {
@@ -40,7 +39,6 @@ export default function ProfilePage() {
     return <div className="text-white">{t("loading")}</div>;
   }
 
-  // ▼▼▼ 3. ДОБАВЛЯЕМ БЛОК ДЛЯ ОТОБРАЖЕНИЯ ОШИБКИ ▼▼▼
   if (error) {
     return <div className="text-red-500 text-center">{error}</div>;
   }

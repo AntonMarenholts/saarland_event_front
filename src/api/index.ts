@@ -1,5 +1,3 @@
-// src/api/index.ts
-
 import axios from "axios";
 import type {
   Event,
@@ -14,7 +12,6 @@ import type {
   Review,
   ReviewData,
 } from "../types";
-// AuthService здесь больше НЕ импортируется
 
 export const apiClient = axios.create({
   baseURL: "https://saarland-events-api-ahtoh-102ce42017ef.herokuapp.com/api",
@@ -35,9 +32,6 @@ apiClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-// --- Все остальные функции (fetchEvents, fetchCategories и т.д.) остаются без изменений ---
-// (Полный код всех функций для надежности приведен ниже)
 
 export const fetchEvents = async (
   params: URLSearchParams
@@ -193,13 +187,12 @@ export const deleteUser = async (id: number): Promise<void> => {
   await apiClient.delete(`/admin/users/${id}`);
 };
 
-// ▼▼▼ ИЗМЕНЕННАЯ ФУНКЦИЯ ▼▼▼
 export const fetchUserProfile = async (): Promise<CurrentUser> => {
   const response = await apiClient.get("/auth/profile");
-  // Мы больше не импортируем AuthService, а напрямую берем токен из localStorage
+
   const userString = localStorage.getItem("user");
   const token = userString ? JSON.parse(userString).token : null;
-  // Возвращаем данные с бэкенда, добавляя к ним токен
+
   return { ...response.data, token: token };
 };
 

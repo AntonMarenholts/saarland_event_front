@@ -13,7 +13,9 @@ export default function AdminEditEventPage() {
 
   useEffect(() => {
     if (id) {
-      fetchEventById(id).then(setEvent).finally(() => setIsLoading(false));
+      fetchEventById(id)
+        .then(setEvent)
+        .finally(() => setIsLoading(false));
     }
   }, [id]);
 
@@ -22,20 +24,24 @@ export default function AdminEditEventPage() {
     setIsLoading(true);
     try {
       await updateEvent(Number(id), eventData);
-      navigate("/admin"); // После успешного обновления возвращаемся в админ-панель
+      navigate("/admin");
     } catch (err) {
-      alert("Не удалось обновить событие.");
+      alert("Failed to update event.");
       console.error(err);
       setIsLoading(false);
     }
   };
 
-  if (isLoading) return <div className="text-white">Загрузка данных события...</div>;
-  if (!event) return <div className="text-red-500">Событие не найдено.</div>;
+  if (isLoading) return <div className="text-white">Loading event data...</div>;
+  if (!event) return <div className="text-red-500">Event not found.</div>;
 
   return (
     <div className="text-white">
-      <EventForm onSubmit={handleUpdateEvent} isLoading={isLoading} initialData={event} />
+      <EventForm
+        onSubmit={handleUpdateEvent}
+        isLoading={isLoading}
+        initialData={event}
+      />
     </div>
   );
 }

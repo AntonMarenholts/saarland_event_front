@@ -118,15 +118,14 @@ export default function LoginPage() {
             >
               {t("password_label")}
             </label>
-            {/* 3. Оборачиваем input и button в div */}
+
             <div className="relative">
               <input
-                // 4. Тип инпута теперь динамический
                 type={passwordVisible ? "text" : "password"}
                 {...register("password", { required: true })}
                 className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10" // Добавляем отступ справа для иконки
               />
-              {/* 5. Кнопка для переключения видимости */}
+
               <button
                 type="button"
                 onClick={() => setPasswordVisible(!passwordVisible)}

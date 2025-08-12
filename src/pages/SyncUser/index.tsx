@@ -22,7 +22,5 @@ export default function SyncUserPage() {
     syncUser();
   }, [navigate]);
 
-  return (
-    <div className="text-white text-center">Синхронизация пользователя...</div>
-  );
+  return <div className="text-white text-center">Synchronizing user...</div>;
 }

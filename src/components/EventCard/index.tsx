@@ -18,8 +18,8 @@ export default function EventCard({ event }: Props) {
 
   useEffect(() => {
     if (currentUser) {
-      fetchFavorites(currentUser.id).then(favorites => {
-        if (favorites.some(fav => fav.id === event.id)) {
+      fetchFavorites(currentUser.id).then((favorites) => {
+        if (favorites.some((fav) => fav.id === event.id)) {
           setIsFavorite(true);
         }
       });
@@ -35,23 +35,24 @@ export default function EventCard({ event }: Props) {
       return;
     }
 
-    const action = isFavorite 
-      ? removeFavorite(currentUser.id, event.id) 
+    const action = isFavorite
+      ? removeFavorite(currentUser.id, event.id)
       : addFavorite(currentUser.id, event.id);
-      
+
     action.then(() => setIsFavorite(!isFavorite));
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const timeIsSpecified = date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
+    const timeIsSpecified =
+      date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
 
     const options: Intl.DateTimeFormatOptions = {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
-      timeZone: 'UTC'
+      timeZone: "UTC",
     };
 
     if (timeIsSpecified) {
@@ -60,7 +61,7 @@ export default function EventCard({ event }: Props) {
     }
 
     return date.toLocaleDateString(currentLang, options);
-  }
+  };
 
   const translation =
     event.translations.find((t) => t.locale === currentLang) ||
@@ -71,7 +72,6 @@ export default function EventCard({ event }: Props) {
       to={`/events/${event.id}`}
       className="relative block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 hover:scale-105 transition-transform duration-300"
     >
-      {/* ▼▼▼ ВОТ ЭТА КНОПКА БЫЛА ПРОПУЩЕНА ▼▼▼ */}
       {currentUser && (
         <button
           onClick={handleFavoriteClick}
@@ -104,9 +104,7 @@ export default function EventCard({ event }: Props) {
           {translation?.name || "Название не указано"}
         </h3>
         <p className="text-gray-400 mb-2">{event.city.name}</p>
-        <p className="text-gray-300 text-sm">
-          {formatDate(event.eventDate)}
-        </p>
+        <p className="text-gray-300 text-sm">{formatDate(event.eventDate)}</p>
       </div>
     </Link>
   );

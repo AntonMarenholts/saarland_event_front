@@ -7,7 +7,7 @@ import EventCard from "../../components/EventCard";
 
 export default function CategoryPage() {
   const { t } = useTranslation();
-  const { categoryName } = useParams<{ categoryName: string }>(); // Получаем имя категории из URL
+  const { categoryName } = useParams<{ categoryName: string }>();
 
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,14 +20,14 @@ export default function CategoryPage() {
       try {
         setIsLoading(true);
         setError(null);
-        // Создаем параметры запроса специально для этой категории
+
         const params = new URLSearchParams();
         params.append("categoryName", categoryName);
-        
+
         const data = await fetchEvents(params);
         setEvents(data);
       } catch (err) {
-        setError(t('errorLoadEvents'));
+        setError(t("errorLoadEvents"));
         console.error(err);
       } finally {
         setIsLoading(false);
@@ -38,18 +38,24 @@ export default function CategoryPage() {
   }, [categoryName, t]);
 
   if (isLoading) {
-    return <div className="text-white text-2xl text-center">{t('loadingEvents')}</div>;
+    return (
+      <div className="text-white text-2xl text-center">
+        {t("loadingEvents")}
+      </div>
+    );
   }
-  
+
   if (error) {
     return <div className="text-red-500 text-2xl text-center">{error}</div>;
   }
 
   return (
     <div>
-      <Link to="/" className="text-cyan-400 hover:underline mb-6 block">&larr; {t('backToList')}</Link>
+      <Link to="/" className="text-cyan-400 hover:underline mb-6 block">
+        &larr; {t("backToList")}
+      </Link>
       <h1 className="text-4xl font-bold text-white text-center mb-8">
-        {t('upcomingEvents')} в категории: {categoryName}
+        {t("upcomingEvents")} в категории: {categoryName}
       </h1>
       {events.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -58,7 +64,9 @@ export default function CategoryPage() {
           ))}
         </div>
       ) : (
-        <p className="text-gray-400 text-center text-xl mt-10">{t('noEventsFound')}</p>
+        <p className="text-gray-400 text-center text-xl mt-10">
+          {t("noEventsFound")}
+        </p>
       )}
     </div>
   );
