@@ -33,14 +33,18 @@ export default function LoginPage() {
         }
       },
       (error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
+        if (error.response && error.response.status === 401) {
+          setMessage(t("error_incorrect_password"));
+        } else {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          setMessage(resMessage);
+        }
         setLoading(false);
-        setMessage(resMessage);
       }
     );
   };
