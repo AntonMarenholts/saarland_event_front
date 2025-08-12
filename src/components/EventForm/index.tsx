@@ -152,7 +152,7 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         {initialData ? t("edit") : t("addNewEvent")}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Поле для даты и времени */}
+        
         <div>
           <input
             type={specifyTime ? "datetime-local" : "date"}
@@ -175,7 +175,7 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
           </label>
         </div>
 
-        {/* Выпадающие списки для города и категории */}
+        
         <select value={cityId || ""} onChange={(e) => setCityId(Number(e.target.value))} required className="p-2 rounded bg-gray-700 text-white">
           <option value="" disabled>{t("selectCity")}</option>
           {cities.map((city) => (<option key={city.id} value={city.id}>{city.name}</option>))}
@@ -185,9 +185,8 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
           {categories.map((cat) => (<option key={cat.id} value={cat.id}>{cat.name}</option>))}
         </select>
         
-        {/* Поле для загрузки изображения */}
         <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-300 mb-1">Изображение</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">{t("formImageUrl")}</label>
             <input
                 type="file"
                 accept="image/*"
@@ -200,7 +199,6 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         </div>
       </div>
       
-      {/* Блок с переводами */}
       <div className="space-y-4">
         <div className="border border-gray-700 p-4 rounded-md">
           <div className="flex justify-between items-center mb-2">
@@ -224,9 +222,8 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         </div>
       </div>
 
-      {/* Кнопка отправки */}
       <button type="submit" disabled={isLoading || isTranslating || isUploading} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded transition disabled:bg-gray-500">
-        {isUploading ? "Загрузка фото..." : isLoading ? t("saving") : initialData ? t("save") : t("add")}
+        {isUploading ? t("uploadingPhoto") : isLoading ? t("saving") : initialData ? t("save") : t("add")}
       </button>
     </form>
   );

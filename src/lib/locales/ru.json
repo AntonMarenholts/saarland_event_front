@@ -18,7 +18,7 @@
   "errorCreate": "Ошибка при создании.",
   "selectCity": "Выберите город",
   "selectCategory": "Выберите категорию",
-  "formImageUrl": "URL изображения",
+  "formImageUrl": "Изображение",
   "formTitleDE": "Название (DE)",
   "formDescriptionDE": "Описание (DE)",
   "formCity": "Город",
@@ -120,5 +120,6 @@
   "review_error_alert": "Не удалось отправить отзыв.",
   "location_map_title": "Местоположение на карте",
   "search_placeholder": "Поиск...",
-  "signup": "Регистрация"
+  "signup": "Регистрация",
+  "uploadingPhoto": "Загрузка фото..."
 }
