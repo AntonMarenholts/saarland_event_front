@@ -40,8 +40,26 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("keyword") || ""
   );
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const newSearchParams = new URLSearchParams(searchParams);
+      if (searchQuery) {
+        newSearchParams.set("keyword", searchQuery);
+      } else {
+        newSearchParams.delete("keyword");
+      }
+
+      if (location.search !== `?${newSearchParams.toString()}`) {
+        navigate(`/?${newSearchParams.toString()}`);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery, navigate, location.search]);
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -70,22 +88,21 @@ export default function Header() {
     location.pathname === "/login" || location.pathname === "/register";
 
   useEffect(() => {
-  if (!isAdminPage && !isAuthPage) {
-    fetchCategories()
-      .then(data => {
-        data.sort((a, b) => a.name.localeCompare(b.name));
-        setCategories(data);
-      })
-      .catch((err) => console.error("Failed to load categories", err));
-    
-    fetchCities()
-      .then(data => {
-        data.sort((a, b) => a.name.localeCompare(b.name));
-        setCities(data);
-      })
-      .catch((err) => console.error("Failed to load cities", err));
-  }
-}, [isAdminPage, isAuthPage]);
+    if (!isAdminPage && !isAuthPage) {
+      fetchCategories()
+        .then((data) => {
+          data.sort((a, b) => a.name.localeCompare(b.name));
+          setCategories(data);
+        })
+        .catch((err) => console.error("Failed to load categories", err));
+      fetchCities()
+        .then((data) => {
+          data.sort((a, b) => a.name.localeCompare(b.name));
+          setCities(data);
+        })
+        .catch((err) => console.error("Failed to load cities", err));
+    }
+  }, [isAdminPage, isAuthPage]);
 
   const handleFilterChange = (key: string, value: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -93,17 +110,6 @@ export default function Header() {
       newSearchParams.delete(key);
     } else {
       newSearchParams.set(key, value);
-    }
-    navigate(`/?${newSearchParams.toString()}`);
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (searchQuery) {
-      newSearchParams.set("keyword", searchQuery);
-    } else {
-      newSearchParams.delete("keyword");
     }
     navigate(`/?${newSearchParams.toString()}`);
   };
@@ -131,7 +137,6 @@ export default function Header() {
         </>
       );
     }
-
     return (
       <>
         {!isAdminPage && (
@@ -167,6 +172,7 @@ export default function Header() {
         <NavLink to="/" className="text-xl font-bold hover:text-cyan-400">
           {t("appName")}
         </NavLink>
+
         {!isAdminPage && !isAuthPage && (
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -200,15 +206,14 @@ export default function Header() {
         >
           {!isAdminPage && !isAuthPage && (
             <div className="flex flex-col md:flex-row gap-2 mt-4 md:mt-0 md:mr-4">
-              <form onSubmit={handleSearch} className="w-full">
-                <input
-                  type="search"
-                  placeholder={t("search_placeholder")}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-gray-700 text-white p-2 rounded-md w-full"
-                />
-              </form>
+              <input
+                type="search"
+                placeholder={t("search_placeholder")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-gray-700 text-white p-2 rounded-md w-full"
+              />
+
               <select
                 onChange={(e) => handleFilterChange("city", e.target.value)}
                 value={searchParams.get("city") || "all"}
