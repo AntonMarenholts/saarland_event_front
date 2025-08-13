@@ -126,5 +126,6 @@
   "noFileSelected": "No file selected",
   "actions_column": "Actions",
   "error_incorrect_password": "Incorrect password or username.",
-  "contactUs": "Contact Us"
+  "contactUs": "Contact Us",
+  "contactLabel": "Contact:"
 }

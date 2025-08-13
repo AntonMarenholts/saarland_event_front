@@ -126,5 +126,6 @@
   "noFileSelected": "Файл не выбран",
   "actions_column": "Действия",
   "error_incorrect_password": "Неверный пароль или имя пользователя.",
-  "contactUs": "Связаться с нами"
+  "contactUs": "Связаться с нами",
+  "contactLabel": "Контакт:"
 }

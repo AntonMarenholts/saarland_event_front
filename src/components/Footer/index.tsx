@@ -12,12 +12,10 @@ export default function Footer() {
         </p>
 
         <div className="flex gap-4 items-center">
-          <a
-            href="mailto:u0542178019@gmail.com"
-            className="text-xs text-gray-400 hover:text-white"
-          >
-            {t("contactUs")}
-          </a>
+          <div className="text-xs text-gray-400">
+            <span>{t("contactLabel")}</span>
+            <span className="ml-1">u0542178019@gmail.com</span>
+          </div>
 
           <Link to="/login" className="text-xs text-gray-400 hover:text-white">
             {t("adminLogin")}
