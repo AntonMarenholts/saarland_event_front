@@ -70,15 +70,22 @@ export default function Header() {
     location.pathname === "/login" || location.pathname === "/register";
 
   useEffect(() => {
-    if (!isAdminPage && !isAuthPage) {
-      fetchCategories()
-        .then(setCategories)
-        .catch((err) => console.error("Failed to load categories", err));
-      fetchCities()
-        .then(setCities)
-        .catch((err) => console.error("Failed to load cities", err));
-    }
-  }, [isAdminPage, isAuthPage]);
+  if (!isAdminPage && !isAuthPage) {
+    fetchCategories()
+      .then(data => {
+        data.sort((a, b) => a.name.localeCompare(b.name));
+        setCategories(data);
+      })
+      .catch((err) => console.error("Failed to load categories", err));
+    
+    fetchCities()
+      .then(data => {
+        data.sort((a, b) => a.name.localeCompare(b.name));
+        setCities(data);
+      })
+      .catch((err) => console.error("Failed to load cities", err));
+  }
+}, [isAdminPage, isAuthPage]);
 
   const handleFilterChange = (key: string, value: string) => {
     const newSearchParams = new URLSearchParams(searchParams);

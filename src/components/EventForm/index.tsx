@@ -53,8 +53,16 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
   );
 
   useEffect(() => {
-    fetchCategories().then(setCategories);
-    fetchCities().then(setCities);
+  
+  fetchCategories().then(data => {
+    data.sort((a, b) => a.name.localeCompare(b.name));
+    setCategories(data);
+  });
+  
+  fetchCities().then(data => {
+    data.sort((a, b) => a.name.localeCompare(b.name));
+    setCities(data);
+  });
 
     if (initialData) {
       const initialDate = new Date(initialData.eventDate);
