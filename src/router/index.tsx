@@ -13,7 +13,7 @@ import AdminCitiesPage from "../pages/AdminCities";
 import ProfilePage from "../pages/Profile";
 import SubmitEventPage from "../pages/SubmitEvent";
 import CategoryPage from "../pages/CategoryPage";
-import CityPage from "../pages/CityPage";
+
 import AdminUsersPage from "../pages/AdminUsers";
 import AuthCallbackPage from "../pages/AuthCallback";
 import SyncUserPage from "../pages/SyncUser";
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       { path: "/register", element: <RegisterPage /> },
       { path: "/submit-event", element: <SubmitEventPage /> },
       { path: "/category/:categoryName", element: <CategoryPage /> },
-      { path: "/city/:cityName", element: <CityPage /> },
+      
       { path: "/auth/callback", element: <AuthCallbackPage /> },
       { path: "/sync-user", element: <SyncUserPage /> },
       {

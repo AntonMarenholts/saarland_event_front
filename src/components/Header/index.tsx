@@ -32,7 +32,7 @@ export default function Header() {
   const [cities, setCities] = useState<City[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
     undefined
   );
@@ -43,6 +43,11 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
+    
+    if (!["/", "/city", "/category"].some(p => location.pathname.startsWith(p))) {
+      return;
+    }
+
     const handler = setTimeout(() => {
       const newSearchParams = new URLSearchParams(searchParams);
       if (searchQuery) {
@@ -50,16 +55,17 @@ export default function Header() {
       } else {
         newSearchParams.delete("keyword");
       }
+      
+      
+      setSearchParams(newSearchParams);
 
-      if (location.search !== `?${newSearchParams.toString()}`) {
-        navigate(`/?${newSearchParams.toString()}`);
-      }
     }, 500);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [searchQuery, navigate, location.search]);
+  }, [searchQuery, location.pathname, setSearchParams]);
+
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -105,23 +111,17 @@ export default function Header() {
   }, [isAdminPage, isAuthPage]);
 
   const handleFilterChange = (key: string, value: string) => {
-    if (key === 'city') {
-      if (value === 'all') {
-        navigate('/');
-      } else {
-        navigate(`/city/${value}`);
-      }
-      return;
-    }
-
+    
     const newSearchParams = new URLSearchParams(searchParams);
     if (value === "all") {
       newSearchParams.delete(key);
     } else {
       newSearchParams.set(key, value);
     }
+    
     navigate(`/?${newSearchParams.toString()}`);
   };
+
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
