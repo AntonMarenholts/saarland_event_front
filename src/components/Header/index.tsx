@@ -105,6 +105,15 @@ export default function Header() {
   }, [isAdminPage, isAuthPage]);
 
   const handleFilterChange = (key: string, value: string) => {
+    if (key === 'city') {
+      if (value === 'all') {
+        navigate('/');
+      } else {
+        navigate(`/city/${value}`);
+      }
+      return;
+    }
+
     const newSearchParams = new URLSearchParams(searchParams);
     if (value === "all") {
       newSearchParams.delete(key);
