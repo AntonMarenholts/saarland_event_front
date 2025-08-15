@@ -134,5 +134,8 @@
   "send_reset_link": "Send Reset Link",
   "reset_link_sent": "A password reset link has been sent to your email if an account exists.",
   "new_password": "New Password",
-  "password_reset_success": "Password changed successfully! You can now log in."
+  "password_reset_success": "Password changed successfully! You can now log in.",
+
+  "confirm_new_password": "Confirm New Password",
+  "passwords_do_not_match": "Passwords do not match."
 }

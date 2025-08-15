@@ -134,5 +134,8 @@
   "send_reset_link": "Link senden",
   "reset_link_sent": "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet, falls ein Konto existiert.",
   "new_password": "Neues Passwort",
-  "password_reset_success": "Passwort erfolgreich geändert! Sie können sich jetzt einloggen."
+  "password_reset_success": "Passwort erfolgreich geändert! Sie können sich jetzt einloggen.",
+
+  "confirm_new_password": "Neues Passwort bestätigen",
+  "passwords_do_not_match": "Die Passwörter stimmen nicht überein."
 }
