@@ -127,5 +127,12 @@
   "actions_column": "Aktionen",
   "error_incorrect_password": "Falsches Passwort oder Benutzername.",
   "contactUs": "Kontakt",
-  "contactLabel": "Kontakt:"
+  "contactLabel": "Kontakt:",
+  "forgot_password": "Passwort vergessen?",
+  "reset_password_title": "Passwort zurücksetzen",
+  "reset_password_instructions": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+  "send_reset_link": "Link senden",
+  "reset_link_sent": "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet, falls ein Konto existiert.",
+  "new_password": "Neues Passwort",
+  "password_reset_success": "Passwort erfolgreich geändert! Sie können sich jetzt einloggen."
 }

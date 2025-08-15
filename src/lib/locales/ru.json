@@ -127,5 +127,12 @@
   "actions_column": "Действия",
   "error_incorrect_password": "Неверный пароль или имя пользователя.",
   "contactUs": "Связаться с нами",
-  "contactLabel": "Контакт:"
+  "contactLabel": "Контакт:",
+  "forgot_password": "Забыли пароль?",
+  "reset_password_title": "Сброс пароля",
+  "reset_password_instructions": "Введите ваш email, и мы отправим вам ссылку для восстановления.",
+  "send_reset_link": "Отправить ссылку",
+  "reset_link_sent": "Ссылка для сброса пароля отправлена на вашу почту, если аккаунт существует.",
+  "new_password": "Новый пароль",
+  "password_reset_success": "Пароль успешно изменен! Теперь вы можете войти."
 }

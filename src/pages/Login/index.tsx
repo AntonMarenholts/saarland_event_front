@@ -158,6 +158,12 @@ export default function LoginPage() {
             >
               {t("create_account_link")}
             </Link>
+            <Link
+              to="/forgot-password"
+              className="inline-block align-baseline font-bold text-gray-400 hover:text-white mt-1"
+            >
+              {t("forgot_password")}
+            </Link>
           </div>
           {message && (
             <div

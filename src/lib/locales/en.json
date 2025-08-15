@@ -127,5 +127,12 @@
   "actions_column": "Actions",
   "error_incorrect_password": "Incorrect password or username.",
   "contactUs": "Contact Us",
-  "contactLabel": "Contact:"
+  "contactLabel": "Contact:",
+  "forgot_password": "Forgot password?",
+  "reset_password_title": "Reset Password",
+  "reset_password_instructions": "Enter your email and we'll send you a link to reset your password.",
+  "send_reset_link": "Send Reset Link",
+  "reset_link_sent": "A password reset link has been sent to your email if an account exists.",
+  "new_password": "New Password",
+  "password_reset_success": "Password changed successfully! You can now log in."
 }

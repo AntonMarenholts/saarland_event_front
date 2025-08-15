@@ -6,17 +6,19 @@ import NotFoundPage from "../pages/NotFound";
 import MainLayout from "../layout";
 import AdminEditEventPage from "../pages/AdminEditEvent";
 import LoginPage from "../pages/Login";
-import RegisterPage from "../pages/Register"; 
+import RegisterPage from "../pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminCategoriesPage from "../pages/AdminCategories";
 import AdminCitiesPage from "../pages/AdminCities";
 import ProfilePage from "../pages/Profile";
 import SubmitEventPage from "../pages/SubmitEvent";
 import CategoryPage from "../pages/CategoryPage";
-
 import AdminUsersPage from "../pages/AdminUsers";
 import AuthCallbackPage from "../pages/AuthCallback";
 import SyncUserPage from "../pages/SyncUser";
+import ForgotPasswordPage from "../pages/ForgotPassword";
+import ResetPasswordPage from "../pages/ResetPassword";
+
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,10 @@ const router = createBrowserRouter([
       { path: "/register", element: <RegisterPage /> },
       { path: "/submit-event", element: <SubmitEventPage /> },
       { path: "/category/:categoryName", element: <CategoryPage /> },
-      
+      { path: "/login", element: <LoginPage /> },
+      { path: "/forgot-password", element: <ForgotPasswordPage /> },
+      { path: "/reset-password", element: <ResetPasswordPage /> },
+      { path: "/register", element: <RegisterPage /> },
       { path: "/auth/callback", element: <AuthCallbackPage /> },
       { path: "/sync-user", element: <SyncUserPage /> },
       {

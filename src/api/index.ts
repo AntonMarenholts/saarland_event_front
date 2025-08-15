@@ -213,3 +213,6 @@ export const createReview = async (
   );
   return response.data;
 };
+export const requestPasswordReset = async (email: string): Promise<void> => {
+  await apiClient.post("/auth/forgot-password", { email });
+};
