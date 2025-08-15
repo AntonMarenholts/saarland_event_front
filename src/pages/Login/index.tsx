@@ -127,7 +127,7 @@ export default function LoginPage() {
               <input
                 type={passwordVisible ? "text" : "password"}
                 {...register("password", { required: true })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10" // Добавляем отступ справа для иконки
+                className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10"
               />
 
               <button
@@ -144,6 +144,8 @@ export default function LoginPage() {
               </p>
             )}
           </div>
+          
+          
           <div className="flex items-center justify-between pt-2">
             <button
               type="submit"
@@ -152,19 +154,23 @@ export default function LoginPage() {
             >
               {loading ? t("loading") : t("loginButton")}
             </button>
-            <Link
-              to="/register"
-              className="inline-block align-baseline font-bold text-sm text-cyan-500 hover:text-cyan-400"
-            >
-              {t("create_account_link")}
-            </Link>
-            <Link
-              to="/forgot-password"
-              className="inline-block align-baseline font-bold text-gray-400 hover:text-white mt-1"
-            >
-              {t("forgot_password")}
-            </Link>
+            <div className="flex flex-col items-end text-sm">
+                <Link
+                  to="/register"
+                  className="inline-block align-baseline font-bold text-cyan-500 hover:text-cyan-400"
+                >
+                  {t("create_account_link")}
+                </Link>
+                <Link
+                  to="/forgot-password"
+                  className="inline-block align-baseline font-bold text-gray-400 hover:text-white mt-1"
+                >
+                  {t("forgot_password")}
+                </Link>
+            </div>
           </div>
+          
+
           {message && (
             <div
               className="mt-4 p-4 text-sm text-red-200 bg-red-900 border border-red-500 rounded-lg"
