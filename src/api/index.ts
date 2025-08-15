@@ -14,7 +14,7 @@ import type {
 } from "../types";
 
 export const apiClient = axios.create({
-  baseURL: "https://saarland-events-api-ahtoh-102ce42017ef.herokuapp.com/api",
+  baseURL: "https://api.saarland-events-new.de/api",
 });
 
 apiClient.interceptors.request.use(
