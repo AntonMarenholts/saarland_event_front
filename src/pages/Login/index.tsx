@@ -154,6 +154,7 @@ export default function LoginPage() {
             >
               {loading ? t("loading") : t("loginButton")}
             </button>
+            
             <div className="flex flex-col items-end text-sm">
                 <Link
                   to="/register"
@@ -163,7 +164,7 @@ export default function LoginPage() {
                 </Link>
                 <Link
                   to="/forgot-password"
-                  className="inline-block align-baseline font-bold text-gray-400 hover:text-white mt-1"
+                  className="inline-block align-baseline font-bold text-gray-400 hover:text-white mt-2"
                 >
                   {t("forgot_password")}
                 </Link>
