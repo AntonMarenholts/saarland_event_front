@@ -7,46 +7,54 @@ import { addFavorite, removeFavorite, fetchFavorites } from "../../api";
 
 interface Props {
   event: Event;
+  isAdminCard?: boolean;
+  onDelete?: (id: number) => void;
 }
 
-export default function EventCard({ event }: Props) {
-  const { i18n } = useTranslation();
+export default function EventCard({
+  event,
+  isAdminCard = false,
+  onDelete,
+}: Props) {
+  const { i18n, t } = useTranslation();
   const currentLang = i18n.language;
   const currentUser = AuthService.getCurrentUser();
 
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && !isAdminCard) {
       fetchFavorites(currentUser.id).then((favorites) => {
         if (favorites.some((fav) => fav.id === event.id)) {
           setIsFavorite(true);
         }
       });
     }
-  }, [currentUser, event.id]);
+  }, [currentUser, event.id, isAdminCard]);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!currentUser) {
-      alert("Please log in to save favorites.");
-      return;
-    }
-
+    if (!currentUser) return;
     const action = isFavorite
       ? removeFavorite(currentUser.id, event.id)
       : addFavorite(currentUser.id, event.id);
-
     action.then(() => setIsFavorite(!isFavorite));
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete(event.id);
+    }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const timeIsSpecified =
       date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
-
     const options: Intl.DateTimeFormatOptions = {
       weekday: "long",
       year: "numeric",
@@ -54,12 +62,10 @@ export default function EventCard({ event }: Props) {
       day: "numeric",
       timeZone: "UTC",
     };
-
     if (timeIsSpecified) {
       options.hour = "2-digit";
       options.minute = "2-digit";
     }
-
     return date.toLocaleDateString(currentLang, options);
   };
 
@@ -67,12 +73,35 @@ export default function EventCard({ event }: Props) {
     event.translations.find((t) => t.locale === currentLang) ||
     event.translations.find((t) => t.locale === "de");
 
-  return (
-    <Link
-      to={`/events/${event.id}`}
-      className="relative block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 hover:scale-105 transition-transform duration-300"
-    >
-      {currentUser && (
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "PENDING":
+        return (
+          <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-1 bg-yellow-500 text-black rounded-full z-10">
+            {t("status_pending")}
+          </span>
+        );
+      case "APPROVED":
+        return (
+          <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-1 bg-green-500 text-white rounded-full z-10">
+            {t("status_approved")}
+          </span>
+        );
+      case "REJECTED":
+        return (
+          <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-1 bg-red-500 text-white rounded-full z-10">
+            {t("status_rejected")}
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const cardContent = (
+    <>
+      {isAdminCard && getStatusBadge(event.status)}
+      {currentUser && !isAdminCard && (
         <button
           onClick={handleFavoriteClick}
           className="absolute top-2 right-2 z-10 p-2 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75"
@@ -93,19 +122,46 @@ export default function EventCard({ event }: Props) {
           </svg>
         </button>
       )}
-
       <img
         className="w-full h-48 object-cover bg-gray-700"
         src={event.imageUrl || "https://via.placeholder.com/400x200"}
         alt={translation?.name || "Event Image"}
       />
       <div className="p-4">
-        <h3 className="text-xl font-bold text-white mb-2">
+        <h3 className="text-xl font-bold text-white mb-2 truncate">
           {translation?.name || "Название не указано"}
         </h3>
         <p className="text-gray-400 mb-2">{event.city.name}</p>
         <p className="text-gray-300 text-sm">{formatDate(event.eventDate)}</p>
       </div>
-    </Link>
+      {isAdminCard && (
+        <div className="border-t border-gray-700 p-2 flex justify-end gap-2">
+          <Link
+            to={`/admin/edit/${event.id}`}
+            className="text-indigo-400 hover:text-indigo-300 text-sm font-semibold px-3 py-1 rounded hover:bg-gray-700"
+          >
+            {t("edit")}
+          </Link>
+          <button
+            onClick={handleDeleteClick}
+            className="text-red-500 hover:text-red-400 text-sm font-semibold px-3 py-1 rounded hover:bg-gray-700"
+          >
+            {t("delete")}
+          </button>
+        </div>
+      )}
+    </>
+  );
+
+  return (
+    <div className="relative block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 transition-shadow duration-300">
+      {isAdminCard ? (
+        cardContent
+      ) : (
+        <Link to={`/events/${event.id}`} className="block">
+          {cardContent}
+        </Link>
+      )}
+    </div>
   );
 }

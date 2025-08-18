@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { isAxiosError } from "axios";
 import {
   fetchAllEventsForAdmin,
   deleteEvent,
@@ -49,12 +50,6 @@ export default function AdminDashboardPage() {
         fetchAdminStats(),
       ]);
 
-      eventsData.sort((a, b) => {
-        if (a.status === "PENDING" && b.status !== "PENDING") return -1;
-        if (a.status !== "PENDING" && b.status === "PENDING") return 1;
-        return 0;
-      });
-
       setEvents(eventsData);
       setStats(statsData);
     } catch (err) {
@@ -88,7 +83,11 @@ export default function AdminDashboardPage() {
       await loadAllData();
       setFormKey((prevKey) => prevKey + 1);
     } catch (err) {
-      alert(t("errorCreate"));
+      if (isAxiosError(err) && err.response?.data?.error) {
+        alert(err.response.data.error);
+      } else {
+        alert(t("errorCreate"));
+      }
       console.error(err);
     } finally {
       setIsSubmitting(false);
@@ -144,6 +143,12 @@ export default function AdminDashboardPage() {
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">{t("adminPanelTitle")}</h1>
         <div className="flex gap-2 flex-wrap">
+          <Link
+            to="/admin/events-by-city"
+            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm"
+          >
+            {t("archive_by_city")}
+          </Link>
           <Link
             to="/admin/categories"
             className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
@@ -208,7 +213,7 @@ export default function AdminDashboardPage() {
       />
 
       <div className="bg-gray-800 rounded-lg p-4 md:p-6">
-        <h2 className="text-xl font-semibold mb-4">{t("allEvents")}</h2>
+        <h2 className="text-xl font-semibold mb-4">{t("status_pending")}</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-700">
             <thead>

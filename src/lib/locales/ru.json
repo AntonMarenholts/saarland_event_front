@@ -137,5 +137,9 @@
   "new_password": "Новый пароль",
   "confirm_new_password": "Подтвердите новый пароль",
   "passwords_do_not_match": "Пароли не совпадают.",
-  "password_reset_success": "Пароль успешно изменен! Теперь вы можете войти."
+  "password_reset_success": "Пароль успешно изменен! Теперь вы можете войти.",
+  "archive_by_city": "Архив по городам",
+  "approved_events": "Одобренные и отклоненные события",
+  "events_in_city": "События в г. {{city}}",
+  "back_to_cities": "Назад к списку городов"
 }

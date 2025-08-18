@@ -137,5 +137,9 @@
   "password_reset_success": "Passwort erfolgreich geändert! Sie können sich jetzt einloggen.",
 
   "confirm_new_password": "Neues Passwort bestätigen",
-  "passwords_do_not_match": "Die Passwörter stimmen nicht überein."
+  "passwords_do_not_match": "Die Passwörter stimmen nicht überein.",
+  "archive_by_city": "Archiv nach Stadt",
+  "approved_events": "Genehmigte & Abgelehnte Veranstaltungen",
+  "events_in_city": "Veranstaltungen in {{city}}",
+  "back_to_cities": "Zurück zur Städteliste"
 }

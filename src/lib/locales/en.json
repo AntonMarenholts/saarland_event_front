@@ -137,5 +137,9 @@
   "password_reset_success": "Password changed successfully! You can now log in.",
 
   "confirm_new_password": "Confirm New Password",
-  "passwords_do_not_match": "Passwords do not match."
+  "passwords_do_not_match": "Passwords do not match.",
+  "archive_by_city": "Archive by City",
+  "approved_events": "Approved & Rejected Events",
+  "events_in_city": "Events in {{city}}",
+  "back_to_cities": "Back to Cities List"
 }

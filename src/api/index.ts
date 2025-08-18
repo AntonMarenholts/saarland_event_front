@@ -14,7 +14,7 @@ import type {
 } from "../types";
 
 export const apiClient = axios.create({
-  baseURL: "https://api.saarland-events-new.de/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 apiClient.interceptors.request.use(
@@ -215,4 +215,18 @@ export const createReview = async (
 };
 export const requestPasswordReset = async (email: string): Promise<void> => {
   await apiClient.post("/auth/forgot-password", { email });
+};
+export const fetchGroupedEventsForAdmin = async (): Promise<
+  Record<string, Event[]>
+> => {
+  const response = await apiClient.get("/admin/events/by-city");
+  return response.data;
+};
+export const fetchAdminEventsByCityName = async (
+  cityName: string
+): Promise<Event[]> => {
+  const response = await apiClient.get(
+    `/admin/events/by-city/${encodeURIComponent(cityName)}`
+  );
+  return response.data;
 };

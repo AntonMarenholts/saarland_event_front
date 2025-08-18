@@ -18,6 +18,8 @@ import AuthCallbackPage from "../pages/AuthCallback";
 import SyncUserPage from "../pages/SyncUser";
 import ForgotPasswordPage from "../pages/ForgotPassword";
 import ResetPasswordPage from "../pages/ResetPassword";
+import AdminEventsByCityPage from "../pages/AdminEventsByCity";
+import AdminCityEventsPage from "../pages/AdminCityEvents";
 
 
 const router = createBrowserRouter([
@@ -46,6 +48,11 @@ const router = createBrowserRouter([
           { path: "/admin/categories", element: <AdminCategoriesPage /> },
           { path: "/admin/cities", element: <AdminCitiesPage /> },
           { path: "/admin/users", element: <AdminUsersPage /> },
+          { path: "/admin/events-by-city", element: <AdminEventsByCityPage /> },
+          {
+            path: "/admin/events-by-city/:cityName",
+            element: <AdminCityEventsPage />,
+          },
         ],
       },
     ],
