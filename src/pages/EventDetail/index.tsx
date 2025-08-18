@@ -154,7 +154,7 @@ export default function EventDetailPage() {
         <img
           src={event.imageUrl || "https://via.placeholder.com/800x400"}
           alt={translation?.name}
-          className="w-full h-64 md:h-96 object-cover"
+          className="w-full h-64 md:h-96 object-contain"
         />
         <div className="p-4 md:p-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-4">

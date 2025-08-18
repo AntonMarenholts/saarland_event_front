@@ -16,21 +16,15 @@ export default function AdminCityEventsPage() {
   const [isLoading, setIsLoading] = useState(!location.state);
 
   const loadEvents = (city: string) => {
-    setIsLoading(true);
-    fetchAdminEventsByCityName(city)
-      .then((data) => {
-        data.sort((a, b) =>
-          a.translations
-            .find((t) => t.locale === "de")!
-            .name.localeCompare(
-              b.translations.find((t) => t.locale === "de")!.name
-            )
-        );
-        setEvents(data);
-      })
-      .catch((err) => console.error("Failed to load city events", err))
-      .finally(() => setIsLoading(false));
-  };
+     setIsLoading(true);
+      fetchAdminEventsByCityName(city)
+        .then((data) => {
+           data.sort((a, b) => a.translations.find(t => t.locale === 'de')!.name.localeCompare(b.translations.find(t => t.locale === 'de')!.name));
+           setEvents(data);
+        })
+        .catch((err) => console.error("Failed to load city events", err))
+        .finally(() => setIsLoading(false));
+  }
 
   useEffect(() => {
     if (!location.state && cityName) {
@@ -66,14 +60,9 @@ export default function AdminCityEventsPage() {
         {t("events_in_city", { city: cityName })}
       </h1>
       {events.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {events.map((event) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              isAdminCard={true}
-              onDelete={handleDelete}
-            />
+            <EventCard key={event.id} event={event} isAdminCard={true} onDelete={handleDelete} />
           ))}
         </div>
       ) : (
