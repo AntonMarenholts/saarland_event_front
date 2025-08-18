@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { submitEvent } from "../../api";
 import type { CreateEventData } from "../../types";
 import EventForm from "../../components/EventForm";
+import { isAxiosError } from "axios";
 
 export default function SubmitEventPage() {
   const { t } = useTranslation();
@@ -19,7 +20,11 @@ export default function SubmitEventPage() {
       setFormKey((prevKey) => prevKey + 1);
       navigate("/");
     } catch (err) {
-      alert(t("errorCreate"));
+      if (isAxiosError(err) && err.response?.data?.error) {
+        alert(err.response.data.error);
+      } else {
+        alert(t("errorCreate"));
+      }
       console.error(err);
     } finally {
       setIsSubmitting(false);

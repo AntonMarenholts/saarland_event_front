@@ -3,13 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchEventById, updateEvent } from "../../api";
 import type { CreateEventData, Event } from "../../types";
 import EventForm from "../../components/EventForm";
+import { useTranslation } from "react-i18next";
 
 export default function AdminEditEventPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -21,14 +24,15 @@ export default function AdminEditEventPage() {
 
   const handleUpdateEvent = async (eventData: CreateEventData) => {
     if (!id) return;
-    setIsLoading(true);
+    setIsSubmitting(true);
     try {
       await updateEvent(Number(id), eventData);
-      navigate("/admin");
+      navigate(-1); 
     } catch (err) {
       alert("Failed to update event.");
       console.error(err);
-      setIsLoading(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -37,9 +41,15 @@ export default function AdminEditEventPage() {
 
   return (
     <div className="text-white">
+      <button
+        onClick={() => navigate(-1)} 
+        className="text-cyan-400 hover:underline mb-6 block"
+      >
+        &larr; {t("backToList")}
+      </button>
       <EventForm
         onSubmit={handleUpdateEvent}
-        isLoading={isLoading}
+        isLoading={isSubmitting}
         initialData={event}
       />
     </div>
