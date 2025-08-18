@@ -22,6 +22,7 @@ export default function AdminCategoriesPage() {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     loadCategories();
