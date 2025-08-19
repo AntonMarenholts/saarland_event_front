@@ -47,7 +47,6 @@ export default function AdminEventsByCityPage() {
         <ul className="space-y-3">
           {Object.entries(groupedEvents).map(([city, events]) => (
             <li key={city}>
-              {/* V-- В ЭТОЙ ССЫЛКЕ УДАЛЕНА ПЕРЕДАЧА state --V */}
               <Link
                 to={`/admin/events-by-city/${encodeURIComponent(city)}`}
                 className="flex justify-between items-center bg-gray-700 p-3 rounded hover:bg-gray-600 transition-colors"

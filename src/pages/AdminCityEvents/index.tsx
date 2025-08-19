@@ -1,4 +1,4 @@
-
+// src/pages/AdminCityEvents/index.tsx
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,7 @@ export default function AdminCityEventsPage() {
     setIsLoading(true);
     fetchAdminEventsByCityName(city)
       .then((data) => {
-        setEvents(data); 
+        setEvents(data);
       })
       .catch((err) => console.error("Failed to load city events", err))
       .finally(() => setIsLoading(false));
