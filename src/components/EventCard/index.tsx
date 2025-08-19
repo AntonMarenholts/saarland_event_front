@@ -1,3 +1,4 @@
+// src/components/EventCard/index.tsx
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Event } from "../../types";
@@ -53,19 +54,24 @@ export default function EventCard({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
+    // Проверяем, было ли время указано (не полночь UTC)
     const timeIsSpecified =
       date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
+      
+    // V-- ЭТОТ БЛОК ИЗМЕНЕН --V
     const options: Intl.DateTimeFormatOptions = {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
-      timeZone: "UTC",
+      // timeZone: "UTC", // <-- СТРОКА УДАЛЕНА
     };
     if (timeIsSpecified) {
       options.hour = "2-digit";
       options.minute = "2-digit";
     }
+    // ^-- КОНЕЦ ИЗМЕНЕНИЙ --^
+    
     return date.toLocaleDateString(currentLang, options);
   };
 

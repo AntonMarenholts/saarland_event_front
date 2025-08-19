@@ -1,5 +1,6 @@
+
 import { useEffect, useState } from "react";
-import { useLocation, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchAdminEventsByCityName, deleteEvent } from "../../api";
 import type { Event } from "../../types";
@@ -8,29 +9,25 @@ import EventCard from "../../components/EventCard";
 export default function AdminCityEventsPage() {
   const { t } = useTranslation();
   const { cityName } = useParams<{ cityName: string }>();
-  const location = useLocation();
 
-  const [events, setEvents] = useState<Event[]>(
-    (location.state as { events: Event[] })?.events || []
-  );
-  const [isLoading, setIsLoading] = useState(!location.state);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadEvents = (city: string) => {
-     setIsLoading(true);
-      fetchAdminEventsByCityName(city)
-        .then((data) => {
-           data.sort((a, b) => a.translations.find(t => t.locale === 'de')!.name.localeCompare(b.translations.find(t => t.locale === 'de')!.name));
-           setEvents(data);
-        })
-        .catch((err) => console.error("Failed to load city events", err))
-        .finally(() => setIsLoading(false));
-  }
+    setIsLoading(true);
+    fetchAdminEventsByCityName(city)
+      .then((data) => {
+        setEvents(data); 
+      })
+      .catch((err) => console.error("Failed to load city events", err))
+      .finally(() => setIsLoading(false));
+  };
 
   useEffect(() => {
-    if (!location.state && cityName) {
+    if (cityName) {
       loadEvents(cityName);
     }
-  }, [cityName, location.state]);
+  }, [cityName]);
 
   const handleDelete = async (id: number) => {
     if (window.confirm(t("confirmDelete")) && cityName) {
@@ -62,7 +59,12 @@ export default function AdminCityEventsPage() {
       {events.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {events.map((event) => (
-            <EventCard key={event.id} event={event} isAdminCard={true} onDelete={handleDelete} />
+            <EventCard
+              key={event.id}
+              event={event}
+              isAdminCard={true}
+              onDelete={handleDelete}
+            />
           ))}
         </div>
       ) : (
