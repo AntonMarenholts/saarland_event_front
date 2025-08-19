@@ -53,16 +53,15 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
   );
 
   useEffect(() => {
-  
-  fetchCategories().then(data => {
-    data.sort((a, b) => a.name.localeCompare(b.name));
-    setCategories(data);
-  });
-  
-  fetchCities().then(data => {
-    data.sort((a, b) => a.name.localeCompare(b.name));
-    setCities(data);
-  });
+    fetchCategories().then((data) => {
+      data.sort((a, b) => a.name.localeCompare(b.name));
+      setCategories(data);
+    });
+
+    fetchCities().then((data) => {
+      data.sort((a, b) => a.name.localeCompare(b.name));
+      setCities(data);
+    });
 
     if (initialData) {
       const initialDate = new Date(initialData.eventDate);
@@ -70,11 +69,21 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         initialDate.getUTCHours() !== 0 || initialDate.getUTCMinutes() !== 0;
       setSpecifyTime(timeIsSpecified);
 
+      // V-- ЭТОТ БЛОК КОДА ПОЛНОСТЬЮ ИЗМЕНЕН ДЛЯ КОРРЕКТНОЙ РАБОТЫ С ВРЕМЕНЕМ --V
       if (timeIsSpecified) {
-        setEventDate(initialData.eventDate.slice(0, 16));
+        // Конвертируем UTC дату из базы в локальное время для поля ввода
+        const localDate = new Date(initialData.eventDate);
+        // Отнимаем смещение временной зоны, чтобы получить корректное значение для input[type=datetime-local]
+        const tzoffset = localDate.getTimezoneOffset() * 60000; //смещение в миллисекундах
+        const localISOTime = new Date(localDate.getTime() - tzoffset)
+          .toISOString()
+          .slice(0, 16);
+        setEventDate(localISOTime);
       } else {
+        // Если время не указано, просто берем дату
         setEventDate(initialData.eventDate.slice(0, 10));
       }
+      // ^-- КОНЕЦ ИЗМЕНЕНИЙ --^
     }
   }, [initialData]);
 
@@ -144,8 +153,10 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
 
     let finalEventDate = "";
     if (specifyTime) {
+      // Input 'datetime-local' дает локальное время, new Date() правильно его поймет
       finalEventDate = new Date(eventDate).toISOString();
     } else {
+      // Input 'date' дает дату, добавляем время и часовой пояс UTC
       finalEventDate = new Date(eventDate + "T00:00:00Z").toISOString();
     }
 
