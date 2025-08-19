@@ -1,3 +1,4 @@
+// src/pages/AdminEventsByCity/index.tsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -46,9 +47,9 @@ export default function AdminEventsByCityPage() {
         <ul className="space-y-3">
           {Object.entries(groupedEvents).map(([city, events]) => (
             <li key={city}>
+              {/* V-- В ЭТОЙ ССЫЛКЕ УДАЛЕНА ПЕРЕДАЧА state --V */}
               <Link
                 to={`/admin/events-by-city/${encodeURIComponent(city)}`}
-                state={{ events }}
                 className="flex justify-between items-center bg-gray-700 p-3 rounded hover:bg-gray-600 transition-colors"
               >
                 <p className="font-bold">{city}</p>
