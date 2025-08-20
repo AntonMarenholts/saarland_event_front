@@ -11,6 +11,7 @@ import type {
   CurrentUser,
   Review,
   ReviewData,
+  Page,
 } from "../types";
 
 export const apiClient = axios.create({
@@ -35,7 +36,7 @@ apiClient.interceptors.request.use(
 
 export const fetchEvents = async (
   params: URLSearchParams
-): Promise<Event[]> => {
+): Promise<Page<Event>> => {
   const response = await apiClient.get(`/events?${params.toString()}`);
   return response.data;
 };
@@ -222,11 +223,16 @@ export const fetchGroupedEventsForAdmin = async (): Promise<
   const response = await apiClient.get("/admin/events/by-city");
   return response.data;
 };
+
 export const fetchAdminEventsByCityName = async (
-  cityName: string
-): Promise<Event[]> => {
+  cityName: string,
+  page: number,
+  size: number
+): Promise<Page<Event>> => {
   const response = await apiClient.get(
-    `/admin/events/by-city/${encodeURIComponent(cityName)}`
+    `/admin/events/by-city/${encodeURIComponent(
+      cityName
+    )}?page=${page}&size=${size}&sort=eventDate,asc`
   );
   return response.data;
 };

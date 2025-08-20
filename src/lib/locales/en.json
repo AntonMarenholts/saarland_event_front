@@ -141,5 +141,7 @@
   "archive_by_city": "Archive by City",
   "approved_events": "Approved & Rejected Events",
   "events_in_city": "Events in {{city}}",
-  "back_to_cities": "Back to Cities List"
+  "back_to_cities": "Back to Cities List",
+  "pagination_back": "Previous",
+  "pagination_forward": "Next"
 }
