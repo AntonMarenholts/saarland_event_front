@@ -141,5 +141,7 @@
   "archive_by_city": "Archiv nach Stadt",
   "approved_events": "Genehmigte & Abgelehnte Veranstaltungen",
   "events_in_city": "Veranstaltungen in {{city}}",
-  "back_to_cities": "Zurück zur Städteliste"
+  "back_to_cities": "Zurück zur Städteliste",
+  "pagination_back": "Zurück",
+  "pagination_forward": "Weiter"
 }
