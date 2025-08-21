@@ -135,6 +135,24 @@ export default function EventDetailPage() {
     event.translations.find((tr) => tr.locale === i18n.language) ||
     event.translations.find((tr) => tr.locale === "de");
 
+  const eventDateObject = new Date(event.eventDate);
+  const timeIsSpecified =
+    eventDateObject.getUTCHours() !== 0 ||
+    eventDateObject.getUTCMinutes() !== 0;
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  if (timeIsSpecified) {
+    dateOptions.hour = "2-digit";
+    dateOptions.minute = "2-digit";
+  }
+  const formattedDate = eventDateObject.toLocaleString(
+    i18n.language,
+    dateOptions
+  );
+
   const isEventPast = new Date(event.eventDate) < new Date();
   const hasUserReviewed = reviews.some(
     (review) => review.userId === currentUser?.id
@@ -184,8 +202,8 @@ export default function EventDetailPage() {
               </Link>
             </p>
             <p>
-              <strong>{t("date_label")}:</strong>{" "}
-              {new Date(event.eventDate).toLocaleString(i18n.language)}
+              <strong>{t("date_label")}:</strong> {formattedDate}{" "}
+              {/* ИСПОЛЬЗУЕМ НОВУЮ ПЕРЕМЕННУЮ */}
             </p>
           </div>
           {currentUser && (
