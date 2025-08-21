@@ -131,7 +131,7 @@ export default function EventCard({
       />
       <div className="p-4">
         <h3 className="text-xl font-bold text-white mb-2 truncate">
-          {translation?.name || "Название не указано"}
+          {translation?.name || "Name not specified"}
         </h3>
         <p className="text-gray-400 mb-2">{event.city.name}</p>
         <p className="text-gray-300 text-sm">{formatDate(event.eventDate)}</p>
@@ -156,7 +156,7 @@ export default function EventCard({
   );
 
   return (
-    <div className="relative block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 transition-shadow duration-300">
+    <div className="relative block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105">
       {isAdminCard ? (
         cardContent
       ) : (
