@@ -1,3 +1,4 @@
+// src/components/Header/index.tsx
 import { useEffect, useState } from "react";
 import {
   NavLink,
@@ -6,8 +7,8 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchCategories, fetchCities } from "../../api";
-import type { Category, City, CurrentUser } from "../../types";
+import { fetchCategories, fetchCities } from "../../api/index";
+import type { Category, City, CurrentUser } from "../../types/index";
 import AuthService from "../../services/auth.service";
 
 const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() + i);
@@ -40,11 +41,11 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("keyword") || ""
   );
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    
-    if (!["/", "/city", "/category"].some(p => location.pathname.startsWith(p))) {
+    if (
+      !["/", "/city", "/category"].some((p) => location.pathname.startsWith(p))
+    ) {
       return;
     }
 
@@ -55,17 +56,13 @@ export default function Header() {
       } else {
         newSearchParams.delete("keyword");
       }
-      
-      
       setSearchParams(newSearchParams);
-
     }, 500);
 
     return () => {
       clearTimeout(handler);
     };
   }, [searchQuery, location.pathname, setSearchParams]);
-
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -78,10 +75,6 @@ export default function Header() {
     }
   }, [location]);
 
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location]);
-
   const logOut = () => {
     AuthService.logout();
     setCurrentUser(undefined);
@@ -92,9 +85,10 @@ export default function Header() {
   const isAdminPage = location.pathname.startsWith("/admin");
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
+  const showFilters = !isAdminPage && !isAuthPage;
 
   useEffect(() => {
-    if (!isAdminPage && !isAuthPage) {
+    if (showFilters) {
       fetchCategories()
         .then((data) => {
           data.sort((a, b) => a.name.localeCompare(b.name));
@@ -108,20 +102,17 @@ export default function Header() {
         })
         .catch((err) => console.error("Failed to load cities", err));
     }
-  }, [isAdminPage, isAuthPage]);
+  }, [showFilters]);
 
   const handleFilterChange = (key: string, value: string) => {
-    
     const newSearchParams = new URLSearchParams(searchParams);
     if (value === "all") {
       newSearchParams.delete(key);
     } else {
       newSearchParams.set(key, value);
     }
-    
     navigate(`/?${newSearchParams.toString()}`);
   };
-
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -177,118 +168,100 @@ export default function Header() {
 
   return (
     <header className="bg-gray-800 text-white p-4 sticky top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center flex-wrap">
-        <NavLink to="/" className="text-xl font-bold hover:text-cyan-400">
-          {t("appName")}
-        </NavLink>
+      <div className="container mx-auto">
+        {/* -- ВЕРХНИЙ УРОВЕНЬ: ТРЕХКОЛОНОЧНАЯ СТРУКТУРА -- */}
+        <div className="flex justify-between items-center">
+          {/* -- ЛЕВАЯ ЧАСТЬ (ПУСТАЯ ДЛЯ БАЛАНСА) -- */}
+          <div className="w-1/3"></div>
 
-        {!isAdminPage && !isAuthPage && (
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d={
-                    isMenuOpen
-                      ? "M6 18L18 6M6 6l12 12"
-                      : "M4 6h16M4 12h16m-7 6h7"
-                  }
-                ></path>
-              </svg>
-            </button>
-          </div>
-        )}
-
-        <div
-          className={
-            `w-full md:flex md:items-center md:w-auto` +
-            (isMenuOpen ? " block" : " hidden")
-          }
-        >
-          {!isAdminPage && !isAuthPage && (
-            <div className="flex flex-col md:flex-row gap-2 mt-4 md:mt-0 md:mr-4">
-              <input
-                type="search"
-                placeholder={t("search_placeholder")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-gray-700 text-white p-2 rounded-md w-full"
-              />
-
-              <select
-                onChange={(e) => handleFilterChange("city", e.target.value)}
-                value={searchParams.get("city") || "all"}
-                className="bg-gray-700 text-white p-2 rounded-md"
-              >
-                <option value="all">{t("selectCity_placeholder")}</option>
-                {cities.map((city) => (
-                  <option key={city.id} value={city.name}>
-                    {city.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                onChange={(e) => handleFilterChange("category", e.target.value)}
-                value={searchParams.get("category") || "all"}
-                className="bg-gray-700 text-white p-2 rounded-md"
-              >
-                <option value="all">{t("selectCategory_placeholder")}</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id.toString()}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                onChange={(e) => handleFilterChange("year", e.target.value)}
-                value={searchParams.get("year") || "all"}
-                className="bg-gray-700 text-white p-2 rounded-md"
-              >
-                <option value="all">{t("selectYear_placeholder")}</option>
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-              <select
-                onChange={(e) => handleFilterChange("month", e.target.value)}
-                value={searchParams.get("month") || "all"}
-                className="bg-gray-700 text-white p-2 rounded-md"
-              >
-                <option value="all">{t("selectMonth_placeholder")}</option>
-                {months.map((month) => (
-                  <option key={month.value} value={month.value.toString()}>
-                    {month.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          <div className="hidden md:flex flex-grow"></div>
-
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mt-4 md:mt-0 pt-4 md:pt-0 border-t border-gray-700 md:border-0">
-            <select
-              onChange={(e) => changeLanguage(e.target.value)}
-              value={i18n.language}
-              className="bg-gray-700 text-white p-2 rounded-md text-sm"
+          {/* -- ЦЕНТРАЛЬНАЯ ЧАСТЬ (ЛОГОТИП) -- */}
+          <div className="w-1/3 flex justify-center">
+            <NavLink
+              to="/"
+              className="flex items-center gap-3 text-2xl font-bold transition-opacity hover:opacity-80"
             >
-              <option value="de">DE</option>
-              <option value="en">EN</option>
-              <option value="ru">RU</option>
-            </select>
-            {!isAuthPage && renderUserSection()}
+              <img src="/logo.png" alt={t("appName")} className="h-12 w-auto" />
+              <span className="hidden lg:block">{t("appName")}</span>
+            </NavLink>
+          </div>
+
+          {/* -- ПРАВАЯ ЧАСТЬ (УПРАВЛЕНИЕ) -- */}
+          <div className="w-1/3 flex justify-end">
+            <div className="flex items-center gap-4">
+              <select
+                onChange={(e) => changeLanguage(e.target.value)}
+                value={i18n.language}
+                className="bg-gray-700 text-white p-2 rounded-md text-sm"
+              >
+                <option value="de">DE</option>
+                <option value="en">EN</option>
+                <option value="ru">RU</option>
+              </select>
+              {!isAuthPage && renderUserSection()}
+            </div>
           </div>
         </div>
+
+        {/* -- НИЖНИЙ УРОВЕНЬ: ФИЛЬТРЫ -- */}
+        {showFilters && (
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2">
+            <input
+              type="search"
+              placeholder={t("search_placeholder")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-gray-700 text-white p-2 rounded-md w-full sm:col-span-2 md:col-span-1"
+            />
+            <select
+              onChange={(e) => handleFilterChange("city", e.target.value)}
+              value={searchParams.get("city") || "all"}
+              className="bg-gray-700 text-white p-2 rounded-md"
+            >
+              <option value="all">{t("selectCity_placeholder")}</option>
+              {cities.map((city) => (
+                <option key={city.id} value={city.name}>
+                  {city.name}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => handleFilterChange("category", e.target.value)}
+              value={searchParams.get("category") || "all"}
+              className="bg-gray-700 text-white p-2 rounded-md"
+            >
+              <option value="all">{t("selectCategory_placeholder")}</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id.toString()}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => handleFilterChange("year", e.target.value)}
+              value={searchParams.get("year") || "all"}
+              className="bg-gray-700 text-white p-2 rounded-md"
+            >
+              <option value="all">{t("selectYear_placeholder")}</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => handleFilterChange("month", e.target.value)}
+              value={searchParams.get("month") || "all"}
+              className="bg-gray-700 text-white p-2 rounded-md"
+            >
+              <option value="all">{t("selectMonth_placeholder")}</option>
+              {months.map((month) => (
+                <option key={month.value} value={month.value.toString()}>
+                  {month.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     </header>
   );
