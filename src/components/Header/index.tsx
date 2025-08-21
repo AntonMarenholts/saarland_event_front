@@ -140,7 +140,7 @@ export default function Header() {
             </NavLink>
             <NavLink
               to="/register"
-              className="bg-cyan-600 hover:bg-cyan-700 px-3 py-1 rounded-md text-sm"
+              className="text-sm font-medium hover:text-cyan-400"
             >
               {t("signup")}
             </NavLink>
@@ -239,7 +239,21 @@ export default function Header() {
     <header className="bg-gray-800 text-white p-4 sticky top-0 z-50">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
-          <div className="lg:w-1/3">
+          <div className="w-1/3"></div>
+
+          <div className="lg:w-1/3 flex justify-center">
+            <NavLink
+              to="/"
+              className="flex items-center gap-3 text-2xl font-bold transition-opacity hover:opacity-80"
+            >
+              <img src="/logo.png" alt={t("appName")} className="h-12 w-auto" />
+              <span className="hidden sm:block">{t("appName")}</span>
+            </NavLink>
+          </div>
+
+          <div className="w-1/3 flex justify-end">
+            <div className="hidden lg:flex">{renderUserSection()}</div>
+
             <button
               className="lg:hidden p-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -260,20 +274,6 @@ export default function Header() {
               </svg>
             </button>
           </div>
-
-          <div className="lg:w-1/3 flex justify-center">
-            <NavLink
-              to="/"
-              className="flex items-center gap-3 text-2xl font-bold transition-opacity hover:opacity-80"
-            >
-              <img src="/logo.png" alt={t("appName")} className="h-12 w-auto" />
-              <span className="hidden sm:block">{t("appName")}</span>
-            </NavLink>
-          </div>
-
-          <div className="w-1/3 hidden lg:flex justify-end">
-            {renderUserSection()}
-          </div>
         </div>
 
         {isMenuOpen && (
@@ -284,7 +284,7 @@ export default function Header() {
         )}
 
         {showFilters && (
-          <div className="hidden lg:grid mt-4">{renderFilters()}</div>
+          <div className="hidden lg:block mt-4">{renderFilters()}</div>
         )}
       </div>
     </header>

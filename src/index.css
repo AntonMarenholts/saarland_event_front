@@ -3,15 +3,19 @@
 @tailwind utilities;
 
 body {
-  background-color: #0f172a;
+  /* Цвет фона, который будет виден, если градиент не загрузится */
+  background-color: #0d2d2b; /* Это очень темный teal-950 */
 
-  background-image: 
-        url('/background-pattern.svg'),
-        linear-gradient(to bottom, #134e4a, #115e59); /* от teal-900 до teal-800 */
+  /* Накладываем наш узор поверх нового, более контрастного градиента */
+  background-image: url("/background-pattern.svg"),
+    linear-gradient(to bottom, #134e4a, #115e59); /* Градиент от teal-900 до teal-800 */
 
+  /* Устанавливаем повторение только для узора */
   background-repeat: repeat, no-repeat;
 
+  /* Устанавливаем размер только для узора */
   background-size: 150px, auto;
 
+  /* Фиксируем фон, чтобы градиент покрывал всю высоту страницы при прокрутке */
   background-attachment: fixed;
 }
