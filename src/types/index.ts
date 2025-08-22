@@ -104,3 +104,7 @@ export interface ReviewData {
   rating: number;
   comment: string;
 }
+export interface CityEventCount {
+  cityName: string;
+  eventCount: number;
+}

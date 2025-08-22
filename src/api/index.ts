@@ -12,7 +12,9 @@ import type {
   Review,
   ReviewData,
   Page,
+  CityEventCount,
 } from "../types";
+
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -122,8 +124,13 @@ export const setReminder = async (
   return response.data;
 };
 
-export const fetchAllEventsForAdmin = async (): Promise<Event[]> => {
-  const response = await apiClient.get("/admin/events");
+export const fetchAllEventsForAdmin = async (
+  page: number,
+  size: number
+): Promise<Page<Event>> => {
+  const response = await apiClient.get(
+    `/admin/events?page=${page}&size=${size}&sort=eventDate,asc`
+  );
   return response.data;
 };
 
@@ -217,10 +224,8 @@ export const createReview = async (
 export const requestPasswordReset = async (email: string): Promise<void> => {
   await apiClient.post("/auth/forgot-password", { email });
 };
-export const fetchGroupedEventsForAdmin = async (): Promise<
-  Record<string, Event[]>
-> => {
-  const response = await apiClient.get("/admin/events/by-city");
+export const fetchCityEventCounts = async (): Promise<CityEventCount[]> => {
+  const response = await apiClient.get("/admin/events/by-city-count");
   return response.data;
 };
 
