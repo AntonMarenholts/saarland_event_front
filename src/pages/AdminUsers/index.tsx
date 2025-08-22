@@ -3,17 +3,24 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchAllUsers, deleteUser } from "../../api";
 import type { User } from "../../types";
+import Pagination from "../../components/Pagination";
 
 export default function AdminUsersPage() {
   const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadUsers = async () => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 50;
+
+  const loadUsers = async (page = 0) => {
     try {
       setIsLoading(true);
-      const data = await fetchAllUsers();
-      setUsers(data);
+      const data = await fetchAllUsers(page, pageSize);
+      setUsers(data.content);
+      setTotalPages(data.totalPages);
+      setCurrentPage(data.number);
     } catch (error) {
       console.error("Failed to load users", error);
     } finally {
@@ -22,18 +29,26 @@ export default function AdminUsersPage() {
   };
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    loadUsers(currentPage);
+  }, [currentPage]);
 
   const handleDelete = async (id: number) => {
     if (window.confirm(t("confirmDelete"))) {
       try {
         await deleteUser(id);
-        await loadUsers();
+        if (users.length === 1 && currentPage > 0) {
+          setCurrentPage(currentPage - 1);
+        } else {
+          loadUsers(currentPage);
+        }
       } catch {
         alert(t("errorDelete"));
       }
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   if (isLoading) return <div className="text-white">{t("loading")}</div>;
@@ -69,6 +84,11 @@ export default function AdminUsersPage() {
             </li>
           ))}
         </ul>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

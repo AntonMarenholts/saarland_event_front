@@ -15,7 +15,6 @@ import type {
   CityEventCount,
 } from "../types";
 
-
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
@@ -186,8 +185,13 @@ export const deleteCity = async (id: number) => {
   await apiClient.delete(`/admin/cities/${id}`);
 };
 
-export const fetchAllUsers = async (): Promise<User[]> => {
-  const response = await apiClient.get("/admin/users");
+export const fetchAllUsers = async (
+  page: number,
+  size: number
+): Promise<Page<User>> => {
+  const response = await apiClient.get(
+    `/admin/users?page=${page}&size=${size}`
+  );
   return response.data;
 };
 

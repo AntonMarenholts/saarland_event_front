@@ -11,7 +11,7 @@ import {
 } from "../../api";
 import type { CreateEventData, Event, AdminStats } from "../../types";
 import EventForm from "../../components/EventForm";
-import Pagination from "../../components/Pagination"; 
+import Pagination from "../../components/Pagination";
 
 function StatCard({
   title,
@@ -42,16 +42,14 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [formKey, setFormKey] = useState(0);
 
-  
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const pageSize = 30; 
+  const pageSize = 50;
 
   const loadAllData = async (page = 0) => {
     setError(null);
     setIsLoading(true);
     try {
-      
       const [eventsPage, statsData] = await Promise.all([
         fetchAllEventsForAdmin(page, pageSize),
         fetchAdminStats(),
@@ -71,14 +69,13 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     loadAllData(currentPage);
-    
   }, [currentPage]);
 
   const handleDelete = async (id: number) => {
     if (window.confirm(t("confirmDelete"))) {
       try {
         await deleteEvent(id);
-        
+
         if (events.length === 1 && currentPage > 0) {
           setCurrentPage(currentPage - 1);
         } else {
@@ -95,7 +92,7 @@ export default function AdminDashboardPage() {
     setIsSubmitting(true);
     try {
       await createEvent(eventData);
-      await loadAllData(currentPage); 
+      await loadAllData(currentPage);
       setFormKey((prevKey) => prevKey + 1);
     } catch (err) {
       if (isAxiosError(err) && err.response?.data?.error) {
@@ -115,7 +112,7 @@ export default function AdminDashboardPage() {
   ) => {
     try {
       await updateEventStatus(id, status);
-      
+
       if (events.length === 1 && currentPage > 0) {
         setCurrentPage(currentPage - 1);
       } else {
@@ -127,12 +124,9 @@ export default function AdminDashboardPage() {
     }
   };
 
-  
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  
-  
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -158,7 +152,7 @@ export default function AdminDashboardPage() {
         return status;
     }
   };
-  
+
   if (isLoading) {
     return (
       <div className="text-white text-2xl text-center">{t("loading")}</div>
@@ -243,7 +237,6 @@ export default function AdminDashboardPage() {
         <h2 className="text-xl font-semibold mb-4">{t("status_pending")}</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-700">
-            
             <tbody className="divide-y divide-gray-700">
               {events.map((event) => (
                 <tr key={event.id}>
@@ -294,7 +287,7 @@ export default function AdminDashboardPage() {
               ))}
             </tbody>
           </table>
-          
+
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
