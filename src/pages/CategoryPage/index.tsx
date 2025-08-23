@@ -1,4 +1,4 @@
-// src/pages/CategoryPage/index.tsx
+
 import { useEffect, useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";

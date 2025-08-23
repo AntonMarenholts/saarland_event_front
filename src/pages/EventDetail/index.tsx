@@ -203,7 +203,7 @@ export default function EventDetailPage() {
             </p>
             <p>
               <strong>{t("date_label")}:</strong> {formattedDate}{" "}
-              {/* ИСПОЛЬЗУЕМ НОВУЮ ПЕРЕМЕННУЮ */}
+              
             </p>
           </div>
           {currentUser && (

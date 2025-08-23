@@ -1,8 +1,7 @@
-// src/components/Pagination/index.tsx
 import { useTranslation } from "react-i18next";
 
 interface Props {
-  currentPage: number; // 0-индексированная
+  currentPage: number;
   totalPages: number;
   onPageChange: (pageNumber: number) => void;
 }

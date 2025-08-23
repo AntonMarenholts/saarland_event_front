@@ -1,100 +1,81 @@
+```markdown
+# Saarland Events - Client Application
 
+## About The Project
 
-Saarland Events Application
-A full-stack web application designed to be the central hub for discovering and managing events throughout the Saarland region of Germany. The platform allows users to find upcoming events, save favorites, and even submit their own events for review, while providing a comprehensive dashboard for administrators to manage all content.
+This is the frontend for the **"Saarland Events"** web application, built with **React** and **TypeScript**. The application provides a user-friendly interface for discovering events and a powerful dashboard for administrators to manage all content.
 
-Features
-For Users:
-Event Discovery: Browse a comprehensive list of upcoming events with a powerful filtering system. Users can filter by city, category, month, and year.
+### ✨ **Live Demo Link:** [https://www.saarland-events-new.de/](https://www.saarland-events-new.de/) ✨
 
-Detailed Event View: Get all the details for an event, including description, date, time, location on a map (with Leaflet integration), and user reviews.
+## Screenshots
 
-Search: Quickly find events using a keyword search that looks through titles and descriptions.
+*(You can insert 2-3 screenshots of your application here)*
 
-User Authentication: Secure registration and login system, including social login with Google (OAuth2).
+![Main Page](https://i.imgur.com/your-screenshot-1.png)
+_The main page with event filters_
 
-Password Reset: Users can securely reset their password via an email link.
+![Event Detail Page](https://i.imgur.com/your-screenshot-2.png)
+_The event detail page with an interactive map_
 
-Favorite Events: Registered users can save events to their personal "Favorites" list for easy access.
+## Key Features
 
-Event Submission: Users can submit their own events through a dedicated form, which then go into a moderation queue for admin approval.
+* **Search and Filtering:** A powerful system to filter events by city, category, date, and keywords.
+* **Responsive Design:** The interface looks and works great on all devices, from desktops to mobile phones.
+* **Authentication:** Secure registration and login, including social login with Google (OAuth2) and password recovery.
+* **Interactive Experience:** Users can add events to their favorites, leave reviews, and set email reminders.
+* **Multi-language Support:** The interface is available in German, English, and Russian, with on-the-fly language switching.
+* **Admin Dashboard:** A full-featured dashboard for managing all aspects of the site, including moderating user-submitted events.
 
-Event Reviews: After an event has passed, logged-in users can leave a star rating and a comment.
+## Tech Stack
 
-Reminders: Users can set email reminders for upcoming events.
+* **Framework:** React 19 (with Vite)
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS
+* **Routing:** React Router
+* **API Communication:** Axios
+* **Internationalization:** i18next
+* **Maps:** Leaflet & React-Leaflet
 
-Multilingual Support: The interface is available in German, English, and Russian, with on-the-fly translation support for event content powered by the DeepL API.
+## Getting Started
 
-For Admins:
-Admin Dashboard: A central dashboard showing key statistics like total events, pending events, total users, and more.
+### Prerequisites
 
-Content Management: Full CRUD (Create, Read, Update, Delete) functionality for events, cities, and categories.
+* Node.js & npm
+* A running instance of the backend (API)
 
-Event Moderation: Admins can approve or reject user-submitted events from a dedicated moderation queue.
+### Installation
 
-User Management: Admins can view a list of all registered users and delete user accounts.
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd events-client
+    ```
 
-Image Uploads: A secure image upload system for event posters, integrated with a cloud storage provider (Supabase).
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-Tech Stack
-Backend
-Framework: Spring Boot 3.3.2
+3.  **Configure Environment Variables:**
+    You need to create two files in the root of the project:
 
-Language: Java 21
+    * `.env.development` (for local development)
+    * `.env.production` (for the production build)
 
-Database: PostgreSQL with Spring Data JPA & Hibernate
+    **Contents of `.env.development`:**
+    ```
+    VITE_API_BASE_URL=http://localhost:8080/api
+    VITE_GOOGLE_LOGIN_URL=http://localhost:8080/oauth2/authorization/google
+    ```
 
-Security: Spring Security (JWT Authentication & OAuth2 for Google)
+    **Contents of `.env.production`:**
+    ```
+    VITE_API_BASE_URL=[https://api.saarland-events-new.de/api](https://api.saarland-events-new.de/api)
+    VITE_GOOGLE_LOGIN_URL=[https://api.saarland-events-new.de/oauth2/authorization/google](https://api.saarland-events-new.de/oauth2/authorization/google)
+    ```
 
-APIs: RESTful API architecture
+### Running the Application
 
-External Services:
-
-DeepL: For language translation
-
-SendGrid: For sending transactional emails (reminders, password resets)
-
-Supabase: For cloud-based image storage
-
-Frontend
-Framework: React 19 with Vite
-
-Language: TypeScript
-
-Styling: Tailwind CSS
-
-Routing: React Router v7
-
-State Management: React Hooks & Context API
-
-API Communication: Axios
-
-Internationalization: i18next
-
-Mapping: Leaflet & React-Leaflet
-
-Getting Started
-Prerequisites
-Java 21+
-
-Maven
-
-Node.js & npm
-
-PostgreSQL Database
-
-Backend Setup
-Clone the repository.
-
-Set up the required environment variables in src/main/resources/application.properties for your database connection, JWT secret, and external API keys (DeepL, SendGrid, Supabase, Google OAuth).
-
-Run the application using your IDE or via the command line: ./mvnw spring-boot:run.
-
-Frontend Setup
-Navigate to the frontend client directory.
-
-Install dependencies: npm install.
-
-Create a .env file in the client's root directory and set the VITE_API_BASE_URL to point to your running backend (e.g., VITE_API_BASE_URL=http://localhost:8080/api).
-
-Start the development server: npm run dev.
+To run the app in development mode, execute:
+```bash
+npm run dev

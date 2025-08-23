@@ -53,7 +53,7 @@ export default function AdminCityEventsPage() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo(0, 0); // Прокрутка вверх
+    window.scrollTo(0, 0);
   };
 
   if (isLoading) {
