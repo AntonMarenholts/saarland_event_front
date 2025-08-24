@@ -41,6 +41,7 @@ export interface CreateEventData {
   categoryId: number;
   cityId: number;
   translations: Translation[];
+  recaptchaToken?: string;
 }
 
 export interface CategoryData {
@@ -57,6 +58,7 @@ export interface CityData {
 export interface LoginData {
   username?: string;
   password?: string;
+  recaptchaToken?: string;
 }
 
 export interface RegisterData extends LoginData {
@@ -103,6 +105,7 @@ export interface Review {
 export interface ReviewData {
   rating: number;
   comment: string;
+  recaptchaToken?: string;
 }
 export interface CityEventCount {
   cityName: string;

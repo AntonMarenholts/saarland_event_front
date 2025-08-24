@@ -1,21 +1,29 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { submitEvent } from "../../api";
 import type { CreateEventData } from "../../types";
 import EventForm from "../../components/EventForm";
 import { isAxiosError } from "axios";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function SubmitEventPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formKey, setFormKey] = useState(0);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleSubmitEvent = async (eventData: CreateEventData) => {
+  const handleSubmitEvent = useCallback(async (eventData: CreateEventData) => {
+    if (!executeRecaptcha) {
+        console.error("Recaptcha not available");
+        return;
+    }
+
     setIsSubmitting(true);
     try {
-      await submitEvent(eventData);
+      const token = await executeRecaptcha("submit_event");
+      await submitEvent({ ...eventData, recaptchaToken: token });
       alert(t("submit_success_alert"));
       setFormKey((prevKey) => prevKey + 1);
       navigate("/");
@@ -29,7 +37,7 @@ export default function SubmitEventPage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [executeRecaptcha, navigate, t]);
 
   return (
     <div className="w-full text-white">

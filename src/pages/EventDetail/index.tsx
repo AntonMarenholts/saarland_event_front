@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 import {
   fetchEventById,
@@ -33,6 +34,7 @@ export default function EventDetailPage() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentUser = AuthService.getCurrentUser();
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,11 +78,12 @@ export default function EventDetailPage() {
     loadData();
   }, [id, t]);
 
-  const handleReviewSubmit = async (rating: number, comment: string) => {
-    if (!event) return;
+  const handleReviewSubmit = useCallback(async (rating: number, comment: string) => {
+    if (!event || !executeRecaptcha) return;
     setIsReviewLoading(true);
     try {
-      const newReview = await createReview(event.id, { rating, comment });
+      const token = await executeRecaptcha("submit_review");
+      const newReview = await createReview(event.id, { rating, comment, recaptchaToken: token });
       setReviews([newReview, ...reviews]);
     } catch (err: unknown) {
       let errorMessage = "Failed to send feedback.";
@@ -100,7 +103,7 @@ export default function EventDetailPage() {
     } finally {
       setIsReviewLoading(false);
     }
-  };
+  }, [event, executeRecaptcha]);
 
   const handleSetReminder = async () => {
     if (!currentUser || !event) return;

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import type { LoginData } from "../../types";
 import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,14 +17,22 @@ export default function LoginPage() {
   } = useForm<LoginData>();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleLogin = (data: LoginData) => {
+  const handleLogin = useCallback(async (data: LoginData) => {
+    if (!executeRecaptcha) {
+      console.error("Recaptcha not available");
+      setMessage("Recaptcha service is not available. Please try again later.");
+      return;
+    }
+
     setMessage("");
     setLoading(true);
 
-    AuthService.login(data).then(
+    const token = await executeRecaptcha("login");
+
+    AuthService.login({ ...data, recaptchaToken: token }).then(
       () => {
         const user = AuthService.getCurrentUser();
         if (user && user.roles.includes("ROLE_ADMIN")) {
@@ -47,7 +56,7 @@ export default function LoginPage() {
         setLoading(false);
       }
     );
-  };
+  }, [executeRecaptcha, navigate, t]);
 
   const handleGoogleLogin = () => {
     window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL;
@@ -171,7 +180,6 @@ export default function LoginPage() {
             </div>
           </div>
           
-
           {message && (
             <div
               className="mt-4 p-4 text-sm text-red-200 bg-red-900 border border-red-500 rounded-lg"

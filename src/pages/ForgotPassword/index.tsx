@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { apiClient } from "../../api";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation();
@@ -9,18 +10,25 @@ export default function ForgotPasswordPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const requestPasswordReset = async (email: string): Promise<void> => {
-    await apiClient.post("/auth/forgot-password", { email });
+  const requestPasswordReset = async (email: string, token: string): Promise<void> => {
+    await apiClient.post("/auth/forgot-password", { email, recaptchaToken: token });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!executeRecaptcha) {
+        console.error("Recaptcha not available");
+        return;
+    }
+
     setLoading(true);
     setMessage("");
     setError("");
     try {
-      await requestPasswordReset(email);
+      const token = await executeRecaptcha("forgot_password");
+      await requestPasswordReset(email, token);
       setMessage(t("reset_link_sent"));
     } catch (err) {
       setMessage(t("reset_link_sent"));
@@ -28,7 +36,7 @@ export default function ForgotPasswordPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [executeRecaptcha, email, t]);
 
   return (
     <div className="w-full max-w-sm mx-auto text-white">
