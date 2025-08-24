@@ -1,9 +1,11 @@
-import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import type { RegisterData } from "../../types";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
+import { useState, useCallback } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -14,18 +16,27 @@ export default function RegisterPage() {
   } = useForm<RegisterData>();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha(); // Инициализируйте хук
 
-  const handleRegister = (data: RegisterData) => {
+  const handleRegister = useCallback(async (data: RegisterData) => {
+    if (!executeRecaptcha) {
+      console.error("Recaptcha not available");
+      return;
+    }
+
     setMessage("");
     setLoading(true);
 
-    AuthService.register(data).then(
+    const token = await executeRecaptcha("register"); // Получаем токен
+
+    // Добавляем токен к данным для отправки
+    const dataWithToken = { ...data, recaptchaToken: token };
+
+    AuthService.register(dataWithToken).then( // Отправляем данные с токеном
       (response) => {
         setMessage(response.data.message);
         setLoading(false);
-
         navigate("/login");
       },
       (error) => {
@@ -40,7 +51,7 @@ export default function RegisterPage() {
         setMessage(resMessage);
       }
     );
-  };
+  }, [executeRecaptcha, navigate]);
 
   return (
     <div className="w-full max-w-md mx-auto">
