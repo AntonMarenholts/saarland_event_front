@@ -166,7 +166,7 @@ export default function AdminDashboardPage() {
         <div className="flex gap-2 flex-wrap">
           <Link
             to="/admin/events-by-city"
-            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm"
+            className="bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm"
           >
             {t("archive_by_city")}
           </Link>
