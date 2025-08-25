@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { fetchCategories, fetchCities } from "../../api/index";
 import type { Category, City, CurrentUser } from "../../types/index";
 import AuthService from "../../services/auth.service";
+import InstallPwaButton from "../InstallPwaButton";
 
 const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() + i);
 const months = [
@@ -120,6 +121,7 @@ export default function Header() {
 
   const renderUserSection = () => (
     <div className="flex items-center justify-end gap-4">
+      <InstallPwaButton />
       <select
         onChange={(e) => changeLanguage(e.target.value)}
         value={i18n.language}
