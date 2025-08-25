@@ -143,5 +143,7 @@
   "events_in_city": "Events in {{city}}",
   "back_to_cities": "Back to Cities List",
   "pagination_back": "Previous",
-  "pagination_forward": "Next"
+  "pagination_forward": "Next",
+  "install_app_button": "Install",
+  "install_app_tooltip": "Install App"
 }
