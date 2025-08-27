@@ -1,30 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../../services/auth.service";
 import { fetchFavorites } from "../../api";
 import type { Event } from "../../types";
 import EventCard from "../../components/EventCard";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const currentUser = AuthService.getCurrentUser();
+  const { user } = useAuth();
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (currentUser) {
+    if (user) {
       setIsLoading(true);
-      fetchFavorites(currentUser.id)
+      fetchFavorites(user.id)
         .then((data) => {
           setFavoriteEvents(data);
         })
         .catch((err) => {
           console.error(err);
-
           setError(t("errorLoadEvents"));
         })
         .finally(() => {
@@ -33,7 +31,7 @@ export default function ProfilePage() {
     } else {
       setIsLoading(false);
     }
-  }, [currentUser?.id, t]);
+  }, [user, t]);
 
   if (isLoading) {
     return <div className="text-white">{t("loading")}</div>;
@@ -43,7 +41,7 @@ export default function ProfilePage() {
     return <div className="text-red-500 text-center">{error}</div>;
   }
 
-  if (!currentUser) {
+  if (!user) {
     return <div className="text-white text-center">{t("auth_required")}</div>;
   }
 
@@ -57,7 +55,7 @@ export default function ProfilePage() {
       </button>
 
       <h1 className="text-3xl font-bold mb-4">
-        {t("profile_title", { name: currentUser.username })}
+        {t("profile_title", { name: user.username })}
       </h1>
       <p className="text-gray-400 mb-8">{t("profile_subtitle")}</p>
 
