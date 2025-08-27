@@ -7,11 +7,10 @@ const register = (data: RegisterData) => {
   return apiClient.post("/auth/signup", data);
 };
 
-const login = (data: LoginData) => {
+const login = (data: LoginData): Promise<CurrentUser> => {
   return apiClient
     .post("/auth/signin", data)
-
-    .then((response: AxiosResponse) => {
+    .then((response: AxiosResponse<CurrentUser>) => {
       if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
@@ -19,16 +18,18 @@ const login = (data: LoginData) => {
     });
 };
 
-const loginWithToken = (token: string) => {
+const loginWithToken = (token: string): CurrentUser => {
   const decoded: { sub: string; iat: number; exp: number } = jwtDecode(token);
-  const user: CurrentUser = {
+  
+  const partialUser: CurrentUser = {
     token: token,
     username: decoded.sub,
-    roles: ["ROLE_USER"],
-    id: 0,
-    email: "",
+    roles: [], 
+    id: 0, 
+    email: "", 
   };
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("user", JSON.stringify(partialUser));
+  return partialUser;
 };
 
 const logout = () => {

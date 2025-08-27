@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Event } from "../../types";
-import { useEffect, useState } from "react";
-import AuthService from "../../services/auth.service";
-import { addFavorite, removeFavorite, fetchFavorites } from "../../api";
+import { useAuth } from "../../hooks/useAuth";
+import { addFavorite, removeFavorite } from "../../api";
 
 interface Props {
   event: Event;
@@ -17,30 +16,27 @@ export default function EventCard({
   onDelete,
 }: Props) {
   const { i18n, t } = useTranslation();
-  const currentLang = i18n.language;
-  const currentUser = AuthService.getCurrentUser();
+  const { user, favoriteEventIds, addFavorite: addFavoriteToContext, removeFavorite: removeFavoriteFromContext } = useAuth();
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const isFavorite = favoriteEventIds.has(event.id);
 
-  useEffect(() => {
-    if (currentUser && !isAdminCard) {
-      fetchFavorites(currentUser.id).then((favorites) => {
-        if (favorites.some((fav) => fav.id === event.id)) {
-          setIsFavorite(true);
-        }
-      });
-    }
-  }, [currentUser, event.id, isAdminCard]);
-
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!currentUser) return;
-    const action = isFavorite
-      ? removeFavorite(currentUser.id, event.id)
-      : addFavorite(currentUser.id, event.id);
-    action.then(() => setIsFavorite(!isFavorite));
+    if (!user) return;
+
+    try {
+      if (isFavorite) {
+        await removeFavorite(user.id, event.id);
+        removeFavoriteFromContext(event.id);
+      } else {
+        await addFavorite(user.id, event.id);
+        addFavoriteToContext(event.id);
+      }
+    } catch (error) {
+      console.error("Failed to update favorite status", error);
+    }
   };
 
   const handleDeleteClick = (e: React.MouseEvent) => {
@@ -53,7 +49,6 @@ export default function EventCard({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-
     const timeIsSpecified =
       date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
 
@@ -68,11 +63,11 @@ export default function EventCard({
       options.minute = "2-digit";
     }
 
-    return date.toLocaleDateString(currentLang, options);
+    return date.toLocaleDateString(i18n.language, options);
   };
 
   const translation =
-    event.translations.find((t) => t.locale === currentLang) ||
+    event.translations.find((t) => t.locale === i18n.language) ||
     event.translations.find((t) => t.locale === "de");
 
   const getStatusBadge = (status: string) => {
@@ -103,7 +98,7 @@ export default function EventCard({
   const cardContent = (
     <>
       {isAdminCard && getStatusBadge(event.status)}
-      {currentUser && !isAdminCard && (
+      {user && !isAdminCard && (
         <button
           onClick={handleFavoriteClick}
           className="absolute top-2 right-2 z-10 p-2 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75"
@@ -128,6 +123,7 @@ export default function EventCard({
         className="w-full h-48 object-cover bg-gray-700"
         src={event.imageUrl || "https://via.placeholder.com/400x200"}
         alt={translation?.name || "Event Image"}
+        loading="lazy"
       />
       <div className="p-4">
         <h3 className="text-xl font-bold text-white mb-2 truncate">

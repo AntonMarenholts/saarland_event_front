@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
@@ -6,10 +6,13 @@ import type { LoginData } from "../../types";
 import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const authContext = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -33,8 +36,8 @@ export default function LoginPage() {
     const token = await executeRecaptcha("login");
 
     AuthService.login({ ...data, recaptchaToken: token }).then(
-      () => {
-        const user = AuthService.getCurrentUser();
+      (user) => {
+        authContext?.login(user); 
         if (user && user.roles.includes("ROLE_ADMIN")) {
           navigate("/admin");
         } else {
@@ -56,7 +59,7 @@ export default function LoginPage() {
         setLoading(false);
       }
     );
-  }, [executeRecaptcha, navigate, t]);
+  }, [executeRecaptcha, navigate, t, authContext]);
 
   const handleGoogleLogin = () => {
     window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL;

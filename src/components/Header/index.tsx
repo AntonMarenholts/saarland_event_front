@@ -7,8 +7,8 @@ import {
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchCategories, fetchCities } from "../../api/index";
-import type { Category, City, CurrentUser } from "../../types/index";
-import AuthService from "../../services/auth.service";
+import type { Category, City } from "../../types/index";
+import { useAuth } from "../../hooks/useAuth";
 import InstallPwaButton from "../InstallPwaButton";
 
 const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() + i);
@@ -34,10 +34,8 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
-    undefined
-  );
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { user, logout } = useAuth();
+  const isAdmin = user?.roles.includes("ROLE_ADMIN") ?? false;
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("keyword") || ""
   );
@@ -65,21 +63,8 @@ export default function Header() {
     return () => clearTimeout(handler);
   }, [searchQuery, location.pathname, setSearchParams]);
 
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      setIsAdmin(user.roles.includes("ROLE_ADMIN"));
-    } else {
-      setCurrentUser(undefined);
-      setIsAdmin(false);
-    }
-  }, [location]);
-
-  const logOut = () => {
-    AuthService.logout();
-    setCurrentUser(undefined);
-    setIsAdmin(false);
+  const handleLogout = () => {
+    logout();
     navigate("/");
   };
 
@@ -132,7 +117,7 @@ export default function Header() {
         <option value="ru">RU</option>
       </select>
       {!isAuthPage &&
-        (!currentUser ? (
+        (!user ? (
           <>
             <NavLink
               to="/login"
@@ -158,16 +143,16 @@ export default function Header() {
               </NavLink>
             )}
             <NavLink
-              to="/profile"
+              to={isAdmin ? "/admin" : "/profile"}
               className="text-sm font-medium hover:text-cyan-400"
             >
               {isAdmin ? `⭐ ${t("admin")}` : `⭐ ${t("favorites_button")}`}
             </NavLink>
             <span className="text-sm font-medium text-gray-400 hidden sm:block">
-              {currentUser.username}
+              {user.username}
             </span>
             <button
-              onClick={logOut}
+              onClick={handleLogout}
               className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm"
             >
               {t("logout")}
