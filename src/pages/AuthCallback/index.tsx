@@ -1,22 +1,42 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
+import { AuthContext } from "../../context/AuthContext";
+import { fetchUserProfile } from "../../api";
 
 export default function AuthCallbackPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    const token = searchParams.get("token");
+    const handleAuth = async () => {
+      const token = searchParams.get("token");
 
-    if (token) {
-      AuthService.loginWithToken(token);
+      if (token && authContext) {
+        
+        AuthService.loginWithToken(token);
+        
+        try {
+          
+          const fullUserData = await fetchUserProfile();
+          
+          authContext.login(fullUserData);
+          
+          navigate("/");
+        } catch (error) {
+          console.error("Failed to sync user data, logging out.", error);
+          authContext.logout();
+          navigate("/login");
+        }
+      } else {
+        
+        navigate("/");
+      }
+    };
 
-      navigate("/sync-user");
-    } else {
-      navigate("/");
-    }
-  }, [searchParams, navigate]);
+    handleAuth();
+  }, [searchParams, navigate, authContext]);
 
   return <div className="text-white text-center">Processing login...</div>;
 }

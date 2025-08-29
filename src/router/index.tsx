@@ -15,12 +15,14 @@ import SubmitEventPage from "../pages/SubmitEvent";
 import CategoryPage from "../pages/CategoryPage";
 import AdminUsersPage from "../pages/AdminUsers";
 import AuthCallbackPage from "../pages/AuthCallback";
-import SyncUserPage from "../pages/SyncUser";
 import ForgotPasswordPage from "../pages/ForgotPassword";
 import ResetPasswordPage from "../pages/ResetPassword";
 import AdminEventsByCityPage from "../pages/AdminEventsByCity";
 import AdminCityEventsPage from "../pages/AdminCityEvents";
-
+import PromotePage from "../pages/PromotePage";
+import PaymentSuccessPage from "../pages/PaymentSuccessPage";
+import PaymentCancelPage from "../pages/PaymentCancelPage";
+import RulesPage from "../pages/RulesPage";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +41,10 @@ const router = createBrowserRouter([
       { path: "/reset-password", element: <ResetPasswordPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "/auth/callback", element: <AuthCallbackPage /> },
-      { path: "/sync-user", element: <SyncUserPage /> },
+      { path: "/promote/:id", element: <PromotePage /> },
+      { path: "/payment-success", element: <PaymentSuccessPage /> },
+      { path: "/payment-cancel", element: <PaymentCancelPage /> },
+      { path: "/rules", element: <RulesPage /> },
       {
         element: <ProtectedRoute />,
         children: [

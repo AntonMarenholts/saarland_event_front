@@ -35,6 +35,20 @@ apiClient.interceptors.request.use(
   }
 );
 
+export const createPaymentSession = async (
+  eventId: number,
+  days: number,
+  userId: number
+): Promise<{ checkoutUrl: string }> => { 
+  
+  const response = await apiClient.post("/payments/create-checkout-session", {
+    eventId,
+    days,
+    userId,
+  });
+  return response.data;
+};
+
 export const fetchEvents = async (
   params: URLSearchParams
 ): Promise<Page<Event>> => {
@@ -71,6 +85,16 @@ export const translateText = async (
 
 export const fetchFavorites = async (userId: number): Promise<Event[]> => {
   const response = await apiClient.get(`/favorites/${userId}`);
+  return response.data;
+};
+
+export const fetchMyEvents = async (
+  page: number,
+  size: number
+): Promise<Page<Event>> => {
+  const response = await apiClient.get(
+    `/user/my-events?page=${page}&size=${size}`
+  );
   return response.data;
 };
 
