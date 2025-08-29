@@ -25,6 +25,10 @@ export interface Event {
   city: City;
   translations: Translation[];
   status: string;
+
+  isPremium: boolean;
+  premiumUntil?: string;
+  createdBy: number;
 }
 
 export interface Page<T> {

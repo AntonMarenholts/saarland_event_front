@@ -146,7 +146,7 @@ export default function Header() {
               to={isAdmin ? "/admin" : "/profile"}
               className="text-sm font-medium hover:text-cyan-400"
             >
-              {isAdmin ? `⭐ ${t("admin")}` : `⭐ ${t("favorites_button")}`}
+              {isAdmin ? `⭐ ${t("admin")}` : `⭐ ${t("my_events_button")}`}
             </NavLink>
             <span className="text-sm font-medium text-gray-400 hidden sm:block">
               {user.username}

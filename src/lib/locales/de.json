@@ -135,7 +135,6 @@
   "reset_link_sent": "Ein Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet, falls ein Konto existiert.",
   "new_password": "Neues Passwort",
   "password_reset_success": "Passwort erfolgreich geändert! Sie können sich jetzt einloggen.",
-
   "confirm_new_password": "Neues Passwort bestätigen",
   "passwords_do_not_match": "Die Passwörter stimmen nicht überein.",
   "archive_by_city": "Archiv nach Stadt",
@@ -145,5 +144,54 @@
   "pagination_back": "Zurück",
   "pagination_forward": "Weiter",
   "install_app_button": "Installieren",
-  "install_app_tooltip": "App installieren"
+  "install_app_tooltip": "App installieren",
+  "my_events_button": "Meine Events",
+  "my_events_title": "Meine veröffentlichten Events",
+  "my_events_no_events": "Sie haben noch keine Events erstellt.",
+  "promote_event_button": "Bewerben",
+  "promote_page_title": "Ihre Veranstaltung bewerben",
+  "promote_page_subtitle": "Wählen Sie einen Plan, um Ihre Veranstaltung hervorzuheben und mehr Leute zu erreichen.",
+  "back_to_profile": "Zurück zum Profil",
+  "popular_choice": "Beliebt",
+  "days_count_one": "{{count}} Tag",
+  "days_count_other": "{{count}} Tage",
+  "pay_and_promote_button": "Bezahlen & Bewerben für €{{price}}",
+  "redirecting_to_payment": "Weiterleitung zur Zahlung...",
+  "payment_error_alert": "Zahlungssitzung konnte nicht erstellt werden. Bitte versuchen Sie es später erneut.",
+  "premium_badge": "Premium",
+  "payment_success_title": "Zahlung erfolgreich!",
+  "payment_success_message": "Ihre Veranstaltung wurde erfolgreich beworben und wird nun oben in der Liste angezeigt.",
+  "payment_cancel_title": "Zahlung abgebrochen",
+  "payment_cancel_message": "Ihre Zahlung wurde abgebrochen. Sie können es jederzeit von Ihrem Profil aus erneut versuchen.",
+  "back_to_profile_button": "Zurück zum Profil",
+  "try_again_button": "Erneut versuchen",
+  "rules_page": {
+    "title": "Regeln und Promotion",
+    "sections": {
+      "submission": {
+        "title": "Wie man eine Veranstaltung einreicht",
+        "p1": "Um eine Veranstaltung auf unserer Seite zu veröffentlichen, müssen Sie registriert sein. Der Prozess ist einfach:",
+        "step1": "Klicken Sie auf die Schaltfläche „Veranstaltung einreichen“ in der Kopfzeile der Website.",
+        "step2": "Füllen Sie das Formular mit allen erforderlichen Informationen zu Ihrer Veranstaltung aus.",
+        "step3": "Nach dem Absenden wird Ihre Veranstaltung zur Moderation weitergeleitet."
+      },
+      "moderation": {
+        "title": "Moderationsregeln",
+        "p1": "Alle eingereichten Veranstaltungen werden von einem Administrator überprüft. Die Moderation dauert in der Regel bis zu 24 Stunden.",
+        "allowed_title": "Erlaubt sind:",
+        "allowed_item1": "Kulturelle Veranstaltungen (Konzerte, Ausstellungen, Festivals).",
+        "allowed_item2": "Sportveranstaltungen.",
+        "allowed_item3": "Bildungs- und öffentliche Vorträge.",
+        "forbidden_title": "Verboten sind:",
+        "forbidden_item1": "Veranstaltungen, die gegen das Gesetz verstoßen.",
+        "forbidden_item2": "Werbung für Finanzdienstleistungen, politische oder religiöse Organisationen."
+      },
+      "promotion": {
+        "title": "Premium-Promotion",
+        "p1": "Um Ihre Veranstaltung hervorzuheben, nutzen Sie den Service „Premium-Promotion“. Bezahlte Veranstaltungen werden ganz oben auf der Hauptseite angezeigt. Der Service wird sofort nach der Zahlung aktiviert. Sie können die Promotion im Bereich <1>Meine Events</1> Ihres Profils verwalten.",
+        "tariffs_title": "Tarife:",
+        "p2": "Die Premium-Events werden untereinander nach dem Datum der Veranstaltung sortiert (das früheste zuerst)."
+      }
+    }
+  }
 }

@@ -98,6 +98,15 @@ export default function EventCard({
   const cardContent = (
     <>
       {isAdminCard && getStatusBadge(event.status)}
+      
+      {event.isPremium && !isAdminCard && (
+        <div className="absolute top-2 left-2 z-10">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-400 text-black">
+              ⭐ {t('premium_badge')}
+            </span>
+        </div>
+      )}
+
       {user && !isAdminCard && (
         <button
           onClick={handleFavoriteClick}

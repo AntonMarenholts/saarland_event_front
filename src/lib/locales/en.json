@@ -135,7 +135,6 @@
   "reset_link_sent": "A password reset link has been sent to your email if an account exists.",
   "new_password": "New Password",
   "password_reset_success": "Password changed successfully! You can now log in.",
-
   "confirm_new_password": "Confirm New Password",
   "passwords_do_not_match": "Passwords do not match.",
   "archive_by_city": "Archive by City",
@@ -145,5 +144,54 @@
   "pagination_back": "Previous",
   "pagination_forward": "Next",
   "install_app_button": "Install",
-  "install_app_tooltip": "Install App"
+  "install_app_tooltip": "Install App",
+  "my_events_button": "My Events",
+  "my_events_title": "My Published Events",
+  "my_events_no_events": "You haven't created any events yet.",
+  "promote_event_button": "Promote",
+  "promote_page_title": "Promote Your Event",
+  "promote_page_subtitle": "Choose a plan to feature your event and reach more people.",
+  "back_to_profile": "Back to Profile",
+  "popular_choice": "Popular",
+  "days_count_one": "{{count}} day",
+  "days_count_other": "{{count}} days",
+  "pay_and_promote_button": "Pay & Promote for €{{price}}",
+  "redirecting_to_payment": "Redirecting to payment...",
+  "payment_error_alert": "Failed to create payment session. Please try again later.",
+  "premium_badge": "Premium",
+  "payment_success_title": "Payment Successful!",
+  "payment_success_message": "Your event has been successfully promoted and will now be featured at the top of the list.",
+  "payment_cancel_title": "Payment Canceled",
+  "payment_cancel_message": "Your payment was canceled. You can try again anytime from your profile.",
+  "back_to_profile_button": "Back to Profile",
+  "try_again_button": "Try Again",
+  "rules_page": {
+    "title": "Rules and Promotion",
+    "sections": {
+      "submission": {
+        "title": "How to Submit an Event",
+        "p1": "To publish an event on our site, you must be a registered user. The process is simple:",
+        "step1": "Click the 'Submit Event' button in the site header.",
+        "step2": "Fill out the form with all the necessary information about your event.",
+        "step3": "After submission, your event will be sent for moderation."
+      },
+      "moderation": {
+        "title": "Moderation Rules",
+        "p1": "All submitted events are reviewed by an administrator. Moderation usually takes up to 24 hours.",
+        "allowed_title": "Allowed:",
+        "allowed_item1": "Cultural events (concerts, exhibitions, festivals).",
+        "allowed_item2": "Sporting events.",
+        "allowed_item3": "Educational and public lectures.",
+        "forbidden_title": "Forbidden:",
+        "forbidden_item1": "Events that violate the law.",
+        "forbidden_item2": "Advertising for financial services, political or religious organizations."
+      },
+      "promotion": {
+        "title": "Premium Promotion",
+        "p1": "To highlight your event, use the 'Premium Promotion' service. Paid events are displayed at the very top of the main page. The service is activated instantly after payment. You can manage the promotion in the <1>My Events</1> section of your profile.",
+        "tariffs_title": "Tariffs:",
+        "p2": "Premium events are sorted among themselves by the event date (the earliest first)."
+      }
+    }
+  }
 }
