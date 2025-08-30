@@ -25,6 +25,12 @@ export interface Event {
   city: City;
   translations: Translation[];
   status: string;
+  // ===== ИЗМЕНЕНИЕ ЗДЕСЬ =====
+  isPremium: boolean; // Было isPremium
+  // ==========================
+
+  premiumUntil?: string;
+  createdByUserId: number; // Изменил на createdByUserId как в DTO
 }
 
 export interface Page<T> {
