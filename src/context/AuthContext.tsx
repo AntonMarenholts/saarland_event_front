@@ -9,6 +9,7 @@ export interface AuthContextType {
   addFavorite: (eventId: number) => void;
   removeFavorite: (eventId: number) => void;
   isLoading: boolean;
+  refreshUserData: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

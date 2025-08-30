@@ -1,7 +1,21 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function PaymentSuccessPage() {
   const { t } = useTranslation();
+  const { refreshUserData } = useAuth();
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const updateData = async () => {
+      await refreshUserData();
+      setIsReady(true);
+    };
+
+    updateData();
+  }, [refreshUserData]);
 
   return (
     <div className="text-center text-white py-20">
@@ -23,12 +37,17 @@ export default function PaymentSuccessPage() {
           {t("payment_success_title")}
         </h1>
         <p className="text-gray-400 mb-8">{t("payment_success_message")}</p>
-        <a
-          href="/profile"
-          className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-transform hover:scale-105"
-        >
-          {t("back_to_profile_button")}
-        </a>
+
+        {isReady ? (
+          <Link
+            to="/profile"
+            className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-transform hover:scale-105"
+          >
+            {t("back_to_profile_button")}
+          </Link>
+        ) : (
+          <p>{t("loading")}...</p>
+        )}
       </div>
     </div>
   );
