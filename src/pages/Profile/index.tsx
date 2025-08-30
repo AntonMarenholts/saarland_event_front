@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchFavorites, fetchMyEvents, deleteMyEvent } from "../../api";
 import type { Event } from "../../types";
@@ -21,35 +21,38 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadData = () => {
+  
+  const loadData = useCallback(async () => {
     if (user) {
       setIsLoading(true);
-      const loadFavorites = fetchFavorites(user.id).then(setFavoriteEvents);
-      const loadMyEvents = fetchMyEvents(
-        myEventsCurrentPage,
-        myEventsPageSize
-      ).then((data) => {
-        setMyEvents(data.content);
-        setMyEventsTotalPages(data.totalPages);
-      });
-      
-
-      Promise.all([loadFavorites, loadMyEvents])
-        .catch((err) => {
-          console.error(err);
-          setError(t("errorLoadEvents"));
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      try {
+        const [favoritesData, myEventsData] = await Promise.all([
+          fetchFavorites(user.id),
+          fetchMyEvents(myEventsCurrentPage, myEventsPageSize),
+        ]);
+        setFavoriteEvents(favoritesData);
+        setMyEvents(myEventsData.content);
+        setMyEventsTotalPages(myEventsData.totalPages);
+      } catch (err) {
+        console.error(err);
+        setError(t("errorLoadEvents"));
+      } finally {
+        setIsLoading(false);
+      }
     } else {
       setIsLoading(false);
     }
-  };
+  }, [user, myEventsCurrentPage, t]);
 
   useEffect(() => {
     loadData();
-  }, [user, myEventsCurrentPage]);
+    
+    window.addEventListener('focus', loadData);
+    return () => {
+      window.removeEventListener('focus', loadData);
+    };
+  }, [loadData]);
+  
 
   const handleDelete = async (event: Event) => {
     if (!event.isPremium) {
