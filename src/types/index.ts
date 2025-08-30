@@ -10,6 +10,7 @@ export interface Category {
   description: string;
 }
 
+
 export interface City {
   id: number;
   name: string;
