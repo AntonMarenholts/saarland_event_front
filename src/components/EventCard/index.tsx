@@ -16,7 +16,12 @@ export default function EventCard({
   onDelete,
 }: Props) {
   const { i18n, t } = useTranslation();
-  const { user, favoriteEventIds, addFavorite: addFavoriteToContext, removeFavorite: removeFavoriteFromContext } = useAuth();
+  const {
+    user,
+    favoriteEventIds,
+    addFavorite: addFavoriteToContext,
+    removeFavorite: removeFavoriteFromContext,
+  } = useAuth();
 
   const isFavorite = favoriteEventIds.has(event.id);
 
@@ -98,12 +103,12 @@ export default function EventCard({
   const cardContent = (
     <>
       {isAdminCard && getStatusBadge(event.status)}
-      
-      {event.isPremium && !isAdminCard && (
+
+      {event.premium && !isAdminCard && (
         <div className="absolute top-2 left-2 z-10">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-400 text-black">
-              ⭐ {t('premium_badge')}
-            </span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-400 text-black">
+            ⭐ {t("premium_badge")}
+          </span>
         </div>
       )}
 

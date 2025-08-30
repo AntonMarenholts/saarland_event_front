@@ -25,14 +25,11 @@ export interface Event {
   city: City;
   translations: Translation[];
   status: string;
-
-  // ===== ИЗМЕНЕНИЕ ЗДЕСЬ =====
-  premium: boolean; // Было isPremium
-  // ==========================
-
+  premium: boolean; // Правильное имя поля
   premiumUntil?: string;
-  createdByUserId: number; // Изменил на createdByUserId как в DTO
+  createdByUserId: number;
 }
+
 export interface Page<T> {
   content: T[];
   totalPages: number;

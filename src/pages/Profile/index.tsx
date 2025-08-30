@@ -49,7 +49,7 @@ export default function ProfilePage() {
   }, [loadData, location.key]);
 
   const handleDelete = async (event: Event) => {
-    if (!event.isPremium) {
+    if (!event.premium) {
       if (window.confirm(t("confirmDelete"))) {
         try {
           await deleteMyEvent(event.id);
@@ -188,7 +188,7 @@ export default function ProfilePage() {
                         {getStatusBadge(event.status)}
                       </div>
                       <div className="flex-shrink-0 flex items-center gap-4">
-                        {event.status === "APPROVED" && !event.isPremium && (
+                        {event.status === "APPROVED" && !event.premium && (
                           <Link
                             to={`/promote/${event.id}`}
                             className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded text-sm"

@@ -59,7 +59,7 @@ export default function PromotePage() {
     event.translations.find((tr) => tr.locale === i18n.language) ||
     event.translations[0];
 
-  if (event.isPremium && event.premiumUntil) {
+  if (event.premium && event.premiumUntil) {
     const formattedDate = new Date(event.premiumUntil).toLocaleDateString(
       i18n.language
     );
