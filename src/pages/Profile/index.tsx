@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { fetchFavorites, fetchMyEvents, deleteMyEvent } from "../../api";
 import type { Event } from "../../types";
 import EventCard from "../../components/EventCard";
@@ -11,6 +11,7 @@ export default function ProfilePage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [activeTab, setActiveTab] = useState("myEvents");
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>([]);
@@ -21,7 +22,6 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  
   const loadData = useCallback(async () => {
     if (user) {
       setIsLoading(true);
@@ -46,13 +46,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     loadData();
-    
-    window.addEventListener('focus', loadData);
-    return () => {
-      window.removeEventListener('focus', loadData);
-    };
-  }, [loadData]);
-  
+  }, [loadData, location.key]);
 
   const handleDelete = async (event: Event) => {
     if (!event.isPremium) {
