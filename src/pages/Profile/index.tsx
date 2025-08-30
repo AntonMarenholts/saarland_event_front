@@ -32,6 +32,7 @@ export default function ProfilePage() {
         setMyEvents(data.content);
         setMyEventsTotalPages(data.totalPages);
       });
+      
 
       Promise.all([loadFavorites, loadMyEvents])
         .catch((err) => {
