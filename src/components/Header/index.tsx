@@ -266,6 +266,14 @@ export default function Header() {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 space-y-4">
             {renderUserSection()}
+            {!isAdminPage && user && (
+              <NavLink
+                to="/submit-event"
+                className="block w-full text-center bg-green-600 hover:bg-green-700 px-3 py-2 rounded-md text-sm"
+              >
+                {t("submit_event_button")}
+              </NavLink>
+            )}
             {showFilters && renderFilters()}
           </div>
         )}
