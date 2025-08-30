@@ -159,6 +159,13 @@
   "pay_and_promote_button": "Оплатить и продвинуть за €{{price}}",
   "redirecting_to_payment": "Перенаправляем на оплату...",
   "payment_error_alert": "Не удалось создать сессию оплаты. Попробуйте позже.",
+  "premium_badge": "Премиум",
+  "payment_success_title": "Оплата прошла успешно!",
+  "payment_success_message": "Ваше событие было успешно продвинуто и теперь будет отображаться вверху списка.",
+  "payment_cancel_title": "Оплата отменена",
+  "payment_cancel_message": "Ваш платеж был отменен. Вы можете повторить попытку в любое время из своего профиля.",
+  "back_to_profile_button": "Вернуться в профиль",
+  "try_again_button": "Попробовать снова",
   "rules_page": {
     "title": "Правила и Продвижение",
     "sections": {
