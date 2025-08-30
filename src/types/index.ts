@@ -26,9 +26,9 @@ export interface Event {
   translations: Translation[];
   status: string;
 
-  isPremium: boolean;
+  premium: boolean;
   premiumUntil?: string;
-  createdBy: number;
+  createdByUserId: number;
 }
 
 export interface Page<T> {
