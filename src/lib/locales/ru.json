@@ -165,7 +165,11 @@
   "payment_cancel_title": "Оплата отменена",
   "payment_cancel_message": "Ваш платеж был отменен. Вы можете повторить попытку в любое время из своего профиля.",
   "back_to_profile_button": "Вернуться в профиль",
+  "confirmDelete_paid_title": "Подтвердите удаление",
+  "confirmDelete_paid_prompt": "Это событие было оплачено. Для подтверждения удаления введите слово DELETE в поле ниже.",
+  "delete_incorrect_input": "Неверный ввод. Удаление отменено.",
   "try_again_button": "Попробовать снова",
+
   "rules_page": {
     "title": "Правила и Продвижение",
     "sections": {

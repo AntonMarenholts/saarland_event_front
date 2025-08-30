@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { fetchFavorites, fetchMyEvents } from "../../api";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchFavorites, fetchMyEvents, deleteMyEvent } from "../../api";
 import type { Event } from "../../types";
 import EventCard from "../../components/EventCard";
 import { useTranslation } from "react-i18next";
@@ -10,23 +10,20 @@ import Pagination from "../../components/Pagination";
 export default function ProfilePage() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("favorites");
-
+  const [activeTab, setActiveTab] = useState("myEvents");
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>([]);
   const [myEvents, setMyEvents] = useState<Event[]>([]);
-
   const [myEventsCurrentPage, setMyEventsCurrentPage] = useState(0);
   const [myEventsTotalPages, setMyEventsTotalPages] = useState(0);
   const myEventsPageSize = 8;
-
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadData = () => {
     if (user) {
       setIsLoading(true);
-
       const loadFavorites = fetchFavorites(user.id).then(setFavoriteEvents);
       const loadMyEvents = fetchMyEvents(
         myEventsCurrentPage,
@@ -47,7 +44,44 @@ export default function ProfilePage() {
     } else {
       setIsLoading(false);
     }
-  }, [user, t, myEventsCurrentPage, myEventsPageSize]);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [user, myEventsCurrentPage]);
+
+  const handleDelete = async (event: Event) => {
+    if (!event.isPremium) {
+      if (window.confirm(t("confirmDelete"))) {
+        try {
+          await deleteMyEvent(event.id);
+          loadData();
+        } catch (err) {
+          alert(t("errorDelete"));
+          console.error(err);
+        }
+      }
+      return;
+    }
+
+    if (window.confirm(t("confirmDelete_paid_title") || undefined)) {
+      const confirmationText = window.prompt(
+        t("confirmDelete_paid_prompt") || undefined
+      );
+
+      if (confirmationText === "DELETE") {
+        try {
+          await deleteMyEvent(event.id);
+          loadData();
+        } catch (err) {
+          alert(t("errorDelete"));
+          console.error(err);
+        }
+      } else if (confirmationText !== null) {
+        alert(t("delete_incorrect_input"));
+      }
+    }
+  };
 
   if (isLoading) {
     return <div className="text-white">{t("loading")}</div>;
@@ -92,19 +126,8 @@ export default function ProfilePage() {
         {t("profile_title", { name: user.username })}
       </h1>
 
-      {/* Tabs */}
       <div className="border-b border-gray-700 mb-8">
         <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-          <button
-            onClick={() => setActiveTab("favorites")}
-            className={`${
-              activeTab === "favorites"
-                ? "border-cyan-500 text-cyan-400"
-                : "border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500"
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            {t("favorites_button")}
-          </button>
           <button
             onClick={() => setActiveTab("myEvents")}
             className={`${
@@ -115,30 +138,22 @@ export default function ProfilePage() {
           >
             {t("my_events_button")}
           </button>
+          <button
+            onClick={() => setActiveTab("favorites")}
+            className={`${
+              activeTab === "favorites"
+                ? "border-cyan-500 text-cyan-400"
+                : "border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500"
+            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+          >
+            {t("favorites_button")}
+          </button>
         </nav>
       </div>
 
       {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
-      {/* Tab Content */}
       <div>
-        {activeTab === "favorites" && (
-          <div>
-            <h2 className="text-2xl font-bold mb-4">{t("profile_subtitle")}</h2>
-            {favoriteEvents.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {favoriteEvents.map((event) => (
-                  <EventCard key={event.id} event={event} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-400 text-center">
-                {t("profile_no_favorites")}
-              </p>
-            )}
-          </div>
-        )}
-
         {activeTab === "myEvents" && (
           <div>
             <h2 className="text-2xl font-bold mb-4">{t("my_events_title")}</h2>
@@ -154,7 +169,10 @@ export default function ProfilePage() {
                         src={
                           event.imageUrl || "https://via.placeholder.com/150"
                         }
-                        alt={event.translations[0].name}
+                        alt={
+                          event.translations.find((t) => t.locale === "de")
+                            ?.name
+                        }
                         className="w-24 h-24 object-cover rounded-md flex-shrink-0"
                       />
                       <div className="flex-grow text-center sm:text-left">
@@ -171,7 +189,7 @@ export default function ProfilePage() {
                       <div className="flex-shrink-0">
                         {getStatusBadge(event.status)}
                       </div>
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0 flex items-center gap-4">
                         {event.status === "APPROVED" && !event.isPremium && (
                           <Link
                             to={`/promote/${event.id}`}
@@ -180,6 +198,18 @@ export default function ProfilePage() {
                             {t("promote_event_button")}
                           </Link>
                         )}
+                        <button
+                          onClick={() => navigate(`/profile/edit/${event.id}`)}
+                          className="text-indigo-400 hover:text-indigo-300 text-sm"
+                        >
+                          {t("edit")}
+                        </button>
+                        <button
+                          onClick={() => handleDelete(event)}
+                          className="text-red-500 hover:text-red-400 text-sm"
+                        >
+                          {t("delete")}
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -193,6 +223,22 @@ export default function ProfilePage() {
             ) : (
               <p className="text-gray-400 text-center">
                 {t("my_events_no_events")}
+              </p>
+            )}
+          </div>
+        )}
+        {activeTab === "favorites" && (
+          <div>
+            <h2 className="text-2xl font-bold mb-4">{t("profile_subtitle")}</h2>
+            {favoriteEvents.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {favoriteEvents.map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-400 text-center">
+                {t("profile_no_favorites")}
               </p>
             )}
           </div>

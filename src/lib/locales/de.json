@@ -165,6 +165,9 @@
   "payment_cancel_message": "Ihre Zahlung wurde abgebrochen. Sie können es jederzeit von Ihrem Profil aus erneut versuchen.",
   "back_to_profile_button": "Zurück zum Profil",
   "try_again_button": "Erneut versuchen",
+  "confirmDelete_paid_title": "Löschung bestätigen",
+  "confirmDelete_paid_prompt": "Diese Veranstaltung wurde bezahlt. Um die Löschung zu bestätigen, geben Sie bitte DELETE in das Feld unten ein.",
+  "delete_incorrect_input": "Falsche Eingabe. Löschvorgang abgebrochen.",
   "rules_page": {
     "title": "Regeln und Promotion",
     "sections": {
