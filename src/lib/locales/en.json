@@ -165,6 +165,9 @@
   "payment_cancel_message": "Your payment was canceled. You can try again anytime from your profile.",
   "back_to_profile_button": "Back to Profile",
   "try_again_button": "Try Again",
+  "confirmDelete_paid_title": "Confirm Deletion",
+  "confirmDelete_paid_prompt": "This event has been paid for. To confirm deletion, please type DELETE in the box below.",
+  "delete_incorrect_input": "Incorrect input. Deletion canceled.",
   "rules_page": {
     "title": "Rules and Promotion",
     "sections": {

@@ -23,6 +23,7 @@ import PromotePage from "../pages/PromotePage";
 import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 import PaymentCancelPage from "../pages/PaymentCancelPage";
 import RulesPage from "../pages/RulesPage";
+import UserEditEventPage from "../pages/UserEditEvent";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/profile", element: <ProfilePage /> },
+      { path: "/profile/edit/:id", element: <UserEditEventPage /> },
       { path: "/events/:id", element: <EventDetailPage /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },

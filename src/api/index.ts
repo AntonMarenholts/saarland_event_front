@@ -39,8 +39,7 @@ export const createPaymentSession = async (
   eventId: number,
   days: number,
   userId: number
-): Promise<{ checkoutUrl: string }> => { 
-  
+): Promise<{ checkoutUrl: string }> => {
   const response = await apiClient.post("/payments/create-checkout-session", {
     eventId,
     days,
@@ -268,4 +267,16 @@ export const fetchAdminEventsByCityName = async (
     )}?page=${page}&size=${size}&sort=eventDate,asc`
   );
   return response.data;
+};
+
+export const updateMyEvent = async (
+  id: number,
+  eventData: CreateEventData
+): Promise<Event> => {
+  const response = await apiClient.put(`/user/events/${id}`, eventData);
+  return response.data;
+};
+
+export const deleteMyEvent = async (id: number): Promise<void> => {
+  await apiClient.delete(`/user/events/${id}`);
 };
