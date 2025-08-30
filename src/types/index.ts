@@ -10,7 +10,6 @@ export interface Category {
   description: string;
 }
 
-
 export interface City {
   id: number;
   name: string;
@@ -29,7 +28,7 @@ export interface Event {
 
   premium: boolean;
   premiumUntil?: string;
-  createdByUserId: number;
+  createdByUserId: number; 
 }
 
 export interface Page<T> {
