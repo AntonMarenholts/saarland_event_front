@@ -37,6 +37,7 @@ apiClient.interceptors.request.use(
   }
 );
 
+
 export const createPaymentSession = async (
   eventId: number,
   days: number,
