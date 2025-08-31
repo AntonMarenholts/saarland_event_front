@@ -40,6 +40,31 @@ export default function Header() {
     searchParams.get("keyword") || ""
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showPromo, setShowPromo] = useState(false);
+  const [promoVisible, setPromoVisible] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      const hasSeenPromo = sessionStorage.getItem("hasSeenEventPromo");
+      if (!hasSeenPromo) {
+        setShowPromo(true);
+        setTimeout(() => setPromoVisible(true), 100);
+
+        const timer = setTimeout(() => {
+          setPromoVisible(false);
+          setTimeout(() => {
+            setShowPromo(false);
+            sessionStorage.setItem("hasSeenEventPromo", "true");
+          }, 500);
+        }, 7000);
+
+        return () => clearTimeout(timer);
+      }
+    } else {
+      setShowPromo(false);
+      setPromoVisible(false);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -226,7 +251,22 @@ export default function Header() {
     <header className="bg-gray-800 text-white p-4 sticky top-0 z-50">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
-          <div className="w-1/3"></div>
+          <div className="w-1/3">
+            {showPromo && (
+              <div
+                className={`transition-opacity duration-500 ${
+                  promoVisible ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <NavLink
+                  to="/submit-event"
+                  className="text-sm font-medium text-cyan-400 hover:text-cyan-300"
+                >
+                  {t("propose_event_promo")}
+                </NavLink>
+              </div>
+            )}
+          </div>
 
           <div className="lg:w-1/3 flex justify-center">
             <NavLink

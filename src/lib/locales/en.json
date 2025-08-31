@@ -168,6 +168,7 @@
   "confirmDelete_paid_title": "Confirm Deletion",
   "confirmDelete_paid_prompt": "This event has been paid for. To confirm deletion, please type DELETE in the box below.",
   "delete_incorrect_input": "Incorrect input. Deletion canceled.",
+  "propose_event_promo": "Suggest your event!",
   "rules_page": {
     "title": "Rules and Promotion",
     "sections": {

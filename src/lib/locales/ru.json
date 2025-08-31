@@ -169,6 +169,7 @@
   "confirmDelete_paid_prompt": "Это событие было оплачено. Для подтверждения удаления введите слово DELETE в поле ниже.",
   "delete_incorrect_input": "Неверный ввод. Удаление отменено.",
   "try_again_button": "Попробовать снова",
+  "propose_event_promo": "Предложи своё событие!",
 
   "rules_page": {
     "title": "Правила и Продвижение",

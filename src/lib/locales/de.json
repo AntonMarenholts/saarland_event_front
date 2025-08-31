@@ -168,6 +168,7 @@
   "confirmDelete_paid_title": "Löschung bestätigen",
   "confirmDelete_paid_prompt": "Diese Veranstaltung wurde bezahlt. Um die Löschung zu bestätigen, geben Sie bitte DELETE in das Feld unten ein.",
   "delete_incorrect_input": "Falsche Eingabe. Löschvorgang abgebrochen.",
+  "propose_event_promo": "Schlag dein Event vor!",
   "rules_page": {
     "title": "Regeln und Promotion",
     "sections": {
