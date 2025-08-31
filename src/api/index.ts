@@ -19,6 +19,7 @@ export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
+
 apiClient.interceptors.request.use(
   (config) => {
     const userString = localStorage.getItem("user");
