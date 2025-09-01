@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initAuthAndData = async () => {
       setIsLoading(true);
-      // Загружаем города и категории ОДИН РАЗ при старте
+
       try {
         const [citiesData, categoriesData] = await Promise.all([
           fetchCities(),
@@ -70,7 +70,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error("Failed to load initial site data", error);
       }
 
-      // Проверяем, есть ли залогиненный пользователь
       const currentUser = AuthService.getCurrentUser();
       if (currentUser && currentUser.token) {
         await refreshUserData();
@@ -100,7 +99,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
   const value: AuthContextType = {
     user,
     favoriteEventIds,
@@ -110,11 +108,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     removeFavorite,
     isLoading,
     refreshUserData,
-    // Добавляем новые данные в контекст
+
     cities,
     categories,
   };
-  // --- КОНЕЦ ИЗМЕНЕНИЙ ---
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

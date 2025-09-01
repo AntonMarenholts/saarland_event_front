@@ -26,13 +26,13 @@
   "backToAdmin": "Zurück zum Admin-Panel",
   "backToList": "Zurück zur Übersicht",
   "logout": "Ausloggen",
-  "alertFillGerman": "Bitte füllen Sie zunächst den Titel und die Beschreibung auf Deutsch aus..",
+  "alertFillGerman": "Bitte füllen Sie zunächst den Titel und die Beschreibung auf Deutsch aus.",
   "alertTranslateError": "Beim Übersetzen ist ein Fehler aufgetreten.",
   "alertSelectCityAndCategory": "Bitte wählen Sie eine Stadt und Kategorie aus.",
   "translating": "Übersetzt...",
   "translateAll": "Alles übersetzen",
-  "formTitleEN": "Title (EN)",
-  "formDescriptionEN": "Description (EN)",
+  "formTitleEN": "Titel (EN)",
+  "formDescriptionEN": "Beschreibung (EN)",
   "formTitleRU": "Name (RU)",
   "formDescriptionRU": "Beschreibung (RU)",
   "selectCity_placeholder": "Stadt auswählen",
@@ -168,14 +168,13 @@
   "confirmDelete_paid_title": "Löschung bestätigen",
   "confirmDelete_paid_prompt": "Diese Veranstaltung wurde bezahlt. Um die Löschung zu bestätigen, geben Sie bitte DELETE in das Feld unten ein.",
   "delete_incorrect_input": "Falsche Eingabe. Löschvorgang abgebrochen.",
-  "propose_event_promo": "Schlag dein Event vor!",
   "rules_page": {
     "title": "Regeln und Promotion",
     "sections": {
       "submission": {
         "title": "Wie man eine Veranstaltung einreicht",
-        "p1": "Um eine Veranstaltung auf unserer Seite zu veröffentlichen, müssen Sie registriert sein. Der Prozess ist einfach:",
-        "step1": "Klicken Sie auf die Schaltfläche „Veranstaltung einreichen“ in der Kopfzeile der Website.",
+        "p1": "Um eine Veranstaltung auf unserer Seite zu veröffentlichen, müssen Sie ein registrierter Benutzer sein. Der Prozess ist einfach:",
+        "step1": "Klicken Sie auf die Schaltfläche 'Veranstaltung einreichen' in der Kopfzeile der Website.",
         "step2": "Füllen Sie das Formular mit allen erforderlichen Informationen zu Ihrer Veranstaltung aus.",
         "step3": "Nach dem Absenden wird Ihre Veranstaltung zur Moderation weitergeleitet."
       },
@@ -192,7 +191,7 @@
       },
       "promotion": {
         "title": "Premium-Promotion",
-        "p1": "Um Ihre Veranstaltung hervorzuheben, nutzen Sie den Service „Premium-Promotion“. Bezahlte Veranstaltungen werden ganz oben auf der Hauptseite angezeigt. Der Service wird sofort nach der Zahlung aktiviert. Sie können die Promotion im Bereich <1>Meine Events</1> Ihres Profils verwalten.",
+        "p1": "Um Ihre Veranstaltung hervorzuheben, nutzen Sie den Service 'Premium-Promotion'. Bezahlte Veranstaltungen werden ganz oben auf der Hauptseite angezeigt. Der Service wird sofort nach der Zahlung aktiviert. Sie können die Promotion im Bereich <1>Meine Events</1> Ihres Profils verwalten.",
         "tariffs_title": "Tarife:",
         "p2": "Die Premium-Events werden untereinander nach dem Datum der Veranstaltung sortiert (das früheste zuerst)."
       }

@@ -15,7 +15,7 @@ export default function RulesPage() {
           {t("rules_page.title")}
         </h1>
 
-        {/* Section 1: How to Submit an Event */}
+        
         <section>
           <h2 className="text-2xl font-semibold mb-4 border-b-2 border-cyan-500 pb-2">
             {t("rules_page.sections.submission.title")}
@@ -30,7 +30,7 @@ export default function RulesPage() {
           </div>
         </section>
 
-        {/* Section 2: Moderation Rules */}
+        
         <section>
           <h2 className="text-2xl font-semibold mb-4 border-b-2 border-cyan-500 pb-2">
             {t("rules_page.sections.moderation.title")}
@@ -77,16 +77,16 @@ export default function RulesPage() {
             </h3>
             <ul className="list-disc list-inside">
               <li>
-                <strong>3 дня</strong> — €10
+                <strong>{t("days_count", { count: 3 })}</strong> — €10
               </li>
               <li>
-                <strong>7 дней</strong> — €20
+                <strong>{t("days_count", { count: 7 })}</strong> — €20
               </li>
               <li>
-                <strong>14 дней</strong> — €30
+                <strong>{t("days_count", { count: 14 })}</strong> — €30
               </li>
               <li>
-                <strong>30 дней</strong> — €50
+                <strong>{t("days_count", { count: 30 })}</strong> — €50
               </li>
             </ul>
             <p>{t("rules_page.sections.promotion.p2")}</p>

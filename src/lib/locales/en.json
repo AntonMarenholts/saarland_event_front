@@ -26,7 +26,7 @@
   "backToAdmin": "Back to Admin Panel",
   "backToList": "Back to List",
   "logout": "Logout",
-  "alertFillGerman": "Please fill in the title and description in German first..",
+  "alertFillGerman": "Please fill in the title and description in German first.",
   "alertTranslateError": "There was an error while translating.",
   "alertSelectCityAndCategory": "Please select a city and category.",
   "translating": "Translated...",

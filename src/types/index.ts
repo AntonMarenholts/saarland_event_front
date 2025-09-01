@@ -25,7 +25,7 @@ export interface Event {
   city: City;
   translations: Translation[];
   status: string;
-  premium: boolean; // Правильное имя поля
+  premium: boolean; 
   premiumUntil?: string;
   createdByUserId: number;
 }

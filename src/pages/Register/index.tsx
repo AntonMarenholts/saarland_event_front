@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
@@ -17,41 +16,43 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const { executeRecaptcha } = useGoogleReCaptcha(); // Инициализируйте хук
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleRegister = useCallback(async (data: RegisterData) => {
-    if (!executeRecaptcha) {
-      console.error("Recaptcha not available");
-      return;
-    }
-
-    setMessage("");
-    setLoading(true);
-
-    const token = await executeRecaptcha("register"); // Получаем токен
-
-    // Добавляем токен к данным для отправки
-    const dataWithToken = { ...data, recaptchaToken: token };
-
-    AuthService.register(dataWithToken).then( // Отправляем данные с токеном
-      (response) => {
-        setMessage(response.data.message);
-        setLoading(false);
-        navigate("/login");
-      },
-      (error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-
-        setLoading(false);
-        setMessage(resMessage);
+  const handleRegister = useCallback(
+    async (data: RegisterData) => {
+      if (!executeRecaptcha) {
+        console.error("Recaptcha not available");
+        return;
       }
-    );
-  }, [executeRecaptcha, navigate]);
+
+      setMessage("");
+      setLoading(true);
+
+      const token = await executeRecaptcha("register");
+
+      const dataWithToken = { ...data, recaptchaToken: token };
+
+      AuthService.register(dataWithToken).then(
+        (response) => {
+          setMessage(response.data.message);
+          setLoading(false);
+          navigate("/login");
+        },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          setLoading(false);
+          setMessage(resMessage);
+        }
+      );
+    },
+    [executeRecaptcha, navigate]
+  );
 
   return (
     <div className="w-full max-w-md mx-auto">
