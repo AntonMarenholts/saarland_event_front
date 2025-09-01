@@ -6,8 +6,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchCategories, fetchCities } from "../../api/index";
-import type { Category, City } from "../../types/index";
 import { useAuth } from "../../hooks/useAuth";
 import InstallPwaButton from "../InstallPwaButton";
 
@@ -29,42 +27,17 @@ const months = [
 
 export default function Header() {
   const { t, i18n } = useTranslation();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [cities, setCities] = useState<City[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { user, logout } = useAuth();
+
+  const { user, logout, cities, categories } = useAuth();
+
   const isAdmin = user?.roles.includes("ROLE_ADMIN") ?? false;
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("keyword") || ""
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showPromo, setShowPromo] = useState(false);
-  const [promoVisible, setPromoVisible] = useState(false);
-
-  useEffect(() => {
-    if (location.pathname === "/") {
-      const hasSeenPromo = sessionStorage.getItem("hasSeenEventPromo");
-      if (!hasSeenPromo) {
-        setShowPromo(true);
-        setTimeout(() => setPromoVisible(true), 100);
-
-        const timer = setTimeout(() => {
-          setPromoVisible(false);
-          setTimeout(() => {
-            setShowPromo(false);
-            sessionStorage.setItem("hasSeenEventPromo", "true");
-          }, 500);
-        }, 7000);
-
-        return () => clearTimeout(timer);
-      }
-    } else {
-      setShowPromo(false);
-      setPromoVisible(false);
-    }
-  }, [location.pathname]);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -97,23 +70,6 @@ export default function Header() {
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
   const showFilters = !isAdminPage && !isAuthPage;
-
-  useEffect(() => {
-    if (showFilters) {
-      fetchCategories()
-        .then((data) => {
-          data.sort((a, b) => a.name.localeCompare(b.name));
-          setCategories(data);
-        })
-        .catch((err) => console.error("Failed to load categories", err));
-      fetchCities()
-        .then((data) => {
-          data.sort((a, b) => a.name.localeCompare(b.name));
-          setCities(data);
-        })
-        .catch((err) => console.error("Failed to load cities", err));
-    }
-  }, [showFilters]);
 
   const handleFilterChange = (key: string, value: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -251,22 +207,7 @@ export default function Header() {
     <header className="bg-gray-800 text-white p-4 sticky top-0 z-50">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
-          <div className="w-1/3">
-            {showPromo && (
-              <div
-                className={`transition-opacity duration-500 ${
-                  promoVisible ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                <NavLink
-                  to="/submit-event"
-                  className="text-sm font-medium text-cyan-400 hover:text-cyan-300"
-                >
-                  {t("propose_event_promo")}
-                </NavLink>
-              </div>
-            )}
-          </div>
+          <div className="w-1/3"></div>
 
           <div className="lg:w-1/3 flex justify-center">
             <NavLink

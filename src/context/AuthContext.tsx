@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { CurrentUser } from "../types";
+import type { CurrentUser, City, Category } from "../types";
 
 export interface AuthContextType {
   user: CurrentUser | null;
@@ -10,6 +10,9 @@ export interface AuthContextType {
   removeFavorite: (eventId: number) => void;
   isLoading: boolean;
   refreshUserData: () => Promise<void>;
+
+  cities: City[];
+  categories: Category[];
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

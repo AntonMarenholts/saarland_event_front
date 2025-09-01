@@ -1,8 +1,13 @@
 import { useState, useEffect, useCallback, type ReactNode } from "react";
 import { AuthContext, type AuthContextType } from "../context/AuthContext";
-import type { CurrentUser } from "../types";
+import type { CurrentUser, City, Category } from "../types";
 import AuthService from "../services/auth.service";
-import { fetchFavorites, fetchUserProfile } from "../api";
+import {
+  fetchFavorites,
+  fetchUserProfile,
+  fetchCities,
+  fetchCategories,
+} from "../api";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<CurrentUser | null>(null);
@@ -10,6 +15,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     new Set()
   );
   const [isLoading, setIsLoading] = useState(true);
+
+  const [cities, setCities] = useState<City[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const loadFavorites = useCallback(async (currentUserId: number) => {
     try {
@@ -21,6 +29,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout();
     }
   }, []);
+
+  const logout = () => {
+    AuthService.logout();
+    setUser(null);
+    setFavoriteEventIds(new Set());
+  };
 
   const refreshUserData = useCallback(async () => {
     const token = AuthService.getCurrentUser()?.token;
@@ -40,15 +54,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadFavorites]);
 
   useEffect(() => {
-    const initAuth = async () => {
+    const initAuthAndData = async () => {
       setIsLoading(true);
+      // Загружаем города и категории ОДИН РАЗ при старте
+      try {
+        const [citiesData, categoriesData] = await Promise.all([
+          fetchCities(),
+          fetchCategories(),
+        ]);
+        citiesData.sort((a, b) => a.name.localeCompare(b.name));
+        categoriesData.sort((a, b) => a.name.localeCompare(b.name));
+        setCities(citiesData);
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Failed to load initial site data", error);
+      }
+
+      // Проверяем, есть ли залогиненный пользователь
       const currentUser = AuthService.getCurrentUser();
       if (currentUser && currentUser.token) {
         await refreshUserData();
       }
       setIsLoading(false);
     };
-    initAuth();
+    initAuthAndData();
   }, [refreshUserData]);
 
   const login = (userData: CurrentUser) => {
@@ -57,12 +86,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (userData.id) {
       loadFavorites(userData.id);
     }
-  };
-
-  const logout = () => {
-    AuthService.logout();
-    setUser(null);
-    setFavoriteEventIds(new Set());
   };
 
   const addFavorite = (eventId: number) => {
@@ -77,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
   const value: AuthContextType = {
     user,
     favoriteEventIds,
@@ -86,7 +110,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     removeFavorite,
     isLoading,
     refreshUserData,
+    // Добавляем новые данные в контекст
+    cities,
+    categories,
   };
+  // --- КОНЕЦ ИЗМЕНЕНИЙ ---
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
