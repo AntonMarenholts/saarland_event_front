@@ -52,23 +52,32 @@ export default function EventCard({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (startDateString: string, endDateString?: string) => {
+    const startDate = new Date(startDateString);
     const timeIsSpecified =
-      date.getUTCHours() !== 0 || date.getUTCMinutes() !== 0;
+      startDate.getUTCHours() !== 0 || startDate.getUTCMinutes() !== 0;
 
     const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
     };
+
     if (timeIsSpecified) {
       options.hour = "2-digit";
       options.minute = "2-digit";
     }
 
-    return date.toLocaleDateString(i18n.language, options);
+    if (endDateString) {
+      const endDate = new Date(endDateString);
+      if (startDate.toDateString() !== endDate.toDateString()) {
+        const startFormatted = startDate.toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' });
+        const endFormatted = endDate.toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' });
+        return `${startFormatted} - ${endFormatted}`;
+      }
+    }
+
+    return startDate.toLocaleString(i18n.language, options);
   };
 
   const translation =
@@ -144,7 +153,7 @@ export default function EventCard({
           {translation?.name || "Name not specified"}
         </h3>
         <p className="text-gray-400 mb-2">{event.city.name}</p>
-        <p className="text-gray-300 text-sm">{formatDate(event.eventDate)}</p>
+        <p className="text-gray-300 text-sm">{formatDate(event.eventDate, event.endDate)}</p>
       </div>
       {isAdminCard && (
         <div className="border-t border-gray-700 p-2 flex justify-end gap-2">

@@ -138,23 +138,33 @@ export default function EventDetailPage() {
     event.translations.find((tr) => tr.locale === i18n.language) ||
     event.translations.find((tr) => tr.locale === "de");
 
-  const eventDateObject = new Date(event.eventDate);
-  const timeIsSpecified =
-    eventDateObject.getUTCHours() !== 0 ||
-    eventDateObject.getUTCMinutes() !== 0;
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  const formatDateRange = (startDateString: string, endDateString?: string) => {
+    const startDate = new Date(startDateString);
+    const timeIsSpecified = startDate.getUTCHours() !== 0 || startDate.getUTCMinutes() !== 0;
+
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    };
+
+    if (timeIsSpecified) {
+        options.hour = '2-digit';
+        options.minute = '2-digit';
+    }
+    
+    if (endDateString) {
+        const endDate = new Date(endDateString);
+        if (startDate.toDateString() !== endDate.toDateString()) {
+          const startFormatted = startDate.toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' });
+          const endFormatted = endDate.toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' });
+          return `${startFormatted} - ${endFormatted}`;
+        }
+    }
+    
+    return startDate.toLocaleString(i18n.language, options);
   };
-  if (timeIsSpecified) {
-    dateOptions.hour = "2-digit";
-    dateOptions.minute = "2-digit";
-  }
-  const formattedDate = eventDateObject.toLocaleString(
-    i18n.language,
-    dateOptions
-  );
+  const formattedDate = formatDateRange(event.eventDate, event.endDate);
 
   const isEventPast = new Date(event.eventDate) < new Date();
   const hasUserReviewed = reviews.some(
