@@ -20,12 +20,13 @@ export interface City {
 export interface Event {
   id: number;
   eventDate: string;
+  endDate?: string;
   imageUrl: string;
   category: Category;
   city: City;
   translations: Translation[];
   status: string;
-  premium: boolean; 
+  premium: boolean;
   premiumUntil?: string;
   createdByUserId: number;
 }
@@ -40,6 +41,7 @@ export interface Page<T> {
 
 export interface CreateEventData {
   eventDate: string;
+  endDate?: string;
   imageUrl: string;
   categoryId: number;
   cityId: number;
