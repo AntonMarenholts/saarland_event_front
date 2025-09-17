@@ -70,24 +70,20 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
     if (initialData) {
       const initialStartDate = new Date(initialData.eventDate);
       const timeIsSpecified =
-        initialStartDate.getUTCHours() !== 0 ||
-        initialStartDate.getUTCMinutes() !== 0;
+        initialStartDate.getUTCHours() !== 0 || initialStartDate.getUTCMinutes() !== 0;
       setSpecifyTime(timeIsSpecified);
 
       const formatToInput = (date: Date) => {
-        const tzoffset = date.getTimezoneOffset() * 60000;
-        const localISOTime = new Date(date.getTime() - tzoffset)
-          .toISOString()
-          .slice(0, 16);
-        return timeIsSpecified ? localISOTime : localISOTime.slice(0, 10);
+          const tzoffset = date.getTimezoneOffset() * 60000;
+          const localISOTime = new Date(date.getTime() - tzoffset)
+            .toISOString()
+            .slice(0, 16);
+          return timeIsSpecified ? localISOTime : localISOTime.slice(0, 10);
       };
 
       setEventDate(formatToInput(initialStartDate));
 
-      if (
-        initialData.endDate &&
-        initialData.endDate !== initialData.eventDate
-      ) {
+      if (initialData.endDate && initialData.endDate !== initialData.eventDate) {
         setIsRange(true);
         setEndDate(formatToInput(new Date(initialData.endDate)));
       }
@@ -159,17 +155,16 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
     }
 
     const getIsoString = (dateStr: string) => {
-      if (specifyTime) {
-        return new Date(dateStr).toISOString();
-      } else {
-        return new Date(dateStr + "T00:00:00Z").toISOString();
-      }
-    };
-
+        if (specifyTime) {
+            return new Date(dateStr).toISOString();
+        } else {
+            return new Date(dateStr + "T00:00:00Z").toISOString();
+        }
+    }
+    
     const eventData: CreateEventData = {
       eventDate: getIsoString(eventDate),
-      endDate:
-        isRange && endDate ? getIsoString(endDate) : getIsoString(eventDate),
+      endDate: isRange && endDate ? getIsoString(endDate) : getIsoString(eventDate),
       imageUrl: finalImageUrl,
       categoryId,
       cityId,
@@ -177,7 +172,7 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         { locale: "de", name: nameDe, description: descriptionDe },
         { locale: "en", name: nameEn, description: descriptionEn },
         { locale: "ru", name: nameRu, description: descriptionRu },
-      ].filter((t) => t.name),
+      ].filter(t => t.name)
     };
     onSubmit(eventData);
   };
@@ -192,9 +187,7 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">
-            {isRange ? "Дата начала" : t("formDate")}
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">{isRange ? t("form_start_date") : t("formDate")}</label>
           <input
             type={specifyTime ? "datetime-local" : "date"}
             value={eventDate}
@@ -203,12 +196,10 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
             className="p-2 rounded bg-gray-700 text-white w-full"
           />
         </div>
-
+        
         {isRange && (
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">
-              Дата окончания
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">{t("form_end_date")}</label>
             <input
               type={specifyTime ? "datetime-local" : "date"}
               value={endDate}
@@ -220,36 +211,36 @@ export default function EventForm({ onSubmit, isLoading, initialData }: Props) {
         )}
 
         <div className="flex items-center gap-6 md:col-span-2">
-          <div className="flex items-center">
-            <input
-              id="specifyTime"
-              type="checkbox"
-              checked={specifyTime}
-              onChange={(e) => setSpecifyTime(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-600 text-cyan-600 focus:ring-cyan-500 bg-gray-700"
-            />
-            <label
-              htmlFor="specifyTime"
-              className="ml-2 block text-sm text-gray-300"
-            >
-              {t("form_specify_time")}
-            </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              id="isRange"
-              type="checkbox"
-              checked={isRange}
-              onChange={(e) => setIsRange(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-600 text-cyan-600 focus:ring-cyan-500 bg-gray-700"
-            />
-            <label
-              htmlFor="isRange"
-              className="ml-2 block text-sm text-gray-300"
-            >
-              Событие идет несколько дней
-            </label>
-          </div>
+            <div className="flex items-center">
+                <input
+                    id="specifyTime"
+                    type="checkbox"
+                    checked={specifyTime}
+                    onChange={(e) => setSpecifyTime(e.target.checked)}
+                    className="h-4 w-4 rounded border-gray-600 text-cyan-600 focus:ring-cyan-500 bg-gray-700"
+                />
+                <label
+                    htmlFor="specifyTime"
+                    className="ml-2 block text-sm text-gray-300"
+                >
+                    {t("form_specify_time")}
+                </label>
+            </div>
+            <div className="flex items-center">
+                 <input
+                    id="isRange"
+                    type="checkbox"
+                    checked={isRange}
+                    onChange={(e) => setIsRange(e.target.checked)}
+                    className="h-4 w-4 rounded border-gray-600 text-cyan-600 focus:ring-cyan-500 bg-gray-700"
+                />
+                <label
+                    htmlFor="isRange"
+                    className="ml-2 block text-sm text-gray-300"
+                >
+                    {t("form_is_range")}
+                </label>
+            </div>
         </div>
 
         <select

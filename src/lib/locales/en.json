@@ -159,6 +159,8 @@
   "redirecting_to_payment": "Redirecting to payment...",
   "payment_error_alert": "Failed to create payment session. Please try again later.",
   "premium_badge": "Premium",
+  "form_start_date": "Start Date",
+  "form_end_date": "End Date",
   "payment_success_title": "Payment Successful!",
   "payment_success_message": "Your event has been successfully promoted and will now be featured at the top of the list.",
   "payment_cancel_title": "Payment Canceled",
@@ -167,6 +169,7 @@
   "try_again_button": "Try Again",
   "confirmDelete_paid_title": "Confirm Deletion",
   "confirmDelete_paid_prompt": "This event has been paid for. To confirm deletion, please type DELETE in the box below.",
+  "form_is_range": "Event lasts for several days",
   "delete_incorrect_input": "Incorrect input. Deletion canceled.",
   "propose_event_promo": "Suggest your event!",
   "rules_page": {
