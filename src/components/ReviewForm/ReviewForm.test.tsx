@@ -46,12 +46,12 @@ describe('ReviewForm', () => {
     fireEvent.click(stars[3]);
 
     const textarea = screen.getByPlaceholderText(i18n.t('review_form_comment_placeholder'));
-    fireEvent.change(textarea, { target: { value: 'Очень понравилось!' } });
+    fireEvent.change(textarea, { target: { value: 'Es hat mir sehr gut gefallen!' } });
     
     const submitButton = screen.getByRole('button', { name: i18n.t('review_form_submit_button') });
     fireEvent.click(submitButton);
     
-    expect(handleSubmit).toHaveBeenCalledWith(4, 'Очень понравилось!');
+    expect(handleSubmit).toHaveBeenCalledWith(4, 'Es hat mir sehr gut gefallen!');
   });
 
 });
