@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -6,10 +5,16 @@ import { fetchEvents } from "../../api";
 import type { Event } from "../../types";
 import EventCard from "../../components/EventCard";
 import Pagination from "../../components/Pagination";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function CategoryPage() {
   const { t } = useTranslation();
   const { categoryName } = useParams<{ categoryName: string }>();
+
+  useDocumentTitle(
+    `${categoryName} | ${t("appName")}`,
+    `Alle Veranstaltungen der Kategorie ${categoryName} im Saarland.`
+  );
 
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +77,7 @@ export default function CategoryPage() {
         &larr; {t("backToList")}
       </Link>
       <h1 className="text-4xl font-bold text-white text-center mb-8">
-        {t("upcomingEvents")} в категории: {categoryName}
+        {t("upcomingEvents")} in der Kategorie: {categoryName}
       </h1>
       {events.length > 0 ? (
         <>

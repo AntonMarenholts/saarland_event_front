@@ -5,22 +5,20 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-
 import {
   fetchEventById,
   setReminder,
   fetchReviewsByEventId,
   createReview,
 } from "../../api";
-
 import type { Event, Review } from "../../types";
 import AuthService from "../../services/auth.service";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
-
 import StarRating from "../../components/StarRating";
 import ReviewList from "../../components/ReviewList";
 import ReviewForm from "../../components/ReviewForm";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const DefaultIcon = L.icon({
   iconUrl: icon,
@@ -46,6 +44,17 @@ export default function EventDetailPage() {
 
   const [showReminderModal, setShowReminderModal] = useState(false);
   const [reminderTime, setReminderTime] = useState(1);
+
+  const translation =
+    event?.translations.find((tr) => tr.locale === i18n.language) ||
+    event?.translations.find((tr) => tr.locale === "de");
+
+  useDocumentTitle(
+    `${translation?.name || "Event"} - ${event?.city.name || ""} | ${t(
+      "appName"
+    )}`,
+    `${translation?.description?.substring(0, 160) || "Details zum Event"}`
+  );
 
   useEffect(() => {
     if (!id) return;
@@ -134,10 +143,6 @@ export default function EventDetailPage() {
       </div>
     );
 
-  const translation =
-    event.translations.find((tr) => tr.locale === i18n.language) ||
-    event.translations.find((tr) => tr.locale === "de");
-
   const formatDateRange = (startDateString: string, endDateString?: string) => {
     const startDate = new Date(startDateString);
     const timeIsSpecified = startDate.getUTCHours() !== 0 || startDate.getUTCMinutes() !== 0;
@@ -153,7 +158,7 @@ export default function EventDetailPage() {
         options.minute = '2-digit';
     }
     
-    if (endDateString) {
+    if (endDateString && startDateString !== endDateString) {
         const endDate = new Date(endDateString);
         if (startDate.toDateString() !== endDate.toDateString()) {
           const startFormatted = startDate.toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' });
