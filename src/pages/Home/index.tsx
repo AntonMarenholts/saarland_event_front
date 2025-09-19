@@ -5,9 +5,15 @@ import { fetchEvents } from "../../api";
 import type { Event } from "../../types";
 import EventCard from "../../components/EventCard";
 import Pagination from "../../components/Pagination";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function HomePage() {
   const { t } = useTranslation();
+  useDocumentTitle(
+    t("appName"),
+    "Finden Sie aktuelle Veranstaltungen, Konzerte, Feste, Märkte und Termine im Saarland."
+  );
+
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
