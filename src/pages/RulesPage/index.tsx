@@ -1,4 +1,4 @@
-// src/pages/RulesPage/index.tsx
+
 import { useTranslation, Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
