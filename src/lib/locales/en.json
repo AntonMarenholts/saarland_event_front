@@ -45,6 +45,7 @@
   "footerRights": "All rights reserved.",
   "selectLanguage": "Select language",
   "upcomingEvents": "Upcoming Events",
+  "past_events": "Past Events",
   "noEventsFound": "No events found for your request.",
   "loadingEvents": "Loading events...",
   "errorLoadEvents": "Failed to load events. Make sure the backend server is running.",
@@ -198,6 +199,11 @@
         "p1": "To highlight your event, use the 'Premium Promotion' service. Paid events are displayed at the very top of the main page. The service is activated instantly after payment. You can manage the promotion in the <1>My Events</1> section of your profile.",
         "tariffs_title": "Tariffs:",
         "p2": "Premium events are sorted among themselves by the event date (the earliest first)."
+      },
+      "refund_policy": {
+        "title": "Refund Policy and Responsibility",
+        "p1": "No refunds are provided for the 'Premium Promotion' service. Once payment is made, the service is considered fully rendered.",
+        "p2": "The user bears full responsibility for the accuracy and legality of the information published in the event. The site administration is not responsible for the content posted by users."
       }
     }
   }

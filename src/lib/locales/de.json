@@ -45,6 +45,7 @@
   "footerRights": "Alle Rechte vorbehalten.",
   "selectLanguage": "Sprache auswählen",
   "upcomingEvents": "Nächste Veranstaltungen",
+  "past_events": "Vergangene Veranstaltungen",
   "noEventsFound": "Für Ihre Anfrage wurden keine Veranstaltungen gefunden.",
   "loadingEvents": "Veranstaltungen werden geladen...",
   "errorLoadEvents": "Veranstaltungen konnten nicht geladen werden. Stellen Sie sicher, dass der Backend-Server läuft.",
@@ -197,6 +198,11 @@
         "p1": "Um Ihre Veranstaltung hervorzuheben, nutzen Sie den Service 'Premium-Promotion'. Bezahlte Veranstaltungen werden ganz oben auf der Hauptseite angezeigt. Der Service wird sofort nach der Zahlung aktiviert. Sie können die Promotion im Bereich <1>Meine Events</1> Ihres Profils verwalten.",
         "tariffs_title": "Tarife:",
         "p2": "Die Premium-Events werden untereinander nach dem Datum der Veranstaltung sortiert (das früheste zuerst)."
+      },
+      "refund_policy": {
+        "title": "Rückerstattungsrichtlinie und Verantwortung",
+        "p1": "Für den 'Premium-Promotion'-Service wird keine Rückerstattung geleistet. Sobald die Zahlung erfolgt ist, gilt die Dienstleistung als vollständig erbracht.",
+        "p2": "Der Nutzer trägt die volle Verantwortung für die Richtigkeit und Rechtmäßigkeit der in der Veranstaltung veröffentlichten Informationen. Die Verwaltung der Website ist nicht verantwortlich für den Inhalt, den die Nutzer posten."
       }
     }
   }

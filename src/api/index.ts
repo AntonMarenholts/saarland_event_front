@@ -272,6 +272,32 @@ export const fetchAdminEventsByCityName = async (
   return response.data;
 };
 
+export const fetchAdminEventsByCityNamePast = async (
+  cityName: string,
+  page: number,
+  size: number
+): Promise<Page<Event>> => {
+  const response = await apiClient.get(
+    `/admin/events/by-city/${encodeURIComponent(
+      cityName
+    )}/past?page=${page}&size=${size}&sort=eventDate,desc`
+  );
+  return response.data;
+};
+
+export const fetchAdminEventsByCityNameUpcoming = async (
+  cityName: string,
+  page: number,
+  size: number
+): Promise<Page<Event>> => {
+  const response = await apiClient.get(
+    `/admin/events/by-city/${encodeURIComponent(
+      cityName
+    )}/upcoming?page=${page}&size=${size}&sort=eventDate,asc`
+  );
+  return response.data;
+};
+
 export const updateMyEvent = async (
   id: number,
   eventData: CreateEventData

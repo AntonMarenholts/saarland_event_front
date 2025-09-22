@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { fetchFavorites, fetchMyEvents, deleteMyEvent } from "../../api";
@@ -188,14 +189,14 @@ export default function ProfilePage() {
                         {getStatusBadge(event.status)}
                       </div>
                       <div className="flex-shrink-0 flex items-center gap-4">
-                        {event.status === "APPROVED" && !event.premium && (
+                        {/* {event.status === "APPROVED" && !event.premium && (
                           <Link
                             to={`/promote/${event.id}`}
                             className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded text-sm"
                           >
                             {t("promote_event_button")}
                           </Link>
-                        )}
+                        )} */}
 
                         <button
                           onClick={() => navigate(`/profile/edit/${event.id}`)}
