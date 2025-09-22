@@ -1,3 +1,4 @@
+// src/pages/RulesPage/index.tsx
 import { useTranslation, Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -15,7 +16,6 @@ export default function RulesPage() {
           {t("rules_page.title")}
         </h1>
 
-        
         <section>
           <h2 className="text-2xl font-semibold mb-4 border-b-2 border-cyan-500 pb-2">
             {t("rules_page.sections.submission.title")}
@@ -30,7 +30,6 @@ export default function RulesPage() {
           </div>
         </section>
 
-        
         <section>
           <h2 className="text-2xl font-semibold mb-4 border-b-2 border-cyan-500 pb-2">
             {t("rules_page.sections.moderation.title")}
@@ -90,6 +89,16 @@ export default function RulesPage() {
               </li>
             </ul>
             <p>{t("rules_page.sections.promotion.p2")}</p>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-cyan-500 pb-2">
+            {t("rules_page.sections.refund_policy.title")}
+          </h2>
+          <div className="prose prose-invert max-w-none text-gray-300 space-y-4">
+            <p>{t("rules_page.sections.refund_policy.p1")}</p>
+            <p>{t("rules_page.sections.refund_policy.p2")}</p>
           </div>
         </section>
       </div>
