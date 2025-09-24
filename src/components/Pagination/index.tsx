@@ -6,6 +6,37 @@ interface Props {
   onPageChange: (pageNumber: number) => void;
 }
 
+
+const getPaginationItems = (currentPage: number, totalPages: number) => {
+  const delta = 2; 
+  const left = currentPage - delta;
+  const right = currentPage + delta + 1;
+  const range = [];
+  const rangeWithDots: (number | string)[] = [];
+  let l: number | undefined;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= left && i < right)) {
+      range.push(i);
+    }
+  }
+
+  for (const i of range) {
+    if (l) {
+      if (i - l === 2) {
+        rangeWithDots.push(l + 1);
+      } else if (i - l !== 1) {
+        rangeWithDots.push("...");
+      }
+    }
+    rangeWithDots.push(i);
+    l = i;
+  }
+
+  return rangeWithDots.map(item => typeof item === 'number' ? item - 1 : item);
+};
+
+
 export default function Pagination({
   currentPage,
   totalPages,
@@ -16,7 +47,7 @@ export default function Pagination({
     return null;
   }
 
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i);
+  const paginationItems = getPaginationItems(currentPage + 1, totalPages);
 
   return (
     <nav
@@ -32,19 +63,28 @@ export default function Pagination({
       </button>
 
       <div className="hidden md:flex">
-        {pageNumbers.map((number) => (
-          <button
-            key={number}
-            onClick={() => onPageChange(number)}
-            className={`px-4 py-2 mx-1 rounded-md ${
-              currentPage === number
-                ? "bg-cyan-600 font-bold"
-                : "bg-gray-700 hover:bg-gray-600"
-            }`}
-          >
-            {number + 1}
-          </button>
-        ))}
+        {paginationItems.map((page, index) => {
+           if (typeof page === 'string') {
+             return (
+                <span key={`dots-${index}`} className="px-4 py-2 mx-1">
+                    {page}
+                </span>
+             );
+           }
+           return (
+            <button
+              key={page}
+              onClick={() => onPageChange(page)}
+              className={`px-4 py-2 mx-1 rounded-md ${
+                currentPage === page
+                  ? "bg-cyan-600 font-bold"
+                  : "bg-gray-700 hover:bg-gray-600"
+              }`}
+            >
+              {page + 1}
+            </button>
+           )
+        })}
       </div>
       <div className="md:hidden text-sm px-4">
         {currentPage + 1} / {totalPages}
