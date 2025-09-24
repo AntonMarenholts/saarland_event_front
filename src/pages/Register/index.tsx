@@ -5,53 +5,65 @@ import type { RegisterData } from "../../types";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
 import { useState, useCallback } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
+    setError, 
     formState: { errors },
   } = useForm<RegisterData>();
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [generalError, setGeneralError] = useState(""); 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleRegister = useCallback(
     async (data: RegisterData) => {
       if (!executeRecaptcha) {
-        console.error("Recaptcha not available");
+        setGeneralError("Recaptcha service is not available.");
         return;
       }
 
-      setMessage("");
+      setGeneralError("");
       setLoading(true);
 
-      const token = await executeRecaptcha("register");
+      try {
+        const token = await executeRecaptcha("register");
+        const dataWithToken = { ...data, recaptchaToken: token };
 
-      const dataWithToken = { ...data, recaptchaToken: token };
+        await AuthService.register(dataWithToken);
+        
+        navigate("/login?registered=true");
 
-      AuthService.register(dataWithToken).then(
-        (response) => {
-          setMessage(response.data.message);
-          setLoading(false);
-          navigate("/login");
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          setLoading(false);
-          setMessage(resMessage);
+      } catch (error) {
+        if (isAxiosError(error) && error.response) {
+          const errorData = error.response.data;
+          
+          if (errorData.message) {
+            setGeneralError(errorData.message);
+          } 
+          
+          else if (typeof errorData === 'object') {
+             Object.keys(errorData).forEach((field) => {
+                setError(field as keyof RegisterData, {
+                    type: 'server',
+                    message: errorData[field]
+                });
+            });
+          }
+        } else {
+          setGeneralError("An unexpected error occurred. Please try again.");
         }
-      );
+      } finally {
+        setLoading(false);
+      }
     },
-    [executeRecaptcha, navigate]
+    [executeRecaptcha, navigate, setError]
   );
 
   return (
@@ -73,11 +85,15 @@ export default function RegisterPage() {
             Username
           </label>
           <input
-            {...register("username", { required: true })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline"
+            {...register("username", { 
+                required: "Username is required.",
+                minLength: { value: 3, message: "Username must be at least 3 characters." },
+                maxLength: { value: 20, message: "Username must be at most 20 characters." }
+            })}
+            className={`shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-red-500' : 'border-gray-600'}`}
           />
           {errors.username && (
-            <p className="text-red-500 text-xs italic">Username is required.</p>
+            <p className="text-red-500 text-xs italic mt-1">{errors.username.message}</p>
           )}
         </div>
 
@@ -89,13 +105,14 @@ export default function RegisterPage() {
             Email
           </label>
           <input
-            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
-            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline"
+            {...register("email", { 
+                required: "Email is required.", 
+                pattern: { value: /^\S+@\S+\.\S+$/, message: "Invalid email address."}
+            })}
+            className={`shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : 'border-gray-600'}`}
           />
           {errors.email && (
-            <p className="text-red-500 text-xs italic">
-              A valid email is required.
-            </p>
+            <p className="text-red-500 text-xs italic mt-1">{errors.email.message}</p>
           )}
         </div>
 
@@ -106,14 +123,15 @@ export default function RegisterPage() {
           >
             Password
           </label>
-
           <div className="relative">
             <input
               type={passwordVisible ? "text" : "password"}
-              {...register("password", { required: true, minLength: 6 })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10" // Добавляем отступ справа
+              {...register("password", { 
+                  required: "Password is required.", 
+                  minLength: { value: 6, message: "Password must be at least 6 characters."}
+                })}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline pr-10 ${errors.password ? 'border-red-500' : 'border-gray-600'}`}
             />
-
             <button
               type="button"
               onClick={() => setPasswordVisible(!passwordVisible)}
@@ -123,11 +141,15 @@ export default function RegisterPage() {
             </button>
           </div>
           {errors.password && (
-            <p className="text-red-500 text-xs italic">
-              Password must be at least 6 characters.
-            </p>
+            <p className="text-red-500 text-xs italic mt-1">{errors.password.message}</p>
           )}
         </div>
+        
+        {generalError && (
+          <div className="p-4 mb-4 text-sm text-red-200 bg-red-900 border border-red-500 rounded-lg" role="alert">
+              {generalError}
+          </div>
+        )}
 
         <div className="flex items-center justify-between">
           <button
@@ -135,7 +157,7 @@ export default function RegisterPage() {
             disabled={loading}
             className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-gray-500"
           >
-            {loading ? "Loading..." : "Sign Up"}
+            {loading ? t("loading") : t("signup")}
           </button>
           <Link
             to="/login"
@@ -144,20 +166,6 @@ export default function RegisterPage() {
             Already have an account?
           </Link>
         </div>
-        {message && (
-          <div className="mt-4">
-            <div
-              className={`p-4 mb-4 text-sm rounded-lg ${
-                message.includes("successfully")
-                  ? "text-green-200 bg-green-900 border border-green-500"
-                  : "text-red-200 bg-red-900 border border-red-500"
-              }`}
-              role="alert"
-            >
-              {message}
-            </div>
-          </div>
-        )}
       </form>
     </div>
   );
