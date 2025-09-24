@@ -1,17 +1,20 @@
 import { useState, useCallback, useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import type { LoginData } from "../../types";
 import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeSlashIcon } from "../../components/Icons";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { AuthContext } from "../../context/AuthContext";
+import { isAxiosError } from "axios"; 
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const authContext = useContext(AuthContext);
+  const [searchParams] = useSearchParams();
+  const wasRegistered = searchParams.get("registered");
 
   const {
     register,
@@ -23,43 +26,53 @@ export default function LoginPage() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleLogin = useCallback(async (data: LoginData) => {
-    if (!executeRecaptcha) {
-      console.error("Recaptcha not available");
-      setMessage("Recaptcha service is not available. Please try again later.");
-      return;
-    }
+  const handleLogin = useCallback(
+    async (data: LoginData) => {
+      if (!executeRecaptcha) {
+        console.error("Recaptcha not available");
+        setMessage(
+          "Recaptcha service is not available. Please try again later."
+        );
+        return;
+      }
 
-    setMessage("");
-    setLoading(true);
+      setMessage("");
+      setLoading(true);
 
-    const token = await executeRecaptcha("login");
+      try {
+        const token = await executeRecaptcha("login");
+        const user = await AuthService.login({ ...data, recaptchaToken: token });
 
-    AuthService.login({ ...data, recaptchaToken: token }).then(
-      (user) => {
-        authContext?.login(user); 
+        authContext?.login(user);
         if (user && user.roles.includes("ROLE_ADMIN")) {
           navigate("/admin");
         } else {
           navigate("/");
         }
-      },
-      (error) => {
-        if (error.response && error.response.status === 401) {
-          setMessage(t("error_incorrect_password"));
+      } catch (error) { 
+        
+        if (isAxiosError(error) && error.response) {
+          if (
+            error.response.status === 401 ||
+            error.response.status === 400
+          ) {
+            setMessage(t("error_incorrect_password"));
+          } else {
+            const resMessage =
+              (error.response.data as { message?: string })?.message ||
+              error.message;
+            setMessage(resMessage);
+          }
         } else {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          setMessage(resMessage);
+          setMessage("An unexpected error occurred.");
+          console.error(error);
         }
+      } finally {
         setLoading(false);
       }
-    );
-  }, [executeRecaptcha, navigate, t, authContext]);
+    },
+    [executeRecaptcha, navigate, t, authContext]
+  );
 
   const handleGoogleLogin = () => {
     window.location.href = import.meta.env.VITE_GOOGLE_LOGIN_URL;
@@ -74,6 +87,15 @@ export default function LoginPage() {
       </div>
 
       <div className="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 text-white">
+        {wasRegistered && (
+          <div
+            className="p-4 mb-4 text-sm text-green-200 bg-green-900 border border-green-500 rounded-lg"
+            role="alert"
+          >
+            Registration successful! Please log in.
+          </div>
+        )}
+
         <button
           type="button"
           onClick={handleGoogleLogin}
@@ -156,8 +178,7 @@ export default function LoginPage() {
               </p>
             )}
           </div>
-          
-          
+
           <div className="flex items-center justify-between pt-2">
             <button
               type="submit"
@@ -166,23 +187,23 @@ export default function LoginPage() {
             >
               {loading ? t("loading") : t("loginButton")}
             </button>
-            
+
             <div className="flex flex-col items-end text-sm">
-                <Link
-                  to="/register"
-                  className="inline-block align-baseline font-bold text-cyan-500 hover:text-cyan-400"
-                >
-                  {t("create_account_link")}
-                </Link>
-                <Link
-                  to="/forgot-password"
-                  className="inline-block align-baseline font-bold text-gray-400 hover:text-white mt-2"
-                >
-                  {t("forgot_password")}
-                </Link>
+              <Link
+                to="/register"
+                className="inline-block align-baseline font-bold text-cyan-500 hover:text-cyan-400"
+              >
+                {t("create_account_link")}
+              </Link>
+              <Link
+                to="/forgot-password"
+                className="inline-block align-baseline font-bold text-gray-400 hover:text-white mt-2"
+              >
+                {t("forgot_password")}
+              </Link>
             </div>
           </div>
-          
+
           {message && (
             <div
               className="mt-4 p-4 text-sm text-red-200 bg-red-900 border border-red-500 rounded-lg"
